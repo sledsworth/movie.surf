@@ -4,13 +4,37 @@ export interface Genre {
 }
 
 export interface Provider {
-	name: string;
+	logo_path: string;
+	provider_id: number;
+	provider_name: string;
+	display_priority: number;
+}
+
+export interface Movie {
 	id: number;
+	title: string;
+	poster_path: string;
+	backdrop_path: string;
+	overview: string;
+	release_date: string;
+	vote_average: number;
+	vote_count: number;
+	genres: Genre[];
+	runtime: number;
+	tagline: string;
+	providers?: Provider[];
+}
+
+export interface MovieFormData {
+	genres: number[];
+	good: boolean;
+	decade?: number;
+	page: number;
 }
 
 const TMDB_API_KEY = "9397736d8fdb6eb4dcb7ddf979963019";
 
-const PROVIDER_URLS = {
+const PROVIDER_URLS: { [key: number]: string } = {
 	8: "https://www.netflix.com/",
 	9: "https://www.amazon.com/gp/video/",
 	15: "https://www.hulu.com/",
@@ -71,7 +95,11 @@ export async function getMovieSuggestions({
 	good = true,
 	decade,
 	page = 1,
-}: { genres: number[]; good: boolean; decade?: number; page: number }) {
+}: MovieFormData): Promise<{
+	movies: Movie[];
+	totalResults: number;
+	totalPages: number;
+}> {
 	try {
 		const url = new URL("https://api.themoviedb.org/3/discover/movie");
 		url.searchParams.append("api_key", TMDB_API_KEY);
@@ -100,9 +128,9 @@ export async function getMovieSuggestions({
 		if (response.ok) {
 			const data = await response.json();
 			return {
-				movies: data.results,
-				totalPages: data.total_pages,
-				totalResults: data.total_results,
+				movies: data.results as Movie[],
+				totalPages: data.total_pages as number,
+				totalResults: data.total_results as number,
 			};
 		}
 		return {
@@ -131,7 +159,7 @@ export async function getMovieDetails(movieId: number) {
 }
 
 export function filterProviders(
-	providers: any[],
+	providers: Provider[],
 	filteredProviders: number[] = [],
 ) {
 	const ignoredProviderIds = [
@@ -158,8 +186,10 @@ export async function getAllMovieProviders() {
 		);
 		const data = await response.json();
 		return data.results
-			.filter((provider) => MAIN_PROVIDERS.includes(provider.provider_id))
-			.map((provider) => ({
+			.filter((provider: Provider) =>
+				MAIN_PROVIDERS.includes(provider.provider_id),
+			)
+			.map((provider: Provider) => ({
 				name: provider.provider_name,
 				id: provider.provider_id,
 				url: PROVIDER_URLS[provider.provider_id],
@@ -189,6 +219,7 @@ export async function getMovieWatchProviders(
 		console.log(response);
 		const data = await response.json();
 		const providers = data.results.US;
+		console.log(providers);
 		return {
 			flatrate: providers?.flatrate
 				? filterProviders(providers.flatrate, filteredProviders)
@@ -204,4 +235,25 @@ export async function getMovieWatchProviders(
 		console.error("Error fetching movie watch providers:", error);
 		throw error;
 	}
+}
+
+export async function getRandomMovie(
+	formData: MovieFormData,
+): Promise<Movie | null> {
+	const { totalResults, totalPages } = await getMovieSuggestions(formData);
+	if (totalResults > 0) {
+		const randomPage = Math.ceil(Math.random() * totalPages);
+		const randomMovies = await getMovieSuggestions({
+			...formData,
+			page: randomPage,
+		});
+		let randomMovie =
+			randomMovies.movies[
+				Math.floor(Math.random() * randomMovies.movies.length)
+			];
+		randomMovie = await getMovieDetails(randomMovie.id);
+		const providers = await getMainMovieStreamProviders(randomMovie.id);
+		return { ...randomMovie, providers };
+	}
+	return null;
 }

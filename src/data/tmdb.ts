@@ -32,7 +32,7 @@ export interface MovieFormData {
 	page: number;
 }
 
-const TMDB_API_KEY = "9397736d8fdb6eb4dcb7ddf979963019";
+const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
 	8: "https://www.netflix.com/",

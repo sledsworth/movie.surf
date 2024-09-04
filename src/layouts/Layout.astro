@@ -1,0 +1,286 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+    <link rel="stylesheet" href="https://use.typekit.net/upw6hrb.css">
+    <slot name="head" />
+	</head>
+	<body>
+    <slot name="header">
+    <header slot="header">
+      <div class="light-bar">
+        <div class="light"></div>
+        <div class="light alternate"></div>
+        <div class="light"></div>
+        <div class="light alternate"></div>
+        <div class="light"></div>
+        <div class="light alternate"></div>
+        <div class="light"></div>
+        <div class="light alternate"></div>
+      </div>
+      <div>
+        <h1>Movie Surf</h1>
+        <p>Making decisions is hard and totally sucks.</p>
+      </div>
+    </header>
+    </slot>
+    <main>
+      <slot />
+    </main>
+    <slot name="footer" />
+	</body>
+  <style is:global>
+    html {
+      background-color: oklch(0.36 0.16 29.9);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue';
+      font-weight: 400;
+      font-style: normal;
+      accent-color: black;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  
+    img {
+      border-radius: .25rem;
+    }
+  
+    h1, h2, h3 {
+      font-family: "ltc-broadway-engraved", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  
+    h1 {
+      font-size: 7rem;
+      margin: 1rem 0;
+      line-height: 0.9;
+      text-align: center;
+    }
+  
+    .genre-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1rem;
+    }
+    
+    button {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      padding: 1rem 2rem;
+      border-radius: 4px;
+      background-color: black;
+      color: white;
+      font-weight: 600;
+      font-size: 1.5rem;
+    }
+
+    button:hover {
+      background-color: rgb(30, 30, 30);
+    }
+  
+   input[type="checkbox"] {
+  appearance: none;
+      margin: 0;
+      /* font: inherit; */
+      /* color: currentColor; */
+      width: 1.25rem;
+      height: 1.25rem;
+      background-color: white;
+      border-radius: 1rem;
+      /* transform: translateY(-0.075em); */
+      display: grid;
+      place-content: center;
+      cursor: pointer;
+  }
+  
+  input[type="checkbox"]:checked::before {
+    content: "✔";
+    font-size: 20px;
+    color: currentColor;
+  }
+  
+  input[type="checkbox"]:focus-visible {
+    outline: none;
+  }
+  
+  label:has(input[type="checkbox"]:focus-visible) {
+    outline: max(2px, 0.15em) solid currentColor;
+    outline-offset: max(2px, 0.15em);
+  }
+  
+  .genre-list label {
+    cursor: pointer;
+    display: inline-block;
+    padding: .25rem 1rem .25rem .25rem;
+    border-radius: 2rem;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  
+  .light-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: .25rem;
+    grid-column: 1 / 2;
+    grid-row: 1;
+  }
+
+  .light-bar ~ .light-bar {
+    grid-column: 3 / 4;
+  }
+  
+  header {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .light {
+    height: 1rem;
+    width: 1rem;
+    border: 1px solid white;
+    border-radius: 2rem;
+    box-shadow: inset 0 0 2px 2px white;
+    opacity: .9;
+  }
+  
+  .light::before {
+    display: block;
+    position: relative;
+    content: "";
+    z-index: 10;
+    height: 1rem;
+    width: 1rem;
+    border-radius: 2rem;
+    opacity: 0;
+    box-shadow: inset 0 0 4px 4px gold, 0 0 6px 6px gold;
+    animation: 2s cubic-bezier(0.42, 0, 0.58, 1) infinite  lightOn;
+  }
+  
+  .light.alternate::before {
+    animation: 2s cubic-bezier(0.42, 0, 0.58, 1) 1s infinite lightOn;
+  }
+  
+  fieldset {
+    border: 8px double black;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: .5rem;
+    display: inline-block;
+    max-width: 500px;
+  }
+  
+  legend {
+    font-size: 2rem;
+    font-family: "ltc-broadway-engraved", sans-serif;
+    padding: .5rem;
+  }
+
+  .marquee {
+    background: url(./marquee.svg) repeat;
+    background-color: white;
+    border: 24px solid;
+    border-radius: .25rem;
+    padding: 2rem;
+    /* background-clip: padding-box;
+    border-image: url(#circle) 27 round; */
+    height: 14rem;
+    grid-column: 1 / 4;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .movie-card {
+    min-width: 100%;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .movie-card-details-meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: .85rem;
+    font-weight: 600;
+    font-variant: small-caps;
+    margin-bottom: 1rem;
+  }
+
+  .movie-card-details-meta-genres {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .movie-card .movie-card-image {
+    max-width: 360px;
+    width: 100%;
+    height: max-content;
+    flex: 0 2;
+  }
+
+  .movie-card .movie-card-details {
+    flex: 2 1;
+    max-width: 600px;
+  }
+
+  .movie-card h2 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .break:after {
+    margin: 0 0 0 1rem;
+    content: "|";
+    display: inline-block;
+  }
+
+  @keyframes lightOn {
+    0% {
+      opacity: .3;
+    }
+  
+    50% {
+      opacity: .9;
+    }
+  
+    100% {
+      opacity: .3;
+    }
+  }
+  </style>
+</html>

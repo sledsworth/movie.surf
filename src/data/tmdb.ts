@@ -102,7 +102,7 @@ export async function getMovieSuggestions({
 }> {
 	try {
 		const url = new URL("https://api.themoviedb.org/3/discover/movie");
-		url.searchParams.append("api_key", TMDB_API_KEY);
+		url.searchParams.append("api_key", TMDB_API_KEY ?? "");
 		url.searchParams.append("with_genres", genres.join(","));
 		url.searchParams.append("page", page.toString());
 		url.searchParams.append("watch_region", "US");

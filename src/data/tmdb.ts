@@ -32,7 +32,7 @@ export interface MovieFormData {
 	page: number;
 }
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
 	8: "https://www.netflix.com/",
@@ -184,6 +184,12 @@ export async function getAllMovieProviders() {
 		const response = await fetch(
 			`https://api.themoviedb.org/3/watch/providers/movie?api_key=${TMDB_API_KEY}`,
 		);
+
+		if (!response.ok) {
+			console.log(TMDB_API_KEY);
+			console.log(response.statusText);
+			throw new Error("Error fetching all movie providers");
+		}
 		const data = await response.json();
 		return data.results
 			.filter((provider: Provider) =>

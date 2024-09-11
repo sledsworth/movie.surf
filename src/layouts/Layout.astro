@@ -20,22 +20,67 @@ const { title } = Astro.props;
 	</head>
 	<body>
     <slot name="header">
-    <header slot="header">
-      <div class="light-bar">
-        <div class="light"></div>
-        <div class="light alternate"></div>
-        <div class="light"></div>
-        <div class="light alternate"></div>
-        <div class="light"></div>
-        <div class="light alternate"></div>
-        <div class="light"></div>
-        <div class="light alternate"></div>
-      </div>
-      <div>
-        <h1>Movie Surf</h1>
-        <p>Making decisions is hard and totally sucks.</p>
-      </div>
-    </header>
+      <header slot="header">
+        <div class="light-bar">
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+        </div>
+        <div class="light-bar light-bar--horizontal">
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <!-- <div class="light"></div>
+          <div class="light alternate"></div> -->
+        </div>
+        <div class="marquee">
+          <h1>Movie Surf</h1>
+        </div>
+        <div class="light-bar light-bar--horizontal">
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <!-- <div class="light"></div>
+          <div class="light alternate"></div> -->
+        </div>
+        <div class="light-bar">
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+          <div class="light"></div>
+          <div class="light alternate"></div>
+        </div>
+      </header>
     </slot>
     <main>
       <slot />
@@ -151,16 +196,33 @@ const { title } = Astro.props;
     gap: 1rem;
     padding: .25rem;
     grid-column: 1 / 2;
-    grid-row: 1;
+    grid-row: 1 / 4;
   }
 
-  .light-bar ~ .light-bar {
+  .light-bar:not(.light-bar--horizontal) {
+    height: calc(100% - .35rem);
+    justify-content: space-evenly;
+    }
+
+  .light-bar:not(.light-bar--horizontal) ~ .light-bar:not(.light-bar--horizontal) {
     grid-column: 3 / 4;
+  }
+
+  .light-bar--horizontal {
+    flex-direction: row;
+    grid-row: 1 / 2;
+    grid-column: 2 / 3;
+    justify-content: space-evenly;
+  }
+
+  .light-bar.light-bar--horizontal ~ .light-bar.light-bar--horizontal {
+    grid-row: 3 / 4;
   }
   
   header {
     display: grid;
     grid-template-columns: 1.5rem 1fr 1.5rem;
+    grid-template-rows: 1.5rem 1fr 1.5rem;
     align-items: center;
     margin-bottom: 2rem;
   }
@@ -216,7 +278,7 @@ const { title } = Astro.props;
     border-image: url(#circle) 27 round; */
     height: 14rem;
     grid-column: 1 / 4;
-    grid-row: 1;
+    grid-row: 1 / 4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -248,7 +310,7 @@ const { title } = Astro.props;
   .movie-card .movie-card-image {
     max-width: 360px;
     width: 100%;
-    height: max-content;
+    /* height: max-content; */
     flex: 0 2;
   }
 

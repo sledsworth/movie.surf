@@ -42,35 +42,7 @@ const randomMovie = await getRandomMovie(formData);
 ---
 <Layout title="Movie Surf">
   <link slot="head" rel="stylesheet" href="https://use.typekit.net/upw6hrb.css">
-  <header slot="header">
-    <div class="light-bar">
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-    </div>
-    <div class="marquee">
-      <h1>Movie Surf</h1>
-    </div>
-    <div class="light-bar">
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-      <div class="light"></div>
-      <div class="light alternate"></div>
-    </div>
-  </header>
+
   <form name="movie-search-details" method="POST">
     <button>Movie Now!</button>
     {randomMovie !== null && (<article class="movie-card">

@@ -22,7 +22,6 @@ const { title } = Astro.props;
     <slot name="header">
       <header slot="header">
         <div class="light-bar">
-          <div class="light"></div>
           <div class="light alternate"></div>
           <div class="light"></div>
           <div class="light alternate"></div>
@@ -30,8 +29,8 @@ const { title } = Astro.props;
           <div class="light alternate"></div>
           <div class="light"></div>
           <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
+          <!-- <div class="light"></div>
+          <div class="light alternate"></div> -->
         </div>
         <div class="light-bar light-bar--horizontal">
           <div class="light"></div>
@@ -45,12 +44,12 @@ const { title } = Astro.props;
           <div class="light"></div>
           <div class="light alternate"></div>
           <div class="light"></div>
-          <div class="light alternate"></div>
           <!-- <div class="light"></div>
           <div class="light alternate"></div> -->
         </div>
         <div class="marquee">
           <h1>Movie Surf</h1>
+          <p>Find a movie fast!</p>
         </div>
         <div class="light-bar light-bar--horizontal">
           <div class="light"></div>
@@ -64,12 +63,10 @@ const { title } = Astro.props;
           <div class="light"></div>
           <div class="light alternate"></div>
           <div class="light"></div>
-          <div class="light alternate"></div>
           <!-- <div class="light"></div>
           <div class="light alternate"></div> -->
         </div>
         <div class="light-bar">
-          <div class="light"></div>
           <div class="light alternate"></div>
           <div class="light"></div>
           <div class="light alternate"></div>
@@ -77,8 +74,8 @@ const { title } = Astro.props;
           <div class="light alternate"></div>
           <div class="light"></div>
           <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
+          <!-- <div class="light"></div>
+          <div class="light alternate"></div> -->
         </div>
       </header>
     </slot>
@@ -109,10 +106,10 @@ const { title } = Astro.props;
     }
   
     h1 {
-      font-size: 7rem;
-      margin: 1rem 0;
-      line-height: 0.9;
       text-align: center;
+      font-size: clamp(3rem, 10vw, 6rem);
+      margin: 0 1rem;
+      line-height: 1;
     }
   
     .genre-list {
@@ -194,14 +191,15 @@ const { title } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: .25rem;
+    /* padding: .25rem; */
     grid-column: 1 / 2;
     grid-row: 1 / 4;
   }
 
   .light-bar:not(.light-bar--horizontal) {
-    height: calc(100% - .35rem);
-    justify-content: space-evenly;
+    height: calc(100% - .25rem);
+    justify-content: space-between;
+    align-items: center;
     }
 
   .light-bar:not(.light-bar--horizontal) ~ .light-bar:not(.light-bar--horizontal) {
@@ -213,10 +211,31 @@ const { title } = Astro.props;
     grid-row: 1 / 2;
     grid-column: 2 / 3;
     justify-content: space-evenly;
+    height: 1.5rem;
+    margin: .5rem;
+    align-items: center;
   }
 
   .light-bar.light-bar--horizontal ~ .light-bar.light-bar--horizontal {
     grid-row: 3 / 4;
+  }
+
+  @media screen and (max-width: 600px) {
+    .light-bar.light-bar--horizontal .light:nth-last-child(-n + 2) {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 440px) {
+    .light-bar.light-bar--horizontal .light:nth-last-child(-n + 4) {
+      display: none;
+    }
+  }
+  
+  @media screen and (max-width: 360px) {
+    .light-bar.light-bar--horizontal .light:nth-last-child(-n + 6) {
+      display: none;
+    }
   }
   
   header {
@@ -224,7 +243,7 @@ const { title } = Astro.props;
     grid-template-columns: 1.5rem 1fr 1.5rem;
     grid-template-rows: 1.5rem 1fr 1.5rem;
     align-items: center;
-    margin-bottom: 2rem;
+    margin: 3rem 0;
   }
   
   .light {
@@ -232,8 +251,10 @@ const { title } = Astro.props;
     width: 1rem;
     border: 1px solid white;
     border-radius: 2rem;
-    box-shadow: inset 0 0 2px 2px white;
-    opacity: .9;
+    border: 2px solid #eeeeee33;
+    z-index: 10;
+    /* box-shadow: inset 0 0 2px 2px white;
+    opacity: .9; */
   }
   
   .light::before {
@@ -276,12 +297,14 @@ const { title } = Astro.props;
     padding: 2rem;
     /* background-clip: padding-box;
     border-image: url(#circle) 27 round; */
-    height: 14rem;
+    min-height: 8rem;
     grid-column: 1 / 4;
     grid-row: 1 / 4;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0 60px 1px gold;  
   }
 
   .movie-card {

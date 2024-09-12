@@ -41,8 +41,6 @@ const providers = await getAllMovieProviders();
 const randomMovie = await getRandomMovie(formData);
 ---
 <Layout title="Movie Surf">
-  <link slot="head" rel="stylesheet" href="https://use.typekit.net/upw6hrb.css">
-
   <form name="movie-search-details" method="POST">
     <button>Movie Now!</button>
     {randomMovie !== null && (<article class="movie-card">

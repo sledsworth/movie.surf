@@ -30,6 +30,7 @@ export interface MovieFormData {
 	good: boolean;
 	decade?: number;
 	page: number;
+	providers?: number[];
 }
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
@@ -95,6 +96,7 @@ export async function getMovieSuggestions({
 	good = true,
 	decade,
 	page = 1,
+	providers,
 }: MovieFormData): Promise<{
 	movies: Movie[];
 	totalResults: number;
@@ -106,7 +108,10 @@ export async function getMovieSuggestions({
 		url.searchParams.append("with_genres", genres.join(","));
 		url.searchParams.append("page", page.toString());
 		url.searchParams.append("watch_region", "US");
-		url.searchParams.append("with_watch_providers", MAIN_PROVIDERS.join("|"));
+		url.searchParams.append(
+			"with_watch_providers",
+			providers ? providers.join("|") : MAIN_PROVIDERS.join("|"),
+		);
 		url.searchParams.append("with_watch_monetization_types", "flatrate");
 		if (decade) {
 			url.searchParams.append("primary_release_date.gte", `${decade}-01-01`);

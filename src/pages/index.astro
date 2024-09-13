@@ -29,6 +29,8 @@ if (Astro.request.method === "POST") {
 			data.get("decade")?.toString() || "2000",
 			10,
 		);
+		formData.providers =
+			(data.getAll("providers") as unknown as number[]) || [];
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
@@ -41,8 +43,9 @@ const providers = await getAllMovieProviders();
 const randomMovie = await getRandomMovie(formData);
 ---
 <Layout title="Movie Surf">
+  <browser-store>
   <form name="movie-search-details" method="POST">
-    <button>Movie Now!</button>
+    <button class="glow">New Movie</button>
     {randomMovie !== null && (<article class="movie-card">
       <img class="movie-card-image" width="300" src={`https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`} alt={randomMovie.title} />
       <section class="movie-card-details">
@@ -83,7 +86,7 @@ const randomMovie = await getRandomMovie(formData);
     {providers?.map(
       (provider: { id: number; name: string; logo: string; url: string }) => (
       <li><label>
-        <input name="genres" type="checkbox" value={provider.id} checked={formData.providers?.includes(provider.id)}>
+        <input name="providers" type="checkbox" value={provider.id} checked={formData.providers?.includes(provider.id)}>
         <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo}`} alt={provider.name} title={provider.name} />
         {provider.name}
       </label></li>
@@ -106,5 +109,6 @@ const randomMovie = await getRandomMovie(formData);
   </label>))}
   </fieldset>
   </form>
+</browser-store>
 </Layout>
 <script src="../components/browser-store.ts"></script>

@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from "astro:transitions";
+
 interface Props {
 	title: string;
 }
@@ -17,6 +19,7 @@ const { title } = Astro.props;
 		<title>{title}</title>
     <link rel="stylesheet" href="https://use.typekit.net/upw6hrb.css">
     <slot name="head" />
+    <ViewTransitions />
 	</head>
 	<body>
     <slot name="header">
@@ -47,9 +50,9 @@ const { title } = Astro.props;
           <!-- <div class="light"></div>
           <div class="light alternate"></div> -->
         </div>
-        <div class="marquee">
+        <div class="marquee glow">
           <h1>Movie Surf</h1>
-          <p>Find a movie fast!</p>
+          <p>Spend time watching a movie instead of searching for one.</p>
         </div>
         <div class="light-bar light-bar--horizontal">
           <div class="light"></div>
@@ -126,7 +129,7 @@ const { title } = Astro.props;
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      margin: 1rem;
+      margin: 1rem 0 10rem;
     }
     
     button {
@@ -134,11 +137,18 @@ const { title } = Astro.props;
       border: none;
       cursor: pointer;
       padding: 1rem 2rem;
-      border-radius: 4px;
-      background-color: black;
-      color: white;
+      border-radius: 2rem;
+      background-color: gold;
+      color: black;
       font-weight: 600;
       font-size: 1.5rem;
+      position: fixed;
+    bottom: 2rem;
+    width: calc(100% - 2rem);
+    max-width: 800px;
+    /* box-sizing: border-box; */
+    margin: auto;
+    /* left: 1rem; */
     }
 
     button:hover {
@@ -249,9 +259,8 @@ const { title } = Astro.props;
   .light {
     height: 1rem;
     width: 1rem;
-    border: 1px solid white;
     border-radius: 2rem;
-    border: 2px solid #eeeeee33;
+    border: 1px solid white;
     z-index: 10;
     /* box-shadow: inset 0 0 2px 2px white;
     opacity: .9; */
@@ -265,8 +274,8 @@ const { title } = Astro.props;
     height: 1rem;
     width: 1rem;
     border-radius: 2rem;
-    opacity: 0;
-    box-shadow: inset 0 0 4px 4px gold, 0 0 6px 6px gold;
+    opacity: .4;
+    box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
     animation: 2s cubic-bezier(0.42, 0, 0.58, 1) infinite  lightOn;
   }
   
@@ -304,7 +313,7 @@ const { title } = Astro.props;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 60px 1px gold;  
+    /* box-shadow: 0 0 60px 1px gold;   */
   }
 
   .movie-card {
@@ -354,17 +363,34 @@ const { title } = Astro.props;
     display: inline-block;
   }
 
+  .glow {
+    box-shadow: 0 0 20px 6px gold;
+    animation: glow 2s ease infinite alternate;
+  }
+
+  @keyframes glow {
+  0% {
+    box-shadow: 0 0 60px -10px gold;
+  }
+  100% {
+    box-shadow: 0 0 60px 0px gold;
+  }
+}
+
   @keyframes lightOn {
     0% {
-      opacity: .3;
+      opacity: .4;
+      box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
     }
   
     50% {
-      opacity: .9;
+      opacity: .95;
+      box-shadow: inset 0 0 -10px 40px gold, 0 0 60px 10px gold;
     }
   
     100% {
-      opacity: .3;
+      opacity: .4;
+      box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
     }
   }
   </style>

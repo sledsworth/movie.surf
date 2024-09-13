@@ -30,23 +30,19 @@ class BrowserStoreElement extends HTMLElement {
 
 	handleSlotChange() {
 		this.form = this.querySelector("form");
-		console.log("slot change", this.form);
 		if (this.form) {
-			this.form.addEventListener("submit", this.handleSubmit.bind(this));
 			this.form.addEventListener("change", (event: Event) => {
 				const formData = new FormData(this.form as HTMLFormElement);
 				let formValues = {};
 				for (const key of formData.keys()) {
-					console.log(key, formData.getAll(key));
-					let value = formData.getAll(key);
+					const value = formData.getAll(key);
 					if (value.length === 1) {
-						// TODO: Fix this
-						value = value[0];
+						formValues = { ...formValues, [key]: value[0] };
+					} else {
+						formValues = { ...formValues, [key]: value };
 					}
-					formValues = { ...formValues, [key]: value };
 				}
 				localStorage.setItem(`${this.form?.name}`, JSON.stringify(formValues));
-				console.log("formdata", event, formData.getAll("genres"));
 			});
 		}
 	}
@@ -55,7 +51,6 @@ class BrowserStoreElement extends HTMLElement {
 		const radios = this.form?.querySelectorAll(`[name="${key}"]`);
 		if (radios) {
 			for (const radio of radios) {
-				console.log(radio.value, value);
 				if ((radio as HTMLInputElement).value === value) {
 					(radio as HTMLInputElement).checked = true;
 				}
@@ -95,11 +90,6 @@ class BrowserStoreElement extends HTMLElement {
 					break;
 			}
 		}
-	}
-
-	handleSubmit(event: Event) {
-		// event.preventDefault();
-		// console.log(event, this.form, new FormData(this.form as HTMLFormElement));
 	}
 }
 

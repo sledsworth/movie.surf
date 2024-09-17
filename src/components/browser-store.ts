@@ -7,11 +7,10 @@ class BrowserStoreElement extends HTMLElement {
 		super();
 
 		this.handleSlotChange = this.handleSlotChange.bind(this);
-
 		this.attachShadow({ mode: "open" });
 	}
 
-	handleCheckbox(key: string, value: any) {
+	handleCheckbox(key: string, value: string | string[]) {
 		const checkboxes = this.form?.querySelectorAll(`[name="${key}"]`);
 		if (checkboxes) {
 			for (const checkbox of checkboxes) {
@@ -47,7 +46,7 @@ class BrowserStoreElement extends HTMLElement {
 		}
 	}
 
-	handleRadio(key: string, value: any) {
+	handleRadio(key: string, value: string) {
 		const radios = this.form?.querySelectorAll(`[name="${key}"]`);
 		if (radios) {
 			for (const radio of radios) {

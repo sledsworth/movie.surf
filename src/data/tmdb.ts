@@ -26,11 +26,11 @@ export interface Movie {
 }
 
 export interface MovieFormData {
-	genres: number[];
+	genres: number[] | string[];
 	good: boolean;
-	decade?: number;
-	page: number;
-	providers?: number[];
+	decade?: number | string;
+	page: number | string;
+	providers?: number[] | string[];
 }
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
@@ -117,7 +117,7 @@ export async function getMovieSuggestions({
 			url.searchParams.append("primary_release_date.gte", `${decade}-01-01`);
 			url.searchParams.append(
 				"primary_release_date.lte",
-				`${decade + 9}-12-31`,
+				`${(typeof decade === "number" ? decade : Number.parseInt(decade)) + 9}-12-31`,
 			);
 		}
 		if (good) {
@@ -149,7 +149,7 @@ export async function getMovieSuggestions({
 	}
 }
 
-export async function getMovieDetails(movieId: number) {
+export async function getMovieDetails(movieId: number | string) {
 	try {
 		const response = await fetch(
 			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,

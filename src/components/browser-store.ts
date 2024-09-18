@@ -3,6 +3,8 @@ class BrowserStoreElement extends HTMLElement {
 	private slotElement: HTMLSlotElement | null = null;
 	private abortController: AbortController | null = null;
 
+	public submitOnLoad = false;
+
 	constructor() {
 		super();
 
@@ -64,6 +66,7 @@ class BrowserStoreElement extends HTMLElement {
 		});
 		this.shadowRoot?.append(this.slotElement);
 		this.form = this.querySelector("form");
+		this.submitOnLoad = this.hasAttribute("submit-on-load");
 		const data = JSON.parse(localStorage.getItem(`${this.form?.name}`) ?? "{}");
 		// const formData = new FormData(this.form as HTMLFormElement);
 		const checkboxes = this.form?.querySelectorAll(`[type="checkbox"]`) ?? [];
@@ -88,6 +91,16 @@ class BrowserStoreElement extends HTMLElement {
 						?.setAttribute("value", value);
 					break;
 			}
+		}
+		console.log(this.submitOnLoad);
+		if (this.submitOnLoad) {
+			this.form?.requestSubmit();
+		}
+	}
+
+	attributcChangedCallback(name: string, oldValue: string, newValue: string) {
+		if (oldValue !== newValue) {
+			if (name === "submit-on-load") this.submitOnLoad = newValue === "true";
 		}
 	}
 }

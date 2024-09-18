@@ -20,6 +20,7 @@ const formData: MovieForm = {
 	page: 1,
 	providers: [],
 };
+let randomMovie = null;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
@@ -36,16 +37,25 @@ if (Astro.request.method === "POST") {
 			console.error(error.message);
 		}
 	}
+	randomMovie = await getRandomMovie(formData);
 }
+
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const providers = await getAllMovieProviders();
-const randomMovie = await getRandomMovie(formData);
 ---
+<slot name="head">
+  <meta property="og:title" content={randomMovie?.title ?? 'Movie Surf'} />
+  <meta property="og:description" content="🍿 It's movie night!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={`https://movie.surf/movie/${randomMovie?.id}`} />
+  <meta property="og:image" content={`https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`} />
+</slot>
 <Layout title="Movie Surf">
-  <browser-store>
+  <browser-store submit-on-load={Astro.request.method !== "POST"}>
   <form name="movie-search-details" method="POST">
     <button class="glow">New Movie</button>
+    <share-button class="share glow" url={`https://movie.surf/movie/${randomMovie?.id}`} image-url={`https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`}>Share</share-button>
     {randomMovie !== null && (<article class="movie-card">
       <img class="movie-card-image" width="300" src={`https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`} alt={randomMovie.title} />
       <section class="movie-card-details">
@@ -112,3 +122,4 @@ const randomMovie = await getRandomMovie(formData);
 </browser-store>
 </Layout>
 <script src="../components/browser-store.ts"></script>
+<script src="../components/share-button.ts"></script>

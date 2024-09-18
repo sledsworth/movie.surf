@@ -1,0 +1,44 @@
+---
+import type { Provider } from "@data/tmdb";
+import { getMovieDetails } from "@data/tmdb";
+import Layout from "src/layouts/Layout.astro";
+
+export const prerender = false;
+const id = Astro.params.id;
+
+let randomMovie = null;
+if (id) {
+	randomMovie = await getMovieDetails(id);
+}
+---
+<slot name="head">
+  <meta property="og:title" content={randomMovie.title} />
+  <meta property="og:description" content="🍿 It's movie night!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content={`https://movie.surf/movie/${id}`} />
+  <meta property="og:image" content={`https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`} />
+</slot>
+<Layout title="Movie Surf">
+  {randomMovie !== null && (<article class="movie-card">
+    <img class="movie-card-image" width="300" src={`https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`} alt={randomMovie.title} />
+    <section class="movie-card-details">
+      <section class="movie-card-details-meta">
+        <span>{randomMovie.release_date}</span>
+        <span class="break">{randomMovie.runtime} minutes</span>
+        <section class="movie-card-details-meta-genres">
+        {randomMovie.genres.map((genre: { name: unknown; }) => (<span>{genre.name}</span>))}
+        </section>
+      </section>
+      <h2>{randomMovie.title}</h2>
+    <section>
+      <div style="display: flex; gap: .5rem;">
+        {randomMovie.providers !== undefined && randomMovie.providers.map((provider: Provider) => (
+          <img width="36" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+        ))}
+      </div>
+    </section>
+    <p>{randomMovie.tagline}</p>
+    <p>{randomMovie.overview}</p>
+    </section>
+  </article>)}
+</Layout>

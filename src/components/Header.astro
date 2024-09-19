@@ -1,0 +1,55 @@
+---
+interface Props {
+	title: string;
+	subtitle: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<header slot="header">
+  <div class="light-bar">
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+  </div>
+  <div class="light-bar light-bar--horizontal">
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+  </div>
+  <div class="marquee glow">
+    <h1>{title}</h1>
+    <p>{subtitle}</p>
+  </div>
+  <div class="light-bar light-bar--horizontal">
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+  </div>
+  <div class="light-bar">
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+    <div class="light"></div>
+    <div class="light alternate"></div>
+  </div>
+</header>

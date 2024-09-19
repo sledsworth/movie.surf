@@ -43,21 +43,32 @@ if (Astro.request.method === "POST") {
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const providers = await getAllMovieProviders();
+
+const shareTitle = randomMovie
+	? `🍿 Movie night!\n\n Let's watch "${randomMovie?.title}"`
+	: "Movie Surf";
+// const shareDescription = "🍿 It's movie night!";
+const shareUrl = randomMovie
+	? `https://movie.surf/movie/${randomMovie?.id}`
+	: "https://movie.surf";
+const shareImageUrl = randomMovie
+	? `https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`
+	: "";
 ---
 <slot name="head">
-  <meta property="og:title" content={randomMovie?.title ?? 'Movie Surf'} />
-  <meta property="og:description" content="🍿 It's movie night!">
+  <meta property="og:title" content={shareTitle} />
+  <meta property="og:description" content={shareTitle}>
   <meta property="og:type" content="website">
-  <meta property="og:url" content={`https://movie.surf/movie/${randomMovie?.id}`} />
-  <meta property="og:image" content={`https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`} />
+  <meta property="og:url" content={shareUrl} />
+  <meta property="og:image" content={shareImageUrl} />
 </slot>
 <Layout title="Movie Surf">
   <browser-store submit-on-load={Astro.request.method !== "POST"}>
   <form name="movie-search-details" method="POST">
     <button class="glow">New Movie</button>
-    <share-button class="share glow" url={`https://movie.surf/movie/${randomMovie?.id}`} image-url={`https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`}>Share</share-button>
+    <share-button class="share glow" title={shareTitle} text={shareTitle} url={shareUrl} image-url={shareImageUrl}>Share</share-button>
     {randomMovie !== null && (<article class="movie-card">
-      <img class="movie-card-image" width="300" src={`https://image.tmdb.org/t/p/w500${randomMovie.poster_path}`} alt={randomMovie.title} />
+      <img class="movie-card-image" width="300" src={shareImageUrl} alt={randomMovie.title} />
       <section class="movie-card-details">
         <section class="movie-card-details-meta">
           <span>{randomMovie.release_date}</span>

@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from "astro:transitions";
+import Header from "src/components/Header.astro";
 
 interface Props {
 	title: string;
@@ -23,64 +24,7 @@ const { title } = Astro.props;
 	</head>
 	<body>
     <slot name="header">
-      <header slot="header">
-        <div class="light-bar">
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-        </div>
-        <div class="light-bar light-bar--horizontal">
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-        </div>
-        <div class="marquee glow">
-          <h1>Movie Surf</h1>
-          <p>Spend time watching a movie instead of searching for one.</p>
-        </div>
-        <div class="light-bar light-bar--horizontal">
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-        </div>
-        <div class="light-bar">
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <div class="light"></div>
-          <div class="light alternate"></div>
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-          <!-- <div class="light"></div>
-          <div class="light alternate"></div> -->
-        </div>
-      </header>
+      <Header title="Movie Surf" subtitle="Watch movies—let us do the surfing." />
     </slot>
     <main>
       <slot />
@@ -318,7 +262,7 @@ const { title } = Astro.props;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     /* box-shadow: 0 0 60px 1px gold;   */
   }
 

@@ -13,6 +13,8 @@ class ShareButtonElement extends HTMLElement {
 		this.handleClick = this.handleClick.bind(this);
 		this.handleSlotChange = this.handleSlotChange.bind(this);
 		this.attachShadow({ mode: "open" });
+
+		this.style.display = "none";
 	}
 
 	handleClick() {
@@ -33,24 +35,39 @@ class ShareButtonElement extends HTMLElement {
 	}
 
 	handleSlotChange(event: Event) {
-		console.log(event, this.slotElement);
 		this.button = this.slotElement?.assignedElements()[0] as HTMLButtonElement;
 		this.button.addEventListener("click", this.handleClick);
+
+		if (this.sharingSupported()) {
+			this.style.display = "block";
+		} else {
+			this.style.display = "none";
+		}
+	}
+
+	sharingSupported() {
+		if (this.shareData !== null && navigator.canShare?.(this.shareData)) {
+			return true;
+		}
+		return false;
 	}
 
 	async connectedCallback() {
 		this.slotElement = document.createElement("slot");
 		this.shadowRoot?.appendChild(this.slotElement);
-		console.log(this.slotElement);
 		this.slotElement.addEventListener("slotchange", this.handleSlotChange);
-		const imageUrl = this.getAttribute("image-url");
 
+		const imageUrl = this.getAttribute("image-url");
 		this.shareData = {
 			title: this.getAttribute("title") || "",
 			text: this.getAttribute("text") || "",
 			url: this.getAttribute("url") || "",
 			files: await this.urlToFiles(imageUrl),
 		};
+
+		if (this.sharingSupported()) {
+			this.style.display = "block";
+		}
 	}
 
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {

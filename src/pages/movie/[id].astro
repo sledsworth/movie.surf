@@ -93,7 +93,7 @@ const shareImageUrl = randomMovie
           <span>{randomMovie.release_date}</span>
           <span class="break">{randomMovie.runtime} minutes</span>
           <section class="movie-card-details-meta-genres">
-          {randomMovie.genres.map(genre => (<span>{genre.name}</span>))}
+          {randomMovie.genres.map((genre: { name: string; }) => (<span>{genre.name}</span>))}
           </section>
         </section>
         <h2>{randomMovie.title}</h2>

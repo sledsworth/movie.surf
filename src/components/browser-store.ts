@@ -92,7 +92,6 @@ class BrowserStoreElement extends HTMLElement {
 					break;
 			}
 		}
-		console.log(this.submitOnLoad);
 		if (this.submitOnLoad) {
 			this.form?.requestSubmit();
 		}

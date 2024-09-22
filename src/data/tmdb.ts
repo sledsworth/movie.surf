@@ -155,8 +155,8 @@ export async function getMovieDetails(movieId: number | string) {
 			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
 		);
 		const data = await response.json();
-		console.log(data);
-		return data;
+		const providers = await getMainMovieStreamProviders(movieId);
+		return { ...data, providers };
 	} catch (error) {
 		console.error("Error fetching movie details:", error);
 		throw error;
@@ -191,8 +191,6 @@ export async function getAllMovieProviders() {
 		);
 
 		if (!response.ok) {
-			console.log(TMDB_API_KEY);
-			console.log(response.statusText);
 			throw new Error("Error fetching all movie providers");
 		}
 		const data = await response.json();
@@ -212,7 +210,7 @@ export async function getAllMovieProviders() {
 	}
 }
 
-export async function getMainMovieStreamProviders(movieId: number) {
+export async function getMainMovieStreamProviders(movieId: number | string) {
 	const allProviders = await getMovieWatchProviders(movieId, []);
 	return allProviders.flatrate.filter((provider) =>
 		MAIN_PROVIDERS.includes(provider.provider_id),
@@ -227,10 +225,8 @@ export async function getMovieWatchProviders(
 		const response = await fetch(
 			`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${TMDB_API_KEY}`,
 		);
-		console.log(response);
 		const data = await response.json();
 		const providers = data.results.US;
-		console.log(providers);
 		return {
 			flatrate: providers?.flatrate
 				? filterProviders(providers.flatrate, filteredProviders)
@@ -263,8 +259,7 @@ export async function getRandomMovie(
 				Math.floor(Math.random() * randomMovies.movies.length)
 			];
 		randomMovie = await getMovieDetails(randomMovie.id);
-		const providers = await getMainMovieStreamProviders(randomMovie.id);
-		return { ...randomMovie, providers };
+		return { ...randomMovie };
 	}
 	return null;
 }

@@ -1,5 +1,5 @@
 class ShareButtonElement extends HTMLElement {
-	private button: HTMLButtonElement | null = null;
+	private button?: HTMLButtonElement | null = null;
 	private slotElement: HTMLSlotElement | null = null;
 	private shareData: ShareData | null = null;
 
@@ -11,6 +11,7 @@ class ShareButtonElement extends HTMLElement {
 		super();
 
 		this.handleClick = this.handleClick.bind(this);
+		this.handleSlotChange = this.handleSlotChange.bind(this);
 		this.attachShadow({ mode: "open" });
 	}
 
@@ -31,15 +32,17 @@ class ShareButtonElement extends HTMLElement {
 			});
 	}
 
-	async connectedCallback() {
-		this.button = document.createElement("button");
-		this.button.textContent = "Share";
-		this.button.type = "button";
+	handleSlotChange(event: Event) {
+		console.log(event, this.slotElement);
+		this.button = this.slotElement?.assignedElements()[0] as HTMLButtonElement;
 		this.button.addEventListener("click", this.handleClick);
-		this.slotElement = document.createElement("slot");
-		this.button.appendChild(this.slotElement);
-		this.shadowRoot?.appendChild(this.button);
+	}
 
+	async connectedCallback() {
+		this.slotElement = document.createElement("slot");
+		this.shadowRoot?.appendChild(this.slotElement);
+		console.log(this.slotElement);
+		this.slotElement.addEventListener("slotchange", this.handleSlotChange);
 		const imageUrl = this.getAttribute("image-url");
 
 		this.shareData = {

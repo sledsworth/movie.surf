@@ -32,12 +32,13 @@ if (Astro.request.method === "POST") {
 		);
 		formData.providers =
 			(data.getAll("providers") as unknown as number[]) || [];
+		randomMovie = await getRandomMovie(formData);
+		return Astro.redirect(`/movie/${randomMovie?.id}`);
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
 		}
 	}
-	randomMovie = await getRandomMovie(formData);
 }
 
 const movieGenres = await getAllGenres({ type: "movie" });

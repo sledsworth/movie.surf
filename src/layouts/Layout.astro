@@ -75,6 +75,17 @@ const { title } = Astro.props;
       gap: 1rem;
       margin: 1rem 0 10rem;
     }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      position: fixed;
+      bottom: 2rem;
+      width: calc(100% - 2rem);
+      max-width: 800px;
+      margin: auto;
+    }
     
     button {
       appearance: none;
@@ -86,17 +97,11 @@ const { title } = Astro.props;
       color: black;
       font-weight: 600;
       font-size: 1.5rem;
-      position: fixed;
-    bottom: 2rem;
-    width: calc(100% - 2rem);
-    max-width: 800px;
-    /* box-sizing: border-box; */
-    margin: auto;
-    /* left: 1rem; */
+      flex: 1;
     }
 
     button:hover {
-      background-color: rgb(30, 30, 30);
+      background-color: goldenrod;
     }
   
    input[type="checkbox"] {

@@ -218,7 +218,7 @@ export async function getMainMovieStreamProviders(movieId: number | string) {
 }
 
 export async function getMovieWatchProviders(
-	movieId: number,
+	movieId: number | string,
 	filteredProviders: number[],
 ) {
 	try {

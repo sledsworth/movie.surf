@@ -5,6 +5,7 @@ import {
 	getAllMovieProviders,
 	getMovieDetails,
 	getRandomMovie,
+	type Movie,
 } from "@data/tmdb";
 import Layout from "src/layouts/Layout.astro";
 
@@ -19,11 +20,6 @@ interface MovieForm {
 	providers?: number[];
 }
 
-let randomMovie = null;
-if (id) {
-	randomMovie = await getMovieDetails(id);
-}
-
 const formData: MovieForm = {
 	genres: [],
 	good: true,
@@ -32,6 +28,8 @@ const formData: MovieForm = {
 	providers: [],
 };
 
+let randomMovie: Movie | null = null;
+let noMoviesFound = false;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
@@ -43,13 +41,22 @@ if (Astro.request.method === "POST") {
 		);
 		formData.providers =
 			(data.getAll("providers") as unknown as number[]) || [];
+
 		randomMovie = await getRandomMovie(formData);
-		return Astro.redirect(`/movie/${randomMovie?.id}`);
+		if (randomMovie !== null) {
+			return Astro.redirect(`/movie/${randomMovie.id}`);
+		}
+
+		noMoviesFound = true;
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
 		}
 	}
+}
+
+if (id) {
+	randomMovie = await getMovieDetails(id);
 }
 
 const movieGenres = await getAllGenres({ type: "movie" });
@@ -78,6 +85,7 @@ const shareImageUrl = randomMovie
   <browser-store submit-on-load={Astro.request.destination.match('/')}>
   <form name="movie-search-details" method="POST">
     <div class="button-group">
+      {noMoviesFound && (<p>No movies found with selected options.</p>)}
       <button class="glow">New Movie</button>
       <share-button url={shareUrl}>
         <button type="button" class="share glow">Share</button>
@@ -148,5 +156,7 @@ const shareImageUrl = randomMovie
   </form>
 </browser-store>
 </Layout>
+<scroll-position></scroll-position>
 <script src="../../components/browser-store.ts"></script>
 <script src="../../components/share-button.ts"></script>
+<script src="../../components/scroll-position.ts"></script>

@@ -1,0 +1,9 @@
+{
+  "index.ignored_file_patterns" : [
+    "node_modules"
+  ],
+  "workspace.color" : 2,
+  "workspace.name" : "🏄 movie.surf",
+  "workspace.preview_type" : "custom",
+  "workspace.preview_url" : "http:\/\/localhost:4321\/"
+}

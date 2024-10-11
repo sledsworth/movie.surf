@@ -10,6 +10,9 @@ class BrowserStoreElement extends HTMLElement {
 
 		this.handleSlotChange = this.handleSlotChange.bind(this);
 		this.attachShadow({ mode: "open" });
+		if (this.shadowRoot) {
+			this.shadowRoot.innerHTML = "<slot></slot>";
+		}
 	}
 
 	handleCheckbox(key: string, value: string | string[]) {
@@ -60,11 +63,10 @@ class BrowserStoreElement extends HTMLElement {
 	}
 
 	connectedCallback() {
-		this.slotElement = document.createElement("slot");
-		this.slotElement.addEventListener("slotchange", this.handleSlotChange, {
+		this.slotElement = this.shadowRoot?.querySelector("slot");
+		this.slotElement?.addEventListener("slotchange", this.handleSlotChange, {
 			signal: this.abortController?.signal,
 		});
-		this.shadowRoot?.append(this.slotElement);
 		this.form = this.querySelector("form");
 		this.submitOnLoad = this.hasAttribute("submit-on-load");
 		const data = JSON.parse(localStorage.getItem(`${this.form?.name}`) ?? "{}");

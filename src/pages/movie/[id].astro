@@ -84,7 +84,6 @@ const shareImageUrl = randomMovie
 <Layout title="Movie Surf">
   <browser-store submit-on-load={Astro.request.destination.match('/')}>
   <form name="movie-search-details" method="POST">
-    <div class="control-dock">
     <div class="popover" id="genre-popover" popover>
       <fieldset>
         <legend>Genres</legend>
@@ -133,16 +132,6 @@ const shareImageUrl = randomMovie
         </ul>
         </fieldset>
     </div>
-      {noMoviesFound && (<p>No movies found with selected options.</p>)}
-      <button popovertarget="genre-popover" type="button">Genres</button>
-      <button popovertarget="decade-popover" type="button">Decade</button>
-      <button popovertarget="good-popover" type="button">Good?</button>
-      <button popovertarget="providers-popover" type="button">Services</button>
-      <button class="glow" autofocus>New Movie</button>
-      <share-button url={shareUrl}>
-        <button type="button" class="share glow">Share</button>
-      </share-button>
-    </div>
     {randomMovie !== null && (<article class="movie-card">
       <img class="movie-card-image" width="300" src={shareImageUrl} alt={randomMovie.title} />
       <section class="movie-card-details">
@@ -165,6 +154,17 @@ const shareImageUrl = randomMovie
       <p>{randomMovie.overview}</p>
       </section>
     </article>)}
+    <div class="control-dock">
+      {noMoviesFound && (<p>No movies found with selected options.</p>)}
+      <button popovertarget="genre-popover" type="button">Genres</button>
+      <button popovertarget="decade-popover" type="button">Decade</button>
+      <button popovertarget="good-popover" type="button">Good?</button>
+      <button popovertarget="providers-popover" type="button">Services</button>
+      <button class="glow" autofocus>New Movie</button>
+      <share-button url={shareUrl}>
+        <button type="button" class="share glow">Share</button>
+      </share-button>
+    </div>
   </form>
 </browser-store>
 </Layout>

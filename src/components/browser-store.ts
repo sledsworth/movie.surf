@@ -1,6 +1,6 @@
 class BrowserStoreElement extends HTMLElement {
 	private form: HTMLFormElement | null = null;
-	private slotElement: HTMLSlotElement | null = null;
+	private slotElement: HTMLSlotElement | null | undefined = null;
 	private abortController: AbortController | null = null;
 
 	public submitOnLoad = false;

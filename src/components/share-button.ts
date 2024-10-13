@@ -66,7 +66,7 @@ class ShareButtonElement extends HTMLElement {
 		};
 
 		if (this.sharingSupported()) {
-			this.style.display = "block";
+			this.style.display = "contents";
 		}
 	}
 

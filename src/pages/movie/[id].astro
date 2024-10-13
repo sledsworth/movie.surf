@@ -255,7 +255,6 @@ const shareImageUrl = randomMovie
     .control-dock {
       display: flex;
       gap: 1rem;
-      justify-content: center;
       position: fixed;
       bottom: 0.5rem;
       width: 100%;
@@ -265,6 +264,14 @@ const shareImageUrl = randomMovie
       border-radius: 2rem;
       padding: 1rem;
       box-sizing: border-box;
+      overflow-x: scroll;
+    }
+
+    .control-dock::after {
+      content: "";
+      display: block;
+      width: 100%;
+      box-shadow: inset 20px 0px 10px 10px green;
     }
     
     button {
@@ -339,5 +346,13 @@ const shareImageUrl = randomMovie
     border-radius: 2rem;
     color: #fff;
     border: none;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .popover:popover-open {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s linear;
   }
 </style>

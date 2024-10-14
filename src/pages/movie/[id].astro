@@ -84,20 +84,21 @@ const shareImageUrl = randomMovie
 </slot>
 <Layout title="Movie Surf">
   <browser-store submit-on-load={Astro.request.destination.match('/')}>
-  <form name="movie-search-details" method="POST">
-		<div class="control-dock-container">
-			<div class="control-dock">
-				{noMoviesFound && (<p>No movies found with selected options.</p>)}
-				<button popovertarget="genre-popover" type="button">Genres</button>
-				<button popovertarget="decade-popover" type="button">Decade</button>
-				<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
-				<button popovertarget="providers-popover" type="button">Services</button>
-				<button class="glow" autofocus>New Movie</button>
-				<share-button url={shareUrl}>
-					<button type="button" class="share glow">Share</button>
-				</share-button>
-			</div>
+	<!-- TODO: move back into form after mobile Safari bug is fixed where popover doesn't open if button is in form -->
+	<div class="control-dock-container">
+		<div class="control-dock">
+			{noMoviesFound && (<p>No movies found with selected options.</p>)}
+			<button popovertarget="genre-popover" type="button">Genres</button>
+			<button popovertarget="decade-popover" type="button">Decade</button>
+			<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
+			<button popovertarget="providers-popover" type="button">Services</button>
+			<button id="new-movie-button" class="glow" autofocus type="button">New Movie</button>
+			<share-button url={shareUrl}>
+				<button type="button" class="share glow">Share</button>
+			</share-button>
 		</div>
+	</div>
+  <form name="movie-search-details" method="POST">
     <div class="popover" id="genre-popover" popover>
       <fieldset>
         <legend>Genres</legend>
@@ -173,6 +174,13 @@ const shareImageUrl = randomMovie
 <script src="../../components/browser-store.ts"></script>
 <script src="../../components/share-button.ts"></script>
 <script src="../../components/scroll-position.ts"></script>
+<script>
+  const movieForm = document.forms.namedItem("movie-search-details") as HTMLFormElement;
+	const submitButton = document.querySelector("#new-movie-button");
+	submitButton?.addEventListener("click", () => {
+		movieForm.submit();
+	});
+</script>
 <style>
 
   fieldset {

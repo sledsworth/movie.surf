@@ -33,7 +33,8 @@ let noMoviesFound = false;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
-		formData.good = data.get("good") === "on";
+		// formData.good = data.get("good") === "on";
+		formData.good = true;
 		formData.genres = (data.getAll("genres") as unknown as number[]) || [];
 		formData.decade = Number.parseInt(
 			data.get("decade")?.toString() || "2000",
@@ -83,18 +84,20 @@ const shareImageUrl = randomMovie
 </slot>
 <Layout title="Movie Surf">
   <browser-store submit-on-load={Astro.request.destination.match('/')}>
-    <div class="control-dock">
-      {noMoviesFound && (<p>No movies found with selected options.</p>)}
-      <button popovertarget="genre-popover" type="button">Genres</button>
-      <button popovertarget="decade-popover" type="button">Decade</button>
-      <button popovertarget="good-popover" type="button">Good?</button>
-      <button popovertarget="providers-popover" type="button">Services</button>
-      <button class="glow" autofocus>New Movie</button>
-      <share-button url={shareUrl}>
-        <button type="button" class="share glow">Share</button>
-      </share-button>
-    </div>
   <form name="movie-search-details" method="POST">
+		<div class="control-dock-container">
+			<div class="control-dock">
+				{noMoviesFound && (<p>No movies found with selected options.</p>)}
+				<button popovertarget="genre-popover" type="button">Genres</button>
+				<button popovertarget="decade-popover" type="button">Decade</button>
+				<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
+				<button popovertarget="providers-popover" type="button">Services</button>
+				<button class="glow" autofocus>New Movie</button>
+				<share-button url={shareUrl}>
+					<button type="button" class="share glow">Share</button>
+				</share-button>
+			</div>
+		</div>
     <div class="popover" id="genre-popover" popover>
       <fieldset>
         <legend>Genres</legend>
@@ -112,21 +115,19 @@ const shareImageUrl = randomMovie
     <div class="popover" id="decade-popover" popover>
         <fieldset>
         <legend>Decade</legend>
-        <label>
-          <input name="decade" type="radio" value="0" checked={formData.decade === 0} />
-          All
-        </label>
-        {decades.map(decade => (<label>
-          <input name="decade" type="radio" value={decade} checked={formData.decade === decade}>
-          {decade}'s
-        </label>))}
+				<ul class="genre-list">
+					<li>
+						<label>
+							<input name="decade" type="radio" value="0" checked={formData.decade === 0} />
+							All
+						</label>
+					</li>
+					{decades.map(decade => (<li><label>
+						<input name="decade" type="radio" value={decade} checked={formData.decade === decade}>
+						{decade}'s
+					</label></li>))}
+				</ul>
         </fieldset>
-    </div>
-    <div class="popover" id="good-popover" popover>
-      <fieldset>
-        <legend>Good?</legend>
-        <label><input name="good" type="checkbox" checked={formData.good}>Good?</label>
-      </fieldset>
     </div>
     <div class="popover" id="providers-popover" popover>
       <fieldset>
@@ -211,7 +212,7 @@ const shareImageUrl = randomMovie
   .movie-card .movie-card-image {
     aspect-ratio: 2 / 3;
     flex: 1 3 160px;
-    height: intrinsic;
+    height: fit-content;
     width: 200px;
   }
   
@@ -239,9 +240,22 @@ const shareImageUrl = randomMovie
       display: flex;
       gap: .5rem;
       flex-wrap: wrap;
-
+			max-height: 60vh;
+    	overflow-x: auto;
+			accent-color: gold;
+		
       li {
         flex: 0 1 240px;
+      }
+
+      label {
+        cursor: pointer;
+        display: inline-block;
+        padding: .25rem 1rem .25rem .25rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
       }
     }
   
@@ -251,27 +265,43 @@ const shareImageUrl = randomMovie
       gap: 1rem;
       margin: 1rem 0 10rem;
     }
+
+		.control-dock-container {
+			position: fixed;
+			bottom: 0.5rem;
+			width: calc(100% - 1rem);
+			left: .5rem;
+		}
   
     .control-dock {
-      display: flex;
-      gap: 1rem;
-      position: fixed;
-      bottom: 0.5rem;
-      width: 100%;
-      max-width: 800px;
-      margin: auto;
-      background: black;
-      border-radius: 2rem;
-      padding: 1rem;
-      box-sizing: border-box;
-      overflow-x: scroll;
+			display: flex;
+			gap: 1rem;
+			width: 100%;
+			max-width: 800px;
+			margin: auto;
+			background: black;
+			border-radius: 2rem;
+			padding: 1rem;
+			box-sizing: border-box;
+			overflow-x: scroll;
+			scroll-snap-type: x mandatory;
+			overscroll-behavior-x: contain;
     }
 
     .control-dock::after {
-      content: "";
-      display: block;
-      width: 100%;
-      box-shadow: inset 20px 0px 10px 10px green;
+			content: "";
+			width: 100%;
+			box-shadow: inset 0px 0 10px 10px black;
+			position: absolute;
+			height: 100%;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			border-radius: 2rem;
+			max-width: 800px;
+			margin: auto;
+			pointer-events: none;
     }
     
     button {
@@ -280,12 +310,19 @@ const shareImageUrl = randomMovie
       cursor: pointer;
       padding: 1rem 1.5rem;
       border-radius: 1rem;
-      background-color: gold;
+      background-color: white;
       color: black;
       font-weight: 800;
       font-size: 1rem;
       flex: 1;
+			scroll-snap-align: start;
+			scroll-margin-inline: 1rem;
+			text-wrap: nowrap;
     }
+
+		button.glow {
+			background-color: gold;
+		}
   
     button:hover {
       background-color: goldenrod;
@@ -320,18 +357,6 @@ const shareImageUrl = randomMovie
   label:has(input[type="checkbox"]:focus-visible) {
     outline: max(2px, 0.15em) solid currentColor;
     outline-offset: max(2px, 0.15em);
-  }
-  
-  .genre-list label {
-    cursor: pointer;
-    display: inline-block;
-    padding: .25rem 1rem .25rem .25rem;
-    /* border-radius: 2rem;
-    background-color: black; */
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: .5rem;
   }
   
   .popover {

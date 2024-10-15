@@ -88,14 +88,14 @@ const shareImageUrl = randomMovie
 	<div class="control-dock-container">
 		<div class="control-dock">
 			{noMoviesFound && (<p>No movies found with selected options.</p>)}
+			<share-button url={shareUrl}>
+				<button type="button" class="share glow">Share</button>
+			</share-button>
+			<button id="new-movie-button" class="glow" autofocus type="button">New Movie</button>
 			<button popovertarget="genre-popover" type="button">Genres</button>
 			<button popovertarget="decade-popover" type="button">Decade</button>
 			<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
 			<button popovertarget="providers-popover" type="button">Services</button>
-			<button id="new-movie-button" class="glow" autofocus type="button">New Movie</button>
-			<share-button url={shareUrl}>
-				<button type="button" class="share glow">Share</button>
-			</share-button>
 		</div>
 	</div>
   <form name="movie-search-details" method="POST">

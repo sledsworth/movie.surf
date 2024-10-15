@@ -150,7 +150,6 @@ export async function getMovieSuggestions({
 }
 
 export async function getMovieDetails(movieId: number | string) {
-	console.log("getMovieDetails", movieId);
 	try {
 		const response = await fetch(
 			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
@@ -259,7 +258,6 @@ export async function getRandomMovie(
 			randomMovies.movies[
 				Math.floor(Math.random() * randomMovies.movies.length)
 			];
-		console.log(randomMovie);
 		randomMovie = await getMovieDetails(randomMovie.id);
 		return { ...randomMovie };
 	}

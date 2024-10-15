@@ -1,11 +1,6 @@
 class ScrollPositionElement extends HTMLElement {
 	selector = "html";
 
-	constructor() {
-		super();
-		console.log("ScrollPositionElement constructor");
-	}
-
 	getScrollElement() {
 		return document.querySelector(this.selector);
 	}

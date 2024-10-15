@@ -99,7 +99,7 @@ const shareImageUrl = randomMovie
 		</div>
 	</div>
   <form name="movie-search-details" method="POST">
-    <div class="popover" id="genre-popover" popover>
+    <div class="glow popover" id="genre-popover" popover>
       <fieldset>
         <legend>Genres</legend>
         <ul class="genre-list">
@@ -113,7 +113,7 @@ const shareImageUrl = randomMovie
         </ul>
       </fieldset>
     </div>
-    <div class="popover" id="decade-popover" popover>
+    <div class="glow popover" id="decade-popover" popover>
         <fieldset>
         <legend>Decade</legend>
 				<ul class="genre-list">
@@ -130,7 +130,7 @@ const shareImageUrl = randomMovie
 				</ul>
         </fieldset>
     </div>
-    <div class="popover" id="providers-popover" popover>
+    <div class="glow popover" id="providers-popover" popover>
       <fieldset>
         <legend>Services</legend>
         <ul class="genre-list">
@@ -200,6 +200,11 @@ const shareImageUrl = randomMovie
     gap: 1rem;
     flex-wrap: wrap;
     justify-content: center;
+		background: black;
+    border-radius: 2rem;
+    color: white;
+    padding: 1rem;
+    box-sizing: border-box;
   }
   
   .movie-card-details-meta {
@@ -222,6 +227,7 @@ const shareImageUrl = randomMovie
     flex: 1 3 160px;
     height: fit-content;
     width: 200px;
+		border-radius: 1rem;
   }
   
   .movie-card .movie-card-details {
@@ -294,12 +300,13 @@ const shareImageUrl = randomMovie
 			overflow-x: scroll;
 			scroll-snap-type: x mandatory;
 			overscroll-behavior-x: contain;
+			box-shadow: 0 0 24px -6px black;
     }
 
     .control-dock::after {
 			content: "";
 			width: 100%;
-			box-shadow: inset 0px 0 10px 10px black;
+			box-shadow: inset 0px 0px 10px 10px black;
 			position: absolute;
 			height: 100%;
 			left: 0;

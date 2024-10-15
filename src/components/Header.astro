@@ -28,9 +28,11 @@ const { title, subtitle } = Astro.props;
     <div class="light alternate"></div>
     <div class="light"></div>
   </div>
-  <div class="marquee glow">
-    <h1>{title}</h1>
-    <p>{subtitle}</p>
+  <div class="marquee-container glow">
+    <div class="marquee">
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+    </div>
   </div>
   <div class="light-bar light-bar--horizontal">
     <div class="light"></div>

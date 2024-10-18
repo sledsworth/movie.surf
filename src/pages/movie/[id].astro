@@ -22,7 +22,6 @@ const formData: MovieForm = {
 };
 
 let randomMovie: Movie | null = null;
-let noMoviesFound = false;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
@@ -36,12 +35,11 @@ if (Astro.request.method === "POST") {
 		formData.providers =
 			(data.getAll("providers") as unknown as number[]) || [];
 
-		randomMovie = await getRandomMovie(formData);
+		const { movie } = await getRandomMovie(formData);
+		randomMovie = movie;
 		if (randomMovie !== null) {
 			return Astro.redirect(`/movie/${randomMovie.id}`);
 		}
-
-		noMoviesFound = true;
 	} catch (error) {
 		if (error instanceof Error) {
 			console.error(error.message);
@@ -54,4 +52,4 @@ if (id) {
 }
 ---
 
-<MoviePage randomMovie={randomMovie} formData={formData} />;
+<MoviePage randomMovie={randomMovie} formData={formData} />

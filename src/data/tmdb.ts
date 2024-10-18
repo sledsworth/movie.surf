@@ -121,9 +121,9 @@ export async function getMovieSuggestions({
 			);
 		}
 		if (good) {
-			url.searchParams.append("vote_average.gte", "7");
-			url.searchParams.append("vote_count.gte", "200");
-			url.searchParams.append("sort_by", "vote_average.desc");
+			url.searchParams.append("vote_average.gte", "6.9");
+			url.searchParams.append("vote_count.gte", "150");
+			// url.searchParams.append("sort_by", "vote_average.desc");
 		} else {
 			url.searchParams.append("vote_average.lte", "3");
 			url.searchParams.append("vote_count.gte", "50");
@@ -246,8 +246,9 @@ export async function getMovieWatchProviders(
 
 export async function getRandomMovie(
 	formData: MovieFormData,
-): Promise<Movie | null> {
+): Promise<{ movie: Movie | null; results: number }> {
 	const { totalResults, totalPages } = await getMovieSuggestions(formData);
+	console.log(totalResults, totalPages);
 	if (totalResults > 0) {
 		const randomPage = Math.ceil(Math.random() * totalPages);
 		const randomMovies = await getMovieSuggestions({
@@ -259,7 +260,26 @@ export async function getRandomMovie(
 				Math.floor(Math.random() * randomMovies.movies.length)
 			];
 		randomMovie = await getMovieDetails(randomMovie.id);
-		return { ...randomMovie };
+		return { movie: randomMovie, results: totalResults };
 	}
-	return null;
+	return { movie: null, results: 0 };
+}
+
+export async function searchForMovie({
+	title,
+	year,
+}: { title: string; year: number }) {
+	try {
+		const url = new URL("https://api.themoviedb.org/3/search/movie");
+		url.searchParams.append("api_key", TMDB_API_KEY ?? "");
+		url.searchParams.append("query", title);
+		url.searchParams.append("primary_release_year", year.toString());
+		const response = await fetch(url.toString());
+		const data = await response.json();
+		console.log(data);
+		return data.results[0] as Movie;
+	} catch (error) {
+		console.error("Error fetching movie search results:", error);
+		return {};
+	}
 }

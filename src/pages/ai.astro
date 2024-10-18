@@ -1,0 +1,100 @@
+---
+import {
+	getAllGenres,
+	getAllMovieProviders,
+	getRandomMovie,
+	searchForMovie,
+} from "@data/tmdb";
+import { getMovieSuggestions } from "@data/openai";
+
+import Layout from "src/layouts/Layout.astro";
+
+export const prerender = false;
+
+interface MovieForm {
+	genres: number[];
+	good: boolean;
+	decade?: number;
+	page: number;
+	providers?: number[];
+	prompt?: string;
+}
+
+if (Astro.request.method === "POST") {
+	try {
+		const data = await Astro.request.formData();
+		if (data) {
+			if (data.has("prompt")) {
+				const suggestions = await getMovieSuggestions(
+					data.get("prompt")?.toString() || "",
+				);
+				const movies = await Promise.all(
+					suggestions.movies.map(
+						(suggestion: { title: string; year: number }) => {
+							return searchForMovie(suggestion);
+						},
+					),
+				);
+				return Astro.redirect(`/movie/${movies[0]?.id}`);
+			}
+		}
+	} catch (error) {
+		if (error instanceof Error) {
+			console.error(error.message);
+		}
+	}
+}
+---
+<Layout title="Movie Surf">
+  <browser-store>
+<form name="movie-search-details" method="POST">
+  <textarea rows="5" name="prompt" placeholder="Brad Pitt's worst performance" />
+  <button id="new-movie-button" class="glow" type="submit">New Movie</button>
+</form>
+</browser-store>
+</Layout>
+<script src="../components/browser-store.ts"></script>
+<style>
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0 10rem;
+  }
+
+  textarea {
+    appearance: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    font-size: 1rem;
+  }
+  
+  button {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    font-weight: 800;
+    font-size: 1rem;
+    flex: 1;
+    scroll-snap-align: start;
+    scroll-margin-inline: 1rem;
+    text-wrap: nowrap;
+  }
+
+  button.glow {
+    background-color: gold;
+  }
+
+  button:hover {
+    background-color: goldenrod;
+  }
+</style>

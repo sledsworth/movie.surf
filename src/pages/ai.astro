@@ -1,24 +1,10 @@
 ---
-import {
-	getAllGenres,
-	getAllMovieProviders,
-	getRandomMovie,
-	searchForMovie,
-} from "@data/tmdb";
+import { searchForMovie } from "@data/tmdb";
 import { getMovieSuggestions } from "@data/openai";
 
 import Layout from "src/layouts/Layout.astro";
 
 export const prerender = false;
-
-interface MovieForm {
-	genres: number[];
-	good: boolean;
-	decade?: number;
-	page: number;
-	providers?: number[];
-	prompt?: string;
-}
 
 if (Astro.request.method === "POST") {
 	try {
@@ -46,14 +32,11 @@ if (Astro.request.method === "POST") {
 }
 ---
 <Layout title="Movie Surf">
-  <browser-store>
 <form name="movie-search-details" method="POST">
   <textarea rows="5" name="prompt" placeholder="Brad Pitt's worst performance" />
-  <button id="new-movie-button" class="glow" type="submit">New Movie</button>
+  <button id="new-movie-button" class="glow" type="submit">Find Movie</button>
 </form>
-</browser-store>
 </Layout>
-<script src="../components/browser-store.ts"></script>
 <style>
 
   form {

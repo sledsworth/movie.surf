@@ -12,7 +12,7 @@ if (Astro.request.method === "POST") {
 		if (data) {
 			if (data.has("prompt")) {
 				const suggestions = await getMovieSuggestions(
-					data.get("prompt")?.toString() || "",
+					data.get("prompt")?.toString() || "Blank Check",
 				);
 				const movies = await Promise.all(
 					suggestions.movies.map(
@@ -33,10 +33,25 @@ if (Astro.request.method === "POST") {
 ---
 <Layout title="Movie Surf">
 <form name="movie-search-details" method="POST">
-  <textarea rows="5" name="prompt" placeholder="Brad Pitt's worst performance" />
-  <button id="new-movie-button" class="glow" type="submit">Find Movie</button>
+  <textarea autofocus rows="5" name="prompt" placeholder="Brad Pitt's worst performance" />
+  <button name="new-movie-button" class="glow" type="submit">Find Movie</button>
 </form>
 </Layout>
+<script>
+  const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
+  const textarea = form?.elements.namedItem("prompt") as HTMLTextAreaElement | null;
+  const submitButton = form?.elements.namedItem("new-movie-button") as HTMLButtonElement | null;
+  submitButton?.addEventListener("click", () => {
+    document.body.setAttribute("inert", "");
+    // submitButton.disabled = true;
+    // TODO: if form submit fails, remove inert
+  });
+  textarea?.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (!event.shiftKey && event.key === "Enter") {
+      form?.submit();
+    }
+  });
+</script>
 <style>
 
   form {
@@ -55,6 +70,7 @@ if (Astro.request.method === "POST") {
     color: black;
     border: 2px solid black;
     font-size: 1rem;
+    resize: none;
   }
   
   button {

@@ -1,4 +1,17 @@
 import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
+import { z } from "zod";
+
+const Movie = z.object({
+	title: z.string(),
+	year: z.number(),
+});
+
+const MovieSuggestions = z.object({
+	movies: z.array(Movie),
+	error: z.string().optional(),
+});
+
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY,
 });
@@ -6,19 +19,16 @@ const openai = new OpenAI({
 export async function getMovieSuggestions(prompt: string) {
 	const completion = await openai.chat.completions.create({
 		model: "gpt-4o",
+
 		messages: [
 			{
 				role: "system",
 				content:
-					"You are a movie expert that knows everything about movies. Suggest three movies to the user based on their prompt, if possible. The results should be presented in valid JSON format { movies: [{ title: string; year: number; }]}. Set an error if there aren't any movie results based on the prompt given. The results should be valid JSON and not markdown.",
+					"You are a movie expert that knows everything about movies. Provide movie suggestions to the user based on their prompt, if possible. If no movies can be found, set the error property of movie suggestions.",
 			},
 			{ role: "user", content: prompt },
-			{
-				role: "system",
-				content:
-					"The results need to be valid JSON without the markdown backticks.",
-			},
 		],
+		response_format: zodResponseFormat(MovieSuggestions, "movies"),
 	});
 	console.log(completion.choices.length);
 	console.log(completion.choices[0].message);

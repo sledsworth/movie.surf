@@ -1,0 +1,44 @@
+---
+interface Props {
+	date: Date;
+	options?: Intl.DateTimeFormatOptions;
+	justDay?: boolean;
+}
+
+const {
+	date,
+	options = {
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	},
+	justDay = false,
+} = Astro.props;
+
+let dateString = date.toLocaleString("en-us", options);
+if (justDay) {
+	const day = date.getDate();
+	switch (day % 10) {
+		case 1:
+			dateString = `${day}st`;
+			break;
+		case 2:
+			dateString = `${day}nd`;
+			break;
+		case 3:
+			dateString = `${day}rd`;
+			break;
+		default:
+			dateString = `${day}th`;
+			break;
+	}
+	if (day === 11 || day === 12 || day === 13) {
+		dateString = `${day}th`;
+	}
+}
+const datetime = date?.toISOString() ?? "";
+---
+
+<time datetime={datetime}>
+  {dateString}
+</time>

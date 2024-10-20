@@ -2,6 +2,7 @@
 import type { Provider } from "@data/tmdb";
 import { getAllGenres, getAllMovieProviders, type Movie } from "@data/tmdb";
 import Layout from "src/layouts/Layout.astro";
+import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
 	randomMovie: Movie | null;
@@ -105,13 +106,13 @@ const shareImageUrl = randomMovie
       <img class="movie-card-image" width="300" src={shareImageUrl} alt={randomMovie.title} />
       <section class="movie-card-details">
         <section class="movie-card-details-meta">
-          <span>{randomMovie.release_date}</span>
-          <span class="break">{randomMovie.runtime} minutes</span>
-          <section class="movie-card-details-meta-genres">
-          {randomMovie.genres.map((genre: { name: string; }) => (<span>{genre.name}</span>))}
-          </section>
+          <FormattedDate date={new Date(randomMovie.release_date)} />
+          <span>{randomMovie.runtime} minutes</span>
         </section>
         <h2>{randomMovie.title}</h2>
+        <section class="movie-card-details-meta">
+          {randomMovie.genres.map((genre: { name: string; }) => (<span>{genre.name}</span>))}
+        </section>
       <section>
         <div style="display: flex; gap: .5rem;">
           {randomMovie.providers !== undefined && randomMovie.providers.map((provider: Provider) => (
@@ -171,11 +172,7 @@ const shareImageUrl = randomMovie
     font-weight: 600;
     font-variant: small-caps;
     margin-bottom: 1rem;
-  }
-  
-  .movie-card-details-meta-genres {
-    display: flex;
-    gap: 1rem;
+    width: 100%;
   }
   
   .movie-card .movie-card-image {

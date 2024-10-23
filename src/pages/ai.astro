@@ -33,9 +33,20 @@ if (Astro.request.method === "POST") {
 ---
 <Layout title="Movie Surf">
 <form name="movie-search-details" method="POST">
-  <textarea autofocus rows="5" name="prompt" placeholder="Brad Pitt's worst performance" />
+  <textarea autofocus rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
   <button name="new-movie-button" class="glow" type="submit">Find Movie</button>
 </form>
+<aside>
+  <h2>Examples</h2>
+  <ul>
+    <li>George Clooney's worst performance (God help us if it isn't Batman & Robin).</li>
+    <li>The best whodonit' (that's not Knives Out).</li>
+    <li>The worst movie of all time.</li>
+    <li>Some movie about doing taxes.</li>
+    <li>A movie where Brad Pitt is always eating.</li>
+    <li>Stephen Spielburg's best flick.</li>
+  </ul>
+</aside>
 </Layout>
 <script>
   const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
@@ -47,18 +58,46 @@ if (Astro.request.method === "POST") {
     // TODO: if form submit fails, remove inert
   });
   textarea?.addEventListener("keydown", (event: KeyboardEvent) => {
+    console.log(event.key);
     if (!event.shiftKey && event.key === "Enter") {
       form?.submit();
     }
   });
 </script>
-<style>
+<style is:global>
+
+  main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  aside {
+    flex: 1 1;
+    padding: 1rem 2rem;
+    background-color: black;
+    color: white;
+    border-radius: 1rem;
+
+    h2 {
+      margin: 1rem 0 0;
+    }
+
+    ul {
+      margin: 0;
+      padding: .5rem;
+    }
+
+    li {
+      margin: .5rem 0;
+    }
+  }
 
   form {
+    flex: 2 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin: 1rem 0 10rem;
   }
 
   textarea {
@@ -71,6 +110,7 @@ if (Astro.request.method === "POST") {
     border: 2px solid black;
     font-size: 1rem;
     resize: none;
+    height: 100%;
   }
   
   button {

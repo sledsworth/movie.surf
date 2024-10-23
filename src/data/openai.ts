@@ -19,7 +19,8 @@ const openai = new OpenAI({
 export async function getMovieSuggestions(prompt: string) {
 	const completion = await openai.chat.completions.create({
 		model: "gpt-4o",
-
+		temperature: 1.5,
+		// top_p: 1,
 		messages: [
 			{
 				role: "system",
@@ -29,6 +30,10 @@ export async function getMovieSuggestions(prompt: string) {
 			{ role: "user", content: prompt },
 		],
 		response_format: zodResponseFormat(MovieSuggestions, "movies"),
+		store: true,
+		metadata: {
+			source: "movie.surf",
+		},
 	});
 	console.log(completion.choices.length);
 	console.log(completion.choices[0].message);

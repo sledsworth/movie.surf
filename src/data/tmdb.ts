@@ -276,7 +276,7 @@ export async function searchForMovie({
 		url.searchParams.append("primary_release_year", year.toString());
 		const response = await fetch(url.toString());
 		const data = await response.json();
-		console.log(data);
+		// console.log(data);
 		return data.results[0] as Movie;
 	} catch (error) {
 		console.error("Error fetching movie search results:", error);

@@ -77,15 +77,20 @@ class BrowserStoreElement extends HTMLElement {
 		}
 		for (const key in data) {
 			const value = data[key];
-			const inputType = this.form
-				?.querySelector(`[name="${key}"]`)
-				?.getAttribute("type");
+			const input = this.form?.querySelector(
+				`[name="${key}"]`,
+			) as HTMLInputElement;
+
+			const inputType = input?.getAttribute("type") ?? input?.type;
 			switch (inputType) {
 				case "checkbox":
 					this.handleCheckbox(key, value);
 					break;
 				case "radio":
 					this.handleRadio(key, value);
+					break;
+				case "textarea":
+					input.value = value as string;
 					break;
 				default:
 					this.form

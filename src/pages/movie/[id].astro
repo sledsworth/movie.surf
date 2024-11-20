@@ -1,4 +1,5 @@
 ---
+import { getMovieSuggestion } from "@data/movie";
 import { getMovieDetails, getRandomMovie, type Movie } from "@data/tmdb";
 import MoviePage from "src/components/MoviePage.astro";
 
@@ -25,20 +26,10 @@ let randomMovie: Movie | null = null;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
-		// formData.good = data.get("good") === "on";
-		formData.good = true;
-		formData.genres = (data.getAll("genres") as unknown as number[]) || [];
-		formData.decade = Number.parseInt(
-			data.get("decade")?.toString() || "2000",
-			10,
-		);
-		formData.providers =
-			(data.getAll("providers") as unknown as number[]) || [];
 
-		const { movie } = await getRandomMovie(formData);
-		randomMovie = movie;
-		if (randomMovie !== null) {
-			return Astro.redirect(`/movie/${randomMovie.id}`);
+		const movie = await getMovieSuggestion(data);
+		if (movie) {
+			return Astro.redirect(`/movie/${movie.id}`);
 		}
 	} catch (error) {
 		if (error instanceof Error) {
@@ -53,3 +44,13 @@ if (id) {
 ---
 
 <MoviePage randomMovie={randomMovie} formData={formData} />
+<script id="session-store-script" data-movie-id={id}>
+  document.addEventListener("DOMContentLoaded", async () => {
+    const movieId = document.getElementById("session-store-script").dataset.movieId;
+    const seenMovies = await JSON.parse(sessionStorage.getItem("seenMovies")) ?? [];
+    if (movieId && !seenMovies.includes(movieId)) {
+      seenMovies.push(movieId);
+      sessionStorage.setItem("seenMovies", JSON.stringify(seenMovies));
+    }
+  });
+</script>

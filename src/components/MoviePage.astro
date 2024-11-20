@@ -49,6 +49,7 @@ const shareImageUrl = randomMovie
 				<button type="button" class="share glow">Share</button>
 			</share-button>
 			<button id="new-movie-button" class="glow" autofocus type="button">New Movie</button>
+			<button popovertarget="prompt-popover" type="button">Prompt</button>
 			<button popovertarget="genre-popover" type="button">Genres</button>
 			<button popovertarget="decade-popover" type="button">Decade</button>
 			<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
@@ -56,6 +57,23 @@ const shareImageUrl = randomMovie
 		</div>
 	</div>
   <form name="movie-search-details" method="POST">
+    <div class="glow popover" id="prompt-popover" popover>
+      <fieldset>
+        <legend>Prompt</legend>
+        <textarea autofocus rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
+        <aside>
+          <h2>Examples</h2>
+          <ul>
+            <li>George Clooney's worst performance (God help us if it isn't Batman & Robin).</li>
+            <li>The best whodonit' (that's not Knives Out).</li>
+            <li>The worst movie of all time.</li>
+            <li>Some movie about doing taxes.</li>
+            <li>A movie where Brad Pitt is always eating.</li>
+            <li>Stephen Spielburg's best flick.</li>
+          </ul>
+        </aside>
+      </fieldset>
+    </div>
     <div class="glow popover" id="genre-popover" popover>
       <fieldset>
         <legend>Genres</legend>
@@ -132,17 +150,38 @@ const shareImageUrl = randomMovie
 <script src="./share-button.ts"></script>
 <script src="./scroll-position.ts"></script>
 <script>
-  const movieForm = document.forms.namedItem("movie-search-details") as HTMLFormElement;
-	const submitButton = document.querySelector("#new-movie-button");
-	submitButton?.addEventListener("click", () => {
-		movieForm.submit();
-	});
+  const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
+  const textarea = form?.elements.namedItem("prompt") as HTMLTextAreaElement | null;
+  const submitButton = document.querySelector('#new-movie-button') as HTMLButtonElement | null;
+  submitButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    document.body.setAttribute("inert", "");
+    const hiddenInput = document.createElement("input");
+    hiddenInput.type = "hidden";
+    hiddenInput.name = "seenMovies";
+    hiddenInput.value = JSON.stringify(
+      JSON.parse(sessionStorage.getItem("seenMovies") || "[]"),
+    );
+    form?.appendChild(hiddenInput);
+    form?.submit();
+    // submitButton.disabled = true;
+    // TODO: if form submit fails, remove inert
+  });
+  textarea?.addEventListener("keydown", (event: KeyboardEvent) => {
+    console.log(event.key);
+    if (!event.shiftKey && event.key === "Enter") {
+      form?.submit();
+    }
+  });
 </script>
 <style>
 
   fieldset {
     border: none;
     padding: 2rem 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
   
   legend {
@@ -201,102 +240,116 @@ const shareImageUrl = randomMovie
   }
   
   .genre-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-			max-height: 60vh;
-    	overflow-x: auto;
-			accent-color: gold;
-		
-      li {
-        flex: 0 1 240px;
-      }
-
-      label {
-        cursor: pointer;
-        display: inline-block;
-        padding: .25rem 1rem .25rem .25rem;
-        color: white;
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-      }
-    }
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    max-height: 60vh;
+    overflow-x: auto;
+    accent-color: gold;
   
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin: 1rem 0 10rem;
+    li {
+      flex: 0 1 240px;
     }
 
-		.control-dock-container {
-			position: fixed;
-			bottom: 0.5rem;
-			width: calc(100% - 1rem);
-			left: .5rem;
-		}
-  
-    .control-dock {
-			display: flex;
-			gap: 1rem;
-			width: 100%;
-			max-width: 800px;
-			margin: auto;
-			background: black;
-			border-radius: 2rem;
-			padding: 1rem;
-			box-sizing: border-box;
-			overflow-x: scroll;
-			scroll-snap-type: x mandatory;
-			overscroll-behavior-x: contain;
-			box-shadow: 0 0 24px -6px black;
-    }
-
-    .control-dock::after {
-			content: "";
-			width: 100%;
-			box-shadow: inset 0px 0px 10px 10px black;
-			position: absolute;
-			height: 100%;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			border-radius: 2rem;
-			max-width: 800px;
-			margin: auto;
-			pointer-events: none;
-    }
-    
-    button {
-      appearance: none;
-      border: none;
+    label {
       cursor: pointer;
-      padding: 1rem 1.5rem;
-      border-radius: 1rem;
-      background-color: white;
-      color: black;
-      font-weight: 800;
-      font-size: 1rem;
-      flex: 1;
-			scroll-snap-align: start;
-			scroll-margin-inline: 1rem;
-			text-wrap: nowrap;
+      display: inline-block;
+      padding: .25rem 1rem .25rem .25rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
     }
+  }
 
-		button.glow {
-			background-color: gold;
-		}
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem 0 10rem;
+  }
+
+  .control-dock-container {
+    position: fixed;
+    bottom: 0.5rem;
+    width: calc(100% - 1rem);
+    left: .5rem;
+  }
+
+  .control-dock {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    background: black;
+    border-radius: 2rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    box-shadow: 0 0 24px -6px black;
+  }
+
+  .control-dock::after {
+    content: "";
+    width: 100%;
+    box-shadow: inset 0px 0px 10px 10px black;
+    position: absolute;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 2rem;
+    max-width: 800px;
+    margin: auto;
+    pointer-events: none;
+  }
   
-    button:hover {
-      background-color: goldenrod;
-    }
+  button {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    font-weight: 800;
+    font-size: 1rem;
+    flex: 1;
+    scroll-snap-align: start;
+    scroll-margin-inline: 1rem;
+    text-wrap: nowrap;
+  }
+
+  button.glow {
+    background-color: gold;
+  }
+
+  button:hover {
+    background-color: goldenrod;
+  }
+
+  textarea {
+    appearance: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    font-size: 1rem;
+    resize: none;
+    height: 100%;
+    width: 100%;
+  }
   
-   input[type="checkbox"] {
+  input[type="checkbox"] {
     appearance: none;
     margin: 0;
     width: 1.25rem;

@@ -18,7 +18,8 @@ export async function getMovieSuggestion(
 				const formInfo: MovieFormData = {
 					genres:
 						(data.getAll("genres") as unknown as string[]).map(
-							(id) => movieGenres.find((g) => g.id.toString() === id)?.name,
+							// biome-ignore lint/style/noNonNullAssertion: <explanation>
+							(id) => movieGenres.find((g) => g.id.toString() === id)!.name,
 						) || [],
 					good: true,
 					decade: data.has("decade")

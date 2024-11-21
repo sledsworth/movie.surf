@@ -268,7 +268,7 @@ export async function getRandomMovie(
 export async function searchForMovie({
 	title,
 	year,
-}: { title: string; year: number }) {
+}: { title: string; year: number }): Promise<Movie | null> {
 	try {
 		const url = new URL("https://api.themoviedb.org/3/search/movie");
 		url.searchParams.append("api_key", TMDB_API_KEY ?? "");
@@ -277,9 +277,10 @@ export async function searchForMovie({
 		const response = await fetch(url.toString());
 		const data = await response.json();
 		// console.log(data);
-		return data.results[0] as Movie;
+
+		return getMovieDetails(data.results[0].id);
 	} catch (error) {
 		console.error("Error fetching movie search results:", error);
-		return {};
+		return null;
 	}
 }

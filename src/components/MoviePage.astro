@@ -69,7 +69,7 @@ const shareImageUrl = randomMovie
             <li>The worst movie of all time.</li>
             <li>Some movie about doing taxes.</li>
             <li>A movie where Brad Pitt is always eating.</li>
-            <li>Stephen Spielburg's best flick.</li>
+            <li>Steven Spielberg's best flick.</li>
           </ul>
         </aside>
       </fieldset>
@@ -140,6 +140,7 @@ const shareImageUrl = randomMovie
       </section>
       <p>{randomMovie.tagline}</p>
       <p>{randomMovie.overview}</p>
+      { randomMovie.imdb_id && (<a href={`https://imdb.com/title/${randomMovie.imdb_id}`}><img src="/imdb.svg" alt={`IMDB link to ${randomMovie.title}`} /></a>)}
       </section>
     </article>)}
   </form>

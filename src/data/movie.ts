@@ -26,7 +26,7 @@ export async function getMovieSuggestion(
 						? Number.parseInt(data.get("decade")?.toString() || "0", 10)
 						: undefined,
 					page: 1,
-					providers: (data.getAll("providers") as unknown as number[]) ?? [],
+					providers: (data.getAll("providers") as unknown as string[]) ?? [],
 				};
 				const suggestions = await getAiMovieSuggestions(
 					data.get("prompt")?.toString() || "Blank Check",
@@ -39,19 +39,32 @@ export async function getMovieSuggestion(
 						},
 					),
 				);
+				// console.log(movies);
+				let availibleMovie;
 				const seenMovies = JSON.parse(data.get("seenMovies") as string) ?? [];
 				for (const movie of movies) {
 					console.log(
+						movie.title,
+						movie.providers,
 						movie.id,
 						seenMovies,
 						seenMovies.includes(movie.id.toString()),
 					);
-					if (seenMovies.includes(movie.id.toString())) {
-						continue;
+					console.log(formInfo.providers, movie.providers);
+					if (
+						formInfo.providers &&
+						movie.providers?.filter((provider) =>
+							formInfo.providers?.includes(provider.provider_id.toString()),
+						).length > 0
+					) {
+						if (!seenMovies.includes(movie.id.toString())) {
+							return movie;
+						}
+						availibleMovie = movie;
 					}
-					return movie;
 				}
-				return movies[0];
+				console.log(availibleMovie);
+				return availibleMovie ?? movies[0];
 			}
 		}
 	} catch (error) {

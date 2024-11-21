@@ -11,6 +11,7 @@ export interface Provider {
 }
 
 export interface Movie {
+	imdb_id: number;
 	id: number;
 	title: string;
 	poster_path: string;

@@ -4,6 +4,7 @@ import {
 	searchForMovie,
 	type Movie,
 	type MovieFormData,
+	type Provider,
 } from "./tmdb";
 
 export async function getMovieSuggestion(
@@ -26,7 +27,7 @@ export async function getMovieSuggestion(
 						? Number.parseInt(data.get("decade")?.toString() || "0", 10)
 						: undefined,
 					page: 1,
-					providers: (data.getAll("providers") as unknown as string[]) ?? [],
+					providers: data.getAll("providers") as unknown as string[],
 				};
 				const suggestions = await getAiMovieSuggestions(
 					data.get("prompt")?.toString() || "Blank Check",
@@ -41,7 +42,8 @@ export async function getMovieSuggestion(
 				);
 				// console.log(movies);
 				let availibleMovie;
-				const seenMovies = JSON.parse(data.get("seenMovies") as string) ?? [];
+				const seenMovies =
+					JSON.parse(data.get("seenMovies") as string) ?? ([] as string[]);
 				for (const movie of movies) {
 					console.log(
 						movie.title,
@@ -53,8 +55,11 @@ export async function getMovieSuggestion(
 					console.log(formInfo.providers, movie.providers);
 					if (
 						formInfo.providers &&
-						movie.providers?.filter((provider) =>
-							formInfo.providers?.includes(provider.provider_id.toString()),
+						movie.providers?.filter(
+							(provider: Provider) =>
+								(formInfo.providers as string[]).includes(
+									provider.provider_id.toString(),
+								) ?? false,
 						).length > 0
 					) {
 						if (!seenMovies.includes(movie.id.toString())) {

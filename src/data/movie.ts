@@ -40,19 +40,10 @@ export async function getMovieSuggestion(
 						},
 					),
 				);
-				// console.log(movies);
-				let availibleMovie;
+				let availibleMovie: Movie | undefined;
 				const seenMovies =
 					JSON.parse(data.get("seenMovies") as string) ?? ([] as string[]);
 				for (const movie of movies) {
-					console.log(
-						movie.title,
-						movie.providers,
-						movie.id,
-						seenMovies,
-						seenMovies.includes(movie.id.toString()),
-					);
-					console.log(formInfo.providers, movie.providers);
 					if (
 						formInfo.providers &&
 						movie.providers?.filter(
@@ -68,7 +59,6 @@ export async function getMovieSuggestion(
 						availibleMovie = movie;
 					}
 				}
-				console.log(availibleMovie);
 				return availibleMovie ?? movies[0];
 			}
 		}

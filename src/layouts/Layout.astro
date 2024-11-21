@@ -43,31 +43,28 @@ const { title } = Astro.props;
       background: radial-gradient(circle at 50% 50%, oklch(0.36 0.16 29.9), transparent),
               radial-gradient(circle at 30% 30%, oklch(0.36 0.16 29.9), transparent),
               radial-gradient(circle at 70% 70%, black, black);
-  background-size: 200% 200%;
-  animation: gradient-move s infinite alternate ease-in-out;
-    }
+      background-size: 200% 200%;
+      animation: gradient-move s infinite alternate ease-in-out;
+        }
 
-    @keyframes gradient-move {
-  0% {
-    background-position: 50% 50%, 30% 30%, 70% 70%;
-  }
-  50% {
-    background-position: 40% 60%, 60% 40%, 80% 20%;
-  }
-  100% {
-    background-position: 70% 70%, 20% 50%, 50% 80%;
-  }
-}
+        @keyframes gradient-move {
+      0% {
+        background-position: 50% 50%, 30% 30%, 70% 70%;
+      }
+      50% {
+        background-position: 40% 60%, 60% 40%, 80% 20%;
+      }
+      100% {
+        background-position: 70% 70%, 20% 50%, 50% 80%;
+      }
+    }
     
     body {
       max-width: 800px;
-      /* background: radial-gradient(circle at top left, oklch(0.36 0.16 29.9), transparent),
-      radial-gradient(circle at bottom right, oklch(0.36 0.16 29.9), black); */
-      /* radial-gradient(circle, oklch(0.36 0.16 29.9) 0%,  #000000 100%); */
-      /* background: linear-gradient(180deg, oklch(0.36 0.16 29.9) 0%, #000000 100%); */
       margin: auto;
+      padding-bottom: 1rem;
     }
-  
+
     img {
       border-radius: .25rem;
     }

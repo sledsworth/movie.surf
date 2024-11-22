@@ -13,8 +13,9 @@ const { title } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="black">
+		<meta name="description" content="Find a movie to watch—fast!" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
@@ -39,6 +40,8 @@ const { title } = Astro.props;
       accent-color: black;
       margin: 0 auto;
       padding: 1rem;
+      background-color: black;
+      border-radius: 4px;
       background: radial-gradient(circle at 50% 50%, oklch(0.36 0.16 29.9), transparent),
               radial-gradient(circle at 30% 30%, oklch(0.36 0.16 29.9), transparent),
               radial-gradient(circle at 70% 70%, black, black);

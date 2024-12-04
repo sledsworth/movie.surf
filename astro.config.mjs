@@ -7,7 +7,7 @@ import netlify from "@astrojs/netlify";
 export default defineConfig({
 	site: "https://movie.surf",
 	prefetch: true,
-	output: "hybrid",
+	output: "static",
 	experimental: {
 		contentIntellisense: true,
 	},

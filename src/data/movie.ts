@@ -34,11 +34,14 @@ export async function getMovieSuggestion(
 					formInfo,
 				);
 				const movies = await Promise.all(
-					suggestions.movies.map(
-						(suggestion: { title: string; year: number }) => {
+					suggestions.movies
+						.map((suggestion: { title: string; year: number }) => {
 							return searchForMovie(suggestion);
-						},
-					),
+						})
+						.filter(
+							(movie: Movie | undefined | null) =>
+								movie !== undefined && movie !== null,
+						),
 				);
 				let availibleMovie: Movie | undefined;
 				const seenMovies =

@@ -16,6 +16,8 @@ export async function getMovieSuggestion(
 		if (data) {
 			console.log(data);
 			if (data.has("prompt")) {
+				const seenMovies =
+					JSON.parse(data.get("seenMovies") as string) ?? ([] as string[]);
 				const formInfo: MovieFormData = {
 					genres:
 						(data.getAll("genres") as unknown as string[]).map(
@@ -28,9 +30,10 @@ export async function getMovieSuggestion(
 						: undefined,
 					page: 1,
 					providers: data.getAll("providers") as unknown as string[],
+					seenMovies,
 				};
 				const suggestions = await getAiMovieSuggestions(
-					data.get("prompt")?.toString() || "Blank Check",
+					data.get("prompt")?.toString() || "One of the best movies ever made.",
 					formInfo,
 				);
 				const movies = await Promise.all(
@@ -44,8 +47,6 @@ export async function getMovieSuggestion(
 						),
 				);
 				let availibleMovie: Movie | undefined;
-				const seenMovies =
-					JSON.parse(data.get("seenMovies") as string) ?? ([] as string[]);
 				for (const movie of movies) {
 					if (
 						formInfo.providers &&
@@ -56,7 +57,7 @@ export async function getMovieSuggestion(
 								) ?? false,
 						).length > 0
 					) {
-						if (!seenMovies.includes(movie.id.toString())) {
+						if (!seenMovies.includes(movie.title)) {
 							return movie;
 						}
 						availibleMovie = movie;

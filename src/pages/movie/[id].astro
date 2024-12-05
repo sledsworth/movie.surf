@@ -44,12 +44,12 @@ if (id) {
 ---
 
 <MoviePage randomMovie={randomMovie} formData={formData} />
-<script id="session-store-script" data-movie-id={id}>
+<script id="session-store-script" data-movie-title={randomMovie?.title}>
   document.addEventListener("DOMContentLoaded", async () => {
-    const movieId = document.getElementById("session-store-script").dataset.movieId;
+    const movieTitle = document.getElementById("session-store-script").dataset.movieTitle;
     const seenMovies = await JSON.parse(sessionStorage.getItem("seenMovies")) ?? [];
-    if (movieId && !seenMovies.includes(movieId)) {
-      seenMovies.push(movieId);
+    if (movieTitle && !seenMovies.includes(movieTitle)) {
+      seenMovies.push(movieTitle);
       sessionStorage.setItem("seenMovies", JSON.stringify(seenMovies));
     }
   });

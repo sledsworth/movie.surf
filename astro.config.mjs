@@ -6,8 +6,11 @@ import netlify from "@astrojs/netlify";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://movie.surf",
+	server: {
+		port: 3001,
+		open: true,
+	},
 	prefetch: true,
-	output: "static",
 	experimental: {
 		contentIntellisense: true,
 	},

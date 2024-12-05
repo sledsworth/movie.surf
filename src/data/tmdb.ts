@@ -32,6 +32,7 @@ export interface MovieFormData {
 	decade?: number | string;
 	page: number | string;
 	providers?: number[] | string[];
+	seenMovies?: string[];
 }
 
 const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;

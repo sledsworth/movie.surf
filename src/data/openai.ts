@@ -41,6 +41,12 @@ export async function getAiMovieSuggestions(
 			role: "user",
 		});
 	}
+	if (movieFormData?.seenMovies) {
+		additionalPrompts.push({
+			content: `Should not include movies: ${movieFormData?.seenMovies.join(", ")}.`,
+			role: "user",
+		});
+	}
 	// console.log(additionalPrompts);
 	const completion = await openai.chat.completions.create({
 		model: "gpt-4o",

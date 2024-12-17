@@ -333,11 +333,22 @@ const shareImageUrl = randomMovie
     border: none;
     visibility: hidden;
     opacity: 0;
+    transform-origin: bottom;
+    transform: translate(0, 100px);
+    transition: all .5s linear(0.00, -0.00323, -0.00324, 0.307, 0.650, 0.908, 1.04, 1.09, 1.08, 1.05, 1.02, 1.00, 0.995, 0.993, 0.995, 0.997, 0.999, 1.00, 1.00) allow-discrete;
   }
 
-  .popover:popover-open {
+  [popover]:popover-open {
+    transform: translate(0, 0);
     visibility: visible;
     opacity: 1;
-    transition: visibility 0s, opacity 0.5s linear;
+  }
+
+  @starting-style {
+    [popover]:popover-open {
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(0, 100px);
+    }
   }
 </style>

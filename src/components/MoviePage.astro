@@ -1,8 +1,7 @@
 ---
-import type { Provider } from "@data/tmdb";
 import { getAllGenres, getAllMovieProviders, type Movie } from "@data/tmdb";
 import Layout from "src/layouts/Layout.astro";
-import FormattedDate from "./FormattedDate.astro";
+import MovieCard from "./MovieCard.astro";
 
 interface Props {
 	randomMovie: Movie | null;
@@ -120,29 +119,7 @@ const shareImageUrl = randomMovie
         </ul>
         </fieldset>
     </div>
-    {randomMovie !== null && (<article class="movie-card">
-      <img class="movie-card-image" width="300" src={shareImageUrl} alt={randomMovie.title} />
-      <section class="movie-card-details">
-        <section class="movie-card-details-meta">
-          <FormattedDate date={new Date(randomMovie.release_date)} />
-          <span>{randomMovie.runtime} minutes</span>
-        </section>
-        <h2>{randomMovie.title}</h2>
-        <section class="movie-card-details-meta">
-          {randomMovie.genres.map((genre: { name: string; }) => (<span>{genre.name}</span>))}
-        </section>
-      <section>
-        <div style="display: flex; gap: .5rem;">
-          {randomMovie.providers !== undefined && randomMovie.providers.map((provider: Provider) => (
-            <img width="36" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
-          ))}
-        </div>
-      </section>
-      <p>{randomMovie.tagline}</p>
-      <p>{randomMovie.overview}</p>
-      { randomMovie.imdb_id && (<a href={`https://imdb.com/title/${randomMovie.imdb_id}`}><img src="/imdb.svg" alt={`IMDB link to ${randomMovie.title}`} /></a>)}
-      </section>
-    </article>)}
+    <MovieCard movie={randomMovie} />
   </form>
 </browser-store>
 </Layout>
@@ -176,7 +153,6 @@ const shareImageUrl = randomMovie
   });
 </script>
 <style>
-
   fieldset {
     border: none;
     padding: 2rem 1rem;
@@ -189,49 +165,6 @@ const shareImageUrl = randomMovie
     font-size: 2rem;
     font-family: "ltc-broadway-engraved", sans-serif;
     padding: .5rem;
-  }
-  
-  .movie-card {
-    min-width: 100%;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    justify-content: center;
-		background: black;
-    border-radius: 2rem;
-    color: white;
-    padding: 1rem;
-    box-sizing: border-box;
-  }
-  
-  .movie-card-details-meta {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    font-size: .85rem;
-    font-weight: 600;
-    font-variant: small-caps;
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-  
-  .movie-card .movie-card-image {
-    aspect-ratio: 2 / 3;
-    flex: 1 3 160px;
-    height: fit-content;
-    width: 200px;
-		border-radius: 1rem;
-  }
-  
-  .movie-card .movie-card-details {
-    flex:  3 2 300px;
-    max-width: 600px;
-  }
-  
-  .movie-card h2 {
-    font-size: 3rem;
-    margin: 0;
-    line-height: 1;
   }
   
   .break:after {

@@ -250,7 +250,7 @@ export async function getRandomMovie(
 	formData: MovieFormData,
 ): Promise<{ movie: Movie | null; results: number }> {
 	const { totalResults, totalPages } = await getMovieSuggestions(formData);
-	console.log(totalResults, totalPages);
+	// console.log(totalResults, totalPages);
 	if (totalResults > 0) {
 		const randomPage = Math.ceil(Math.random() * totalPages);
 		const randomMovies = await getMovieSuggestions({

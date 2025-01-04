@@ -14,7 +14,7 @@ export async function getMovieSuggestion(
 		const movieGenres = await getAllGenres({ type: "movie" });
 
 		if (data) {
-			console.log(data);
+			// console.log(data);
 			if (data.has("prompt")) {
 				const seenMovies =
 					JSON.parse(data.get("seenMovies") as string) ?? ([] as string[]);

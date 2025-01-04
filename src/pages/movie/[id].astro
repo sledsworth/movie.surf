@@ -1,24 +1,18 @@
 ---
+import type { Movie, MovieFormData } from "@actions/movie";
 import { getMovieSuggestion } from "@data/movie";
-import { getMovieDetails, getRandomMovie, type Movie } from "@data/tmdb";
+import { getMovieDetails } from "@data/tmdb";
 import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
+
 const id = Astro.params.id;
 
-interface MovieForm {
-	genres: number[];
-	good: boolean;
-	decade?: number;
-	page: number;
-	providers?: number[];
-}
-
-const formData: MovieForm = {
+const formData: MovieFormData = {
+	prompt: "",
 	genres: [],
 	good: true,
 	decade: undefined,
-	page: 1,
 	providers: [],
 };
 

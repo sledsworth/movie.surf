@@ -1,0 +1,6 @@
+[dev]
+  command = "astro dev"
+  targetPort = 3001
+[build]
+  command = "npm run build"
+  publish = "dist"

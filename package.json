@@ -3,8 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
+    "start": "netlify dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -13,15 +12,17 @@
     "update:astro": "npx @astrojs/upgrade"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/cloudflare": "^12.0.0",
-    "@astrojs/netlify": "^6.0.0",
-    "astro": "^5.0.2",
-    "openai": "^4.75.0",
-    "typescript": "^5.7.2",
-    "zod": "^3.23.8"
+    "@astrojs/check": "0.9.4",
+    "@astrojs/cloudflare": "12.1.0",
+    "@astrojs/netlify": "6.0.1",
+    "@netlify/blobs": "8.1.0",
+    "astro": "5.1.2",
+    "openai": "4.77.0",
+    "typescript": "5.7.2",
+    "zod": "3.24.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4"
+    "@biomejs/biome": "1.9.4",
+    "netlify-cli": "17.38.1"
   }
 }

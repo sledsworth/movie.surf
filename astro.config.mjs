@@ -1,5 +1,4 @@
 import { defineConfig } from "astro/config";
-// import cloudflare from "@astrojs/cloudflare";
 
 import netlify from "@astrojs/netlify";
 
@@ -8,10 +7,18 @@ export default defineConfig({
 	site: "https://movie.surf",
 	server: {
 		port: 3001,
-		open: true,
 	},
 	prefetch: true,
 	experimental: {
+		session: {
+			// The name of the unstorage driver is camelCase
+			driver: "netlify-blobs",
+			options: {
+				name: "astro-sessions",
+				// Sessions need strong consistency
+				consistency: "strong",
+			},
+		},
 		contentIntellisense: true,
 	},
 	adapter: netlify(),

@@ -1,3 +1,26 @@
+---
+import Button from "./Button.astro";
+
+interface Props {
+	url: string;
+}
+---
+
+<share-button>
+  <slot>
+    <Button variant="primary">Share</Button>
+  </slot>
+</share-button>
+<style>
+  share-button {
+    display: none;
+  }
+
+  share-button:defined {
+    display: block;
+  }
+</style>
+<script>
 class ShareButtonElement extends HTMLElement {
 	private button?: HTMLButtonElement | null = null;
 	private slotElement: HTMLSlotElement | null = null;
@@ -88,3 +111,4 @@ class ShareButtonElement extends HTMLElement {
 }
 
 customElements.define("share-button", ShareButtonElement);
+</script>

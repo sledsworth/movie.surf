@@ -1,0 +1,66 @@
+---
+
+interface Props {
+	title: string;
+	id: string;
+}
+
+const { title, id } = Astro.props;
+---
+
+<section class="glow popover" id={id} popover>
+  <fieldset>
+  <legend>{title}</legend>
+  <slot></slot>
+  </fieldset>
+</section>
+<style>
+  .popover {
+    bottom: -8rem;
+    padding-bottom: 8rem;
+    top: initial;
+    position: fixed;
+    margin: auto;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    background: #000;
+    border-radius: 2rem 2rem 0 0;
+    color: #fff;
+    border: none;
+    /* visibility: hidden; */
+    /* opacity: 0; */
+    transform-origin: bottom;
+    transform: translate(0, 800px);
+    transition: all .4s cubic-bezier(0.485, -0.050, 0.285, 1.105) allow-discrete;
+    z-index: 100;
+  }
+
+  [popover]:popover-open {
+    transform: translate(0, 0);
+    /* visibility: visible; */
+    /* opacity: 1; */
+  }
+
+  @starting-style {
+    [popover]:popover-open {
+      /* opacity: 0; */
+      /* visibility: hidden; */
+      transform: translate(0, 800px);
+    }
+  }
+
+  fieldset {
+    border: none;
+    padding: 2rem 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  legend {
+    font-size: 2rem;
+    font-family: "ltc-broadway-engraved", sans-serif;
+    padding: .5rem;
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+
+interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
+	variant?: "primary" | "secondary";
+	glow?: boolean;
+	className?: string;
+}
+
+const {
+	variant = "secondary",
+	glow,
+	type = "button",
+	className,
+	...buttonProps
+} = Astro.props;
+---
+
+<button class={`${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
+  <slot />
+</button>
+<style>
+    button {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    font-weight: 800;
+    font-size: 1rem;
+    flex: 1;
+    scroll-snap-align: start;
+    scroll-margin-inline: 1rem;
+    text-wrap: nowrap;
+  }
+
+  button.glow {
+    background-color: gold;
+  }
+
+  button:hover {
+    background-color: goldenrod;
+  }
+
+  button:focus-visible {
+    outline: 4px solid gold;
+    outline-offset: 4px;
+  }
+
+</style>

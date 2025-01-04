@@ -22,7 +22,7 @@ const formData: MovieForm = {
 	providers: [],
 };
 
-let randomMovie: Movie | null = null;
+let movie: Movie | null = null;
 if (Astro.request.method === "POST") {
 	try {
 		const data = await Astro.request.formData();
@@ -39,18 +39,8 @@ if (Astro.request.method === "POST") {
 }
 
 if (id) {
-	randomMovie = await getMovieDetails(id);
+	movie = await getMovieDetails(id);
 }
 ---
 
-<MoviePage randomMovie={randomMovie} formData={formData} />
-<script id="session-store-script" data-movie-title={randomMovie?.title}>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const movieTitle = document.getElementById("session-store-script").dataset.movieTitle;
-    const seenMovies = await JSON.parse(sessionStorage.getItem("seenMovies")) ?? [];
-    if (movieTitle && !seenMovies.includes(movieTitle)) {
-      seenMovies.push(movieTitle);
-      sessionStorage.setItem("seenMovies", JSON.stringify(seenMovies));
-    }
-  });
-</script>
+<MoviePage movie={movie} formData={formData} />

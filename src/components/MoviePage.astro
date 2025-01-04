@@ -1,34 +1,38 @@
 ---
-import { getAllGenres, getAllMovieProviders, type Movie } from "@data/tmdb";
+import { getAllGenres, getAllMovieProviders } from "@data/tmdb.new";
 import Layout from "src/layouts/Layout.astro";
 import MovieCard from "./MovieCard.astro";
+import type { Movie, MovieFormData, Provider } from "@actions/movie";
+import Popover from "./Popover.astro";
+import Button from "./Button.astro";
+import ShareButton from "./ShareButton.astro";
+import BrowserStore from "./BrowserStore.astro";
+import ScrollPositionRestore from "./ScrollPositionRestore.astro";
+import Radio from "./Radio.astro";
 
 interface Props {
-	randomMovie: Movie | null;
-	formData: {
-		genres: number[];
-		good: boolean;
-		decade?: number;
-		page: number;
-		providers?: number[];
-	};
+	movie: Movie | null;
+	formData: MovieFormData;
 }
 
-const { randomMovie, formData } = Astro.props;
+const { movie, formData } = Astro.props;
+
+const seenMovies = (await Astro.session?.get("viewedMovies")) || [];
+console.log("seen", seenMovies);
 
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const providers = await getAllMovieProviders();
 
-const shareTitle = randomMovie
-	? `🍿 Movie night!\n\n Let's watch "${randomMovie?.title}"`
+const shareTitle = movie
+	? `🍿 Movie night!\n\n Let's watch "${movie?.title}"`
 	: "Movie Surf";
 // const shareDescription = "🍿 It's movie night!";
-const shareUrl = randomMovie
-	? `https://movie.surf/movie/${randomMovie?.id}`
+const shareUrl = movie
+	? `https://movie.surf/movie/${movie?.id}`
 	: "https://movie.surf";
-const shareImageUrl = randomMovie
-	? `https://image.tmdb.org/t/p/w500${randomMovie?.poster_path}`
+const shareImageUrl = movie
+	? `https://image.tmdb.org/t/p/w500${movie?.poster_path}`
 	: "";
 ---
 <slot name="head">
@@ -39,26 +43,9 @@ const shareImageUrl = randomMovie
   <meta property="og:image" content={shareImageUrl} />
 </slot>
 <Layout title="Movie Surf">
-  <browser-store submit-on-load={Astro.request.destination.match('/')}>
-	<!-- TODO: move back into form after mobile Safari bug is fixed where popover doesn't open if button is in form -->
-	<div class="control-dock-container">
-		<div class="control-dock">
-			{!randomMovie && (<p>No movies found with selected options.</p>)}
-			<share-button url={shareUrl}>
-				<button type="button" class="share glow">Share</button>
-			</share-button>
-			<button id="new-movie-button" class="glow" autofocus type="button">New Movie</button>
-			<button popovertarget="prompt-popover" type="button">Prompt</button>
-			<button popovertarget="genre-popover" type="button">Genres</button>
-			<button popovertarget="decade-popover" type="button">Decade</button>
-			<!-- <button popovertarget="good-popover" type="button">Good?</button> -->
-			<button popovertarget="providers-popover" type="button">Services</button>
-		</div>
-	</div>
+  <BrowserStore>
   <form name="movie-search-details" method="POST">
-    <div class="glow popover" id="prompt-popover" popover>
-      <fieldset>
-        <legend>Prompt</legend>
+    <Popover title="Description" id="prompt-popover">
         <textarea rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
         <aside>
           <h2>Examples</h2>
@@ -71,11 +58,8 @@ const shareImageUrl = randomMovie
             <li>Steven Spielberg's best flick.</li>
           </ul>
         </aside>
-      </fieldset>
-    </div>
-    <div class="glow popover" id="genre-popover" popover>
-      <fieldset>
-        <legend>Genres</legend>
+      </Popover>
+    <Popover title="Genres" id="genre-popover">
         <ul class="genre-list">
           {movieGenres.map(
             (genre: { id: number; name: string; }) => (
@@ -85,94 +69,123 @@ const shareImageUrl = randomMovie
             </label></li>
           ))}
         </ul>
-      </fieldset>
-    </div>
-    <div class="glow popover" id="decade-popover" popover>
-        <fieldset>
-        <legend>Decade</legend>
+      </Popover>
+    <Popover title="Decade" id="decade-popover">
 				<ul class="genre-list">
 					<li>
-						<label>
-							<input name="decade" type="radio" value="0" checked={formData.decade === 0} />
-							All
-						</label>
+            <Radio label="All" name="decade" value="0" checked={formData.decade === 0} />
 					</li>
-					{decades.map(decade => (<li><label>
-						<input name="decade" type="radio" value={decade} checked={formData.decade === decade}>
-						{decade}'s
-					</label></li>))}
+					{decades.map(decade => (
+          <li>
+            <Radio label={`${decade}'s`} name="decade" value={decade.toString()} checked={formData.decade === decade} />
+          </li>))}
 				</ul>
-        </fieldset>
-    </div>
-    <div class="glow popover" id="providers-popover" popover>
-      <fieldset>
-        <legend>Services</legend>
+    </Popover>
+    <Popover title="Services" id="providers-popover">
         <ul class="genre-list">
           {providers?.map(
-            (provider: { id: number; name: string; logo: string; url: string }) => (
+            (provider: Provider) => (
             <li><label>
-              <input name="providers" type="checkbox" value={provider.id} checked={formData.providers?.includes(provider.id)} />
-              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo}`} alt={provider.name} title={provider.name} />
-              {provider.name}
+              <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
+              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              {provider.provider_name}
             </label></li>
           ))}
         </ul>
-        </fieldset>
-    </div>
-    <MovieCard movie={randomMovie} />
+    </Popover>
+    <MovieCard server:defer movie={movie} />
+   	<div class="control-dock-container">
+		<div class="control-dock">
+			<ShareButton url={shareUrl} />
+			<Button type="submit" variant="primary" id="new-movie-button" glow autofocus>New Movie</Button>
+			<Button popovertarget="prompt-popover">Describe</Button>
+			<Button popovertarget="genre-popover">Genres</Button>
+			<Button popovertarget="decade-popover">Decade</Button>
+			<Button popovertarget="providers-popover">Services</Button>
+		</div>
+	</div>
   </form>
-</browser-store>
+</BrowserStore>
+<!-- TODO: Is this needed if we get the server island working? -->
+<ScrollPositionRestore />
 </Layout>
-<scroll-position />
-<script src="./browser-store.ts"></script>
-<script src="./share-button.ts"></script>
-<script src="./scroll-position.ts"></script>
+<Button glow id="test">Suggestion</Button>
+<script>
+  import { actions } from 'astro:actions';
+  import type { MovieFormData } from 'src/actions/movie';
+  const testButton = document.querySelector("#test") as HTMLButtonElement | null;
+  testButton?.addEventListener("click", async () => {
+    console.log("Suggestion button clicked");
+    const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
+    const formData = new FormData(form!);
+    let formValues: MovieFormData = {
+      genres: [],
+      good: true,
+      prompt: "",
+    };
+    for (const key of formData.keys()) {
+      const value = formData.getAll(key);
+      switch(key) {
+        case "genres":
+        case "providers":
+          formValues = { ...formValues, [key]: value.map(Number) };
+          break;
+        case "decade":
+          formValues = { ...formValues, [key]: Number(value[0]) };
+          break;
+        case "good":
+          formValues = { ...formValues, [key]: value[0] === "true" };
+          break;
+        default:
+          if (value.length === 1) {
+            formValues = { ...formValues, [key]: value[0] };
+          } else {
+            formValues = { ...formValues, [key]: value };
+          }
+      }
+    }
+    console.log('using ai...', formValues);
+    const { data, error } = await actions.movie.suggestion(formValues);
+    if (error) alert(error.message);
+    console.log('matches found, making sure they aren\'t hallucinations...', data);
+    if (data?.hasResults) {
+      const { data: movies, error: err } = await actions.movie.find(data.movies);
+      console.log('movie results verified, selecting movie...', movies);
+      if (movies && movies.length > 0) {
+        const {data: result, error: er } = await actions.movie.select(movies);
+        console.log('movie selected, updating UI...', result);
+      } else {
+        console.log('no movies found');
+      }
+    }
+  });
+</script>
 <script>
   const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
   const textarea = form?.elements.namedItem("prompt") as HTMLTextAreaElement | null;
   const submitButton = document.querySelector('#new-movie-button') as HTMLButtonElement | null;
-  submitButton?.addEventListener("click", (event) => {
+  submitButton?.addEventListener("submit", (event) => {
     event.preventDefault();
-    document.body.setAttribute("inert", "");
-    const hiddenInput = document.createElement("input");
-    hiddenInput.type = "hidden";
-    hiddenInput.name = "seenMovies";
-    hiddenInput.value = JSON.stringify(
-      JSON.parse(sessionStorage.getItem("seenMovies") || "[]"),
-    );
-    form?.appendChild(hiddenInput);
-    form?.submit();
+    // document.body.setAttribute("inert", "");
+    // const hiddenInput = document.createElement("input");
+    // hiddenInput.type = "hidden";
+    // hiddenInput.name = "seenMovies";
+    // hiddenInput.value = JSON.stringify(
+    //   JSON.parse(sessionStorage.getItem("seenMovies") || "[]"),
+    // );
+    // form?.appendChild(hiddenInput);
+    // form?.submit();
     // submitButton.disabled = true;
     // TODO: if form submit fails, remove inert
   });
-  textarea?.addEventListener("keydown", (event: KeyboardEvent) => {
-    console.log(event.key);
-    if (!event.shiftKey && event.key === "Enter") {
-      form?.submit();
-    }
-  });
 </script>
 <style>
-  fieldset {
-    border: none;
-    padding: 2rem 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-  
-  legend {
-    font-size: 2rem;
-    font-family: "ltc-broadway-engraved", sans-serif;
-    padding: .5rem;
-  }
-  
   .break:after {
     margin: 0 0 0 1rem;
     content: "|";
     display: inline-block;
   }
-  
+
   .genre-list {
     list-style: none;
     padding: 0;
@@ -183,7 +196,7 @@ const shareImageUrl = randomMovie
     max-height: 60vh;
     overflow-x: auto;
     accent-color: gold;
-  
+
     li {
       flex: 0 1 240px;
     }
@@ -244,35 +257,6 @@ const shareImageUrl = randomMovie
     margin: auto;
     pointer-events: none;
   }
-  
-  button {
-    appearance: none;
-    border: none;
-    cursor: pointer;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    background-color: white;
-    color: black;
-    font-weight: 800;
-    font-size: 1rem;
-    flex: 1;
-    scroll-snap-align: start;
-    scroll-margin-inline: 1rem;
-    text-wrap: nowrap;
-  }
-
-  button.glow {
-    background-color: gold;
-  }
-
-  button:hover {
-    background-color: goldenrod;
-  }
-
-  button:focus-visible {
-    outline: 4px solid gold;
-    outline-offset: 4px;
-  }
 
   textarea {
     appearance: none;
@@ -287,7 +271,12 @@ const shareImageUrl = randomMovie
     height: 100%;
     width: 100%;
   }
-  
+
+  textarea:focus-visible {
+    outline: gold solid 4px;
+    outline-offset: 2px;
+  }
+
   input[type="checkbox"] {
     appearance: none;
     margin: 0;
@@ -299,7 +288,7 @@ const shareImageUrl = randomMovie
     place-content: center;
     cursor: pointer;
   }
-  
+
   input[type="checkbox"]:checked {
     background: url(/checkmark.svg);
     background-size: 1rem 1.25rem;
@@ -309,46 +298,22 @@ const shareImageUrl = randomMovie
     box-shadow: 0 0 6px -2px gold;
     animation: glow-checkmark 2s ease infinite alternate;
   }
-  
+
+  label:has(input[type="checkbox"]) {
+    border-radius: 8px;
+  }
+
   input[type="checkbox"]:focus-visible {
     outline: none;
   }
-  
+
   label:has(input[type="checkbox"]:focus-visible) {
-    outline: max(2px, 0.15em) solid currentColor;
-    outline-offset: max(2px, 0.15em);
-  }
-  
-  .popover {
-    bottom: 8rem;
-    top: initial;
-    position: fixed;
-    margin: auto;
-    width: calc(100% - 2rem);
-    max-width: 800px;
-    box-sizing: border-box;
-    background: #000;
-    border-radius: 2rem;
-    color: #fff;
-    border: none;
-    visibility: hidden;
-    opacity: 0;
-    transform-origin: bottom;
-    transform: translate(0, 100px);
-    transition: all .5s linear(0.00, -0.00323, -0.00324, 0.307, 0.650, 0.908, 1.04, 1.09, 1.08, 1.05, 1.02, 1.00, 0.995, 0.993, 0.995, 0.997, 0.999, 1.00, 1.00) allow-discrete;
+    outline: 2px solid gold;
+    outline-offset: -2px;
+    overflow-x: visible;
   }
 
-  [popover]:popover-open {
-    transform: translate(0, 0);
-    visibility: visible;
-    opacity: 1;
-  }
-
-  @starting-style {
-    [popover]:popover-open {
-      opacity: 0;
-      visibility: hidden;
-      transform: translate(0, 100px);
-    }
+  label:has(input[type="checkbox"]):hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
 </style>

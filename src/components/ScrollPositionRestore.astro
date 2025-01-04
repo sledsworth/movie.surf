@@ -1,4 +1,16 @@
+---
+interface Props {
+	selector?: string;
+}
+
+const { selector = "html" } = Astro.props;
+---
+<scroll-position selector={selector}></scroll-position>
+<script>
+
 class ScrollPositionElement extends HTMLElement {
+  abortController = new AbortController();
+  timeout: number | null = null;
 	selector = "html";
 
 	getScrollElement() {
@@ -24,11 +36,21 @@ class ScrollPositionElement extends HTMLElement {
 			scrollElement?.scroll({ top: Number(top) });
 		});
 		window.addEventListener("scroll", () => {
-			sessionStorage.setItem(
-				"scroll-position",
-				`${scrollElement?.scrollTop ?? 0}`,
-			);
-		});
+      if (!this.timeout) {
+        this.timeout = window.setTimeout(() => {
+          sessionStorage.setItem(
+            "scroll-position",
+            `${scrollElement?.scrollTop ?? 0}`,
+          );
+          this.timeout = null;
+        }, 300);
+      }
+		}, { signal: this.abortController.signal });
 	}
+
+  disconnectCallback() {
+    this.abortController.abort();
+  }
 }
 customElements.define("scroll-position", ScrollPositionElement);
+</script>

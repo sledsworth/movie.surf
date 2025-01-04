@@ -1,5 +1,5 @@
 ---
-import type { Movie, Provider } from "@data/tmdb";
+import type { Movie, Provider } from "@actions/movie";
 import FormattedDate from "./FormattedDate.astro";
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 }
 
 const { movie } = Astro.props;
+// console.log(movie);
 
 const movieImageUrl = movie?.poster_path
 	? `https://image.tmdb.org/t/p/w500${movie?.poster_path}`

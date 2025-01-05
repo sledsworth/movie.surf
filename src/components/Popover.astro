@@ -8,16 +8,26 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<section class="glow popover" id={id} popover>
+<dialog class="glow popover" id={id}>
   <fieldset>
   <legend>{title}</legend>
   <slot></slot>
   </fieldset>
-</section>
+</dialog>
+<script>
+  const dialogs = document.querySelectorAll('dialog');
+  dialogs.forEach(dialog => {
+    dialog.addEventListener('click', (event) => {
+      if (event.target === event.currentTarget) {
+        (event.currentTarget as HTMLDialogElement)?.close()
+      }
+    });
+  });
+</script>
 <style>
   .popover {
     bottom: -8rem;
-    padding-bottom: 8rem;
+    padding: 0 0 8rem 0;
     top: initial;
     position: fixed;
     margin: auto;
@@ -36,14 +46,14 @@ const { title, id } = Astro.props;
     z-index: 100;
   }
 
-  [popover]:popover-open {
+  dialog[open] {
     transform: translate(0, 0);
     /* visibility: visible; */
     /* opacity: 1; */
   }
 
   @starting-style {
-    [popover]:popover-open {
+    dialog[open] {
       /* opacity: 0; */
       /* visibility: hidden; */
       transform: translate(0, 800px);

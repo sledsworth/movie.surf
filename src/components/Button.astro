@@ -4,6 +4,7 @@ interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
 	variant?: "primary" | "secondary";
 	glow?: boolean;
 	className?: string;
+	dialogtarget?: string;
 }
 
 const {
@@ -18,6 +19,15 @@ const {
 <button class={`${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
   <slot />
 </button>
+<script>
+  const buttons = document.querySelectorAll('button[dialogtarget]');
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const dialog = document.getElementById(button.getAttribute('dialogtarget') as string) as HTMLDialogElement;
+      dialog?.showModal();
+    });
+  });
+</script>
 <style>
     button {
     appearance: none;

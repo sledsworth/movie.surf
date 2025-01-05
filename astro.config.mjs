@@ -9,17 +9,17 @@ export default defineConfig({
 		port: 3001,
 	},
 	prefetch: true,
+	adapter: netlify(),
 	experimental: {
 		session: {
 			// The name of the unstorage driver is camelCase
 			driver: "netlify-blobs",
 			options: {
-				name: "astro-sessions",
+				name: "movie-surf-sessions",
 				// Sessions need strong consistency
 				consistency: "strong",
 			},
 		},
 		contentIntellisense: true,
 	},
-	adapter: netlify(),
 });

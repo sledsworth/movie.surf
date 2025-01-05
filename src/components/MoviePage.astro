@@ -43,7 +43,7 @@ const shareImageUrl = movie
   <meta property="og:image" content={shareImageUrl} />
 </slot>
 <Layout title="Movie Surf">
-  <!-- <BrowserStore> -->
+  <BrowserStore>
   <form name="movie-search-details" method="POST">
     <Popover title="Description" id="prompt-popover">
         <textarea rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
@@ -105,7 +105,7 @@ const shareImageUrl = movie
 		</div>
 	</div>
   </form>
-<!-- </BrowserStore> -->
+</BrowserStore>
 <!-- TODO: Is this needed if we get the server island working? -->
 <!-- <ScrollPositionRestore /> -->
 </Layout>

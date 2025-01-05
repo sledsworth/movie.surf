@@ -64,7 +64,8 @@ export const movie = {
 	suggestion: defineAction({
 		input: MovieFormDataSchema,
 		handler: async (input, context) => {
-			context.session?.set("movieFormData", input);
+			console.log("movieFormData", input, context.session);
+			await context.session?.set("movieFormData", input);
 			const seenMovies: Movie[] =
 				(await context.session?.get("viewedMovies")) ?? [];
 			try {
@@ -99,17 +100,17 @@ export const movie = {
 			const viewedMovies: Partial<Movie>[] =
 				(await context.session?.get("viewedMovies")) ?? [];
 			const formData = await context.session?.get("movieFormData");
-
 			try {
+				console.log("formData", formData);
 				console.log("viewed movie ids: ", viewedMovies);
 				let availibleMovie: Movie | undefined;
 				for (const movie of input) {
-					console.log("provided", formData.providers, movie.providers);
+					console.log("provided", formData?.providers, movie.providers);
 					if (
-						formData.providers === undefined ||
+						formData?.providers === undefined ||
 						(movie.providers?.filter(
 							(provider: Provider) =>
-								(formData.providers ?? []).includes(provider.provider_id) ??
+								(formData?.providers ?? []).includes(provider.provider_id) ??
 								false,
 						).length ?? 0) > 0
 					) {

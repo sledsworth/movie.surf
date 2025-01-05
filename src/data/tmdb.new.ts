@@ -88,6 +88,7 @@ export async function searchForMovie({
 		url.searchParams.append("primary_release_year", year.toString());
 		const response = await fetch(url.toString());
 		const data = await response.json();
+		console.log(data);
 		if (data.results.length > 0) {
 			return getMovieDetails(data.results[0].id);
 		}

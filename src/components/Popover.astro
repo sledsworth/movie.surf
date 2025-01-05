@@ -1,4 +1,5 @@
 ---
+import closeIcon from "../icons/close.svg?raw";
 
 interface Props {
 	title: string;
@@ -10,13 +11,22 @@ const { title, id } = Astro.props;
 
 <dialog class="glow popover" id={id}>
   <fieldset>
-  <legend>{title}</legend>
+  <header>
+    <legend>{title}</legend>
+    <button type="button" aria-label="close">
+      <Fragment set:html={closeIcon} />
+    </button>
+  </header>
   <slot></slot>
   </fieldset>
 </dialog>
 <script>
   const dialogs = document.querySelectorAll('dialog');
   dialogs.forEach(dialog => {
+    const close = dialog.querySelector('button[aria-label="close"]');
+    close?.addEventListener('click', () => {
+      dialog.close();
+    });
     dialog.addEventListener('click', (event) => {
       if (event.target === event.currentTarget) {
         (event.currentTarget as HTMLDialogElement)?.close()
@@ -27,7 +37,7 @@ const { title, id } = Astro.props;
 <style>
   .popover {
     bottom: -8rem;
-    padding: 0 0 8rem 0;
+    padding: 0 0 9rem 0;
     top: initial;
     position: fixed;
     margin: auto;
@@ -62,10 +72,36 @@ const { title, id } = Astro.props;
 
   fieldset {
     border: none;
-    padding: 2rem 1rem;
+    padding: 1rem;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background: black;
+    padding-top: 1rem;
+  }
+
+  button[aria-label="close"] {
+    all: unset;
+    color: white;
+    padding: .5rem;
+    height: 48px;
+    width: 48px;
+    box-sizing: border-box;
+    border-radius: 48px;
+    transition: background .3s;
+  }
+
+  button[aria-label="close"]:hover {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
   }
 
   legend {

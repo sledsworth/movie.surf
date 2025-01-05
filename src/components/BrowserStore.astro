@@ -50,6 +50,7 @@ class BrowserStoreElement extends HTMLElement {
 						formValues = { ...formValues, [key]: value };
 					}
 				}
+        console.log(formValues)
 				localStorage.setItem(`${this.form?.name}`, JSON.stringify(formValues));
 			});
 		}
@@ -93,6 +94,7 @@ class BrowserStoreElement extends HTMLElement {
 					this.handleRadio(key, value);
 					break;
 				case "textarea":
+          console.log(value, input.value)
 					input.value = value as string;
 					break;
 				default:

@@ -50,13 +50,21 @@ const {
     background-color: gold;
   }
 
-  button:hover {
+  button:not(:disabled):hover {
     background-color: goldenrod;
   }
 
-  button:focus-visible {
+  button:not(:disabled):focus-visible {
     outline: 4px solid gold;
     outline-offset: 4px;
+  }
+
+  button:disabled:disabled {
+    background-color: darkgray;
+    color: white;
+    cursor: not-allowed;
+    box-shadow: none;
+    animation: none;
   }
 
 </style>

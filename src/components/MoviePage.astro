@@ -109,12 +109,14 @@ const shareImageUrl = movie
 <!-- TODO: Is this needed if we get the server island working? -->
 <!-- <ScrollPositionRestore /> -->
 </Layout>
-<Button glow id="test">Suggestion</Button>
 <script>
   import { actions } from 'astro:actions';
+  import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
-  const testButton = document.querySelector("#test") as HTMLButtonElement | null;
-  testButton?.addEventListener("click", async () => {
+  const submitButton = document.querySelector("#new-movie-button") as HTMLButtonElement | null;
+  submitButton?.addEventListener("click", async () => {
+    event?.preventDefault();
+    submitButton.disabled = true;
     console.log("Suggestion button clicked");
     const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
     const formData = new FormData(form!);
@@ -154,29 +156,15 @@ const shareImageUrl = movie
       if (movies && movies.length > 0) {
         const {data: result, error: er } = await actions.movie.select(movies);
         console.log('movie selected, updating UI...', result);
+        if (result) {
+          submitButton.disabled = false;
+          navigate('/movie/' + result.id);
+        }
       } else {
         console.log('no movies found');
       }
+      submitButton.disabled = false;
     }
-  });
-</script>
-<script>
-  const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
-  const textarea = form?.elements.namedItem("prompt") as HTMLTextAreaElement | null;
-  const submitButton = document.querySelector('#new-movie-button') as HTMLButtonElement | null;
-  submitButton?.addEventListener("submit", (event) => {
-    event.preventDefault();
-    // document.body.setAttribute("inert", "");
-    // const hiddenInput = document.createElement("input");
-    // hiddenInput.type = "hidden";
-    // hiddenInput.name = "seenMovies";
-    // hiddenInput.value = JSON.stringify(
-    //   JSON.parse(sessionStorage.getItem("seenMovies") || "[]"),
-    // );
-    // form?.appendChild(hiddenInput);
-    // form?.submit();
-    // submitButton.disabled = true;
-    // TODO: if form submit fails, remove inert
   });
 </script>
 <style>

@@ -7,7 +7,7 @@ interface Props {
 const { title, subtitle } = Astro.props;
 ---
 
-<header slot="header">
+<header transition:persist slot="header">
   <div class="light-bar">
     <div class="light alternate"></div>
     <div class="light"></div>

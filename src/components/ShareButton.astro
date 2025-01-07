@@ -59,6 +59,9 @@ class ShareButtonElement extends HTMLElement {
 
 	handleSlotChange(event: Event) {
 		this.button = this.slotElement?.assignedElements()[0] as HTMLButtonElement;
+    if (!this.button) {
+      return;
+    }
 		this.button.addEventListener("click", this.handleClick);
 
 		if (this.sharingSupported()) {

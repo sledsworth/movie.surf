@@ -44,7 +44,7 @@ const shareImageUrl = movie
 </slot>
 <Layout title="Movie Surf">
   <BrowserStore>
-  <form name="movie-search-details" method="POST">
+  <form name="movie-search-details" method="POST" transition:persist>
     <Popover title="Description" id="prompt-popover">
         <textarea rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
         <aside>
@@ -93,19 +93,19 @@ const shareImageUrl = movie
           ))}
         </ul>
     </Popover>
-    <MovieCard server:defer movie={movie} />
-   	<div class="control-dock-container">
-		<div class="control-dock">
-			<ShareButton url={shareUrl} />
-			<Button type="submit" variant="primary" id="new-movie-button" glow autofocus>New Movie</Button>
-			<Button dialogtarget="prompt-popover">Describe</Button>
-			<Button dialogtarget="genre-popover">Genres</Button>
-			<Button dialogtarget="decade-popover">Decade</Button>
-			<Button dialogtarget="providers-popover">Services</Button>
-		</div>
-	</div>
+    <div class="control-dock-container">
+      <div class="control-dock">
+        <ShareButton url={shareUrl} />
+        <Button type="submit" variant="primary" id="new-movie-button" glow autofocus>New Movie</Button>
+        <Button dialogtarget="prompt-popover">Describe</Button>
+        <Button dialogtarget="genre-popover">Genres</Button>
+        <Button dialogtarget="decade-popover">Decade</Button>
+        <Button dialogtarget="providers-popover">Services</Button>
+      </div>
+    </div>
   </form>
 </BrowserStore>
+<MovieCard movie={movie} />
 <!-- TODO: Is this needed if we get the server island working? -->
 <!-- <ScrollPositionRestore /> -->
 </Layout>

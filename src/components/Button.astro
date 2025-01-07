@@ -11,16 +11,17 @@ const {
 	variant = "secondary",
 	glow,
 	type = "button",
-	className,
+	className = "",
 	...buttonProps
 } = Astro.props;
 ---
 
-<button class={`${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
+<button transition:persist class={`${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
   <slot />
 </button>
 <script>
   const buttons = document.querySelectorAll('button[dialogtarget]');
+  console.log('initial buttons for dialogs', buttons)
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const dialog = document.getElementById(button.getAttribute('dialogtarget') as string) as HTMLDialogElement;

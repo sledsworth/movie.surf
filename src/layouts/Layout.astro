@@ -24,13 +24,15 @@ const { title } = Astro.props;
     <ClientRouter />
 	</head>
 	<body>
-    <slot name="header">
-      <Header title="Movie Surf" />
-    </slot>
-    <main>
-      <slot />
-    </main>
-    <slot name="footer" />
+    <div class="container">
+      <slot name="header">
+        <Header title="Movie Surf" />
+      </slot>
+      <main>
+        <slot />
+      </main>
+      <slot name="footer" />
+    </div>
 	</body>
   <style is:global>
     html {
@@ -38,20 +40,13 @@ const { title } = Astro.props;
       font-weight: 400;
       font-style: normal;
       accent-color: black;
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
       min-height: 100vh;
-      background-color: black;
-      /* border-radius: 4px; */
-      background: radial-gradient(circle at 50% 50%, oklch(0.36 0.16 29.9), transparent),
-              radial-gradient(circle at 30% 30%, oklch(0.36 0.16 29.9), transparent),
-              radial-gradient(circle at 70% 70%, black, black);
-      background-size: 150% 150%;
-      background-repeat: no-repeat;
-      animation: gradient-move s infinite alternate ease-in-out;
-        }
+      background-color: oklch(0.22 0.08 26.62);
+    }
 
-        @keyframes gradient-move {
+    @keyframes gradient-move {
       0% {
         background-position: 50% 50%, 30% 30%, 70% 70%;
       }
@@ -64,13 +59,21 @@ const { title } = Astro.props;
     }
     
     body {
-      max-width: 800px;
-      margin: auto;
-      padding: 1rem;
+      background: radial-gradient(circle at 50% 50%, oklch(0.36 0.16 29.9), transparent), radial-gradient(circle at 30% 30%, oklch(0.36 0.16 29.9), transparent), radial-gradient(circle at 70% 70%, black, black); */
+      background-size: 150% 150%;
+      background-repeat: no-repeat;
+      animation: gradient-move 5s infinite alternate ease-in-out;
+      margin: 0;
     }
 
     body:has(dialog[open]) {
       overflow: hidden;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 1rem;
     }
 
     img {

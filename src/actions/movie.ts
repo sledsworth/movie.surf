@@ -135,4 +135,15 @@ export const movie = {
 			}
 		},
 	}),
+	resetSession: defineAction({
+		handler: async (input, context) => {
+			try {
+				await context.session?.destroy();
+				return true;
+			} catch (error) {
+				console.error("Error resetting session", error);
+				return false;
+			}
+		},
+	}),
 };

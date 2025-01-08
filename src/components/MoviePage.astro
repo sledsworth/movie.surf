@@ -101,6 +101,7 @@ const shareImageUrl = movie
         <Button dialogtarget="genre-popover">Genres</Button>
         <Button dialogtarget="decade-popover">Decade</Button>
         <Button dialogtarget="providers-popover">Services</Button>
+        <Button id="reset-suggestions-button">Reset</Button>
       </div>
     </div>
   </form>
@@ -114,6 +115,7 @@ const shareImageUrl = movie
   import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
   const submitButton = document.querySelector("#new-movie-button") as HTMLButtonElement | null;
+  const resetButton = document.querySelector("#reset-suggestions-button") as HTMLButtonElement | null;
   submitButton?.addEventListener("click", async () => {
     event?.preventDefault();
     submitButton.disabled = true;
@@ -165,6 +167,15 @@ const shareImageUrl = movie
       }
       submitButton.disabled = false;
     }
+  });
+  resetButton?.addEventListener("click", async () => {
+    event?.preventDefault();
+    resetButton.disabled = true;
+    console.log("Reset button clicked");
+    const { data, error } = await actions.movie.resetSession();
+    if (error) alert(error.message);
+    console.log('resetting...', data);
+    resetButton.disabled = false;
   });
 </script>
 <style>

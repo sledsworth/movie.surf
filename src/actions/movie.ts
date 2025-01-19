@@ -1,6 +1,6 @@
 import { getAiMovieSuggestions } from "@data/openai.new";
 import { searchForMovie } from "@data/tmdb.new";
-import { defineAction } from "astro:actions";
+import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 
 export const MovieSuggestionSchema = z.object({
@@ -28,12 +28,12 @@ export const ProviderSchema = z.object({
 
 export const MovieSchema = z.object({
 	id: z.number(),
-	imdb_id: z.string().optional(),
+	imdb_id: z.union([z.string().optional(), z.null()]),
 	title: z.string(),
 	tagline: z.string(),
 	overview: z.string(),
-	poster_path: z.string(),
-	backdrop_path: z.string().optional(),
+	poster_path: z.union([z.string().optional(), z.null()]),
+	backdrop_path: z.union([z.string().optional(), z.null()]),
 	release_date: z.string(),
 	vote_average: z.number(),
 	vote_count: z.number(),
@@ -76,7 +76,11 @@ export const movie = {
 				// console.log(suggestions);
 				return suggestions;
 			} catch (error) {
-				throw new Error("Error getting AI movie suggestions.");
+				console.error("Error getting AI movie suggestions.", error);
+				throw new ActionError({
+					message: "Error getting AI movie suggestions.",
+					code: "INTERNAL_SERVER_ERROR",
+				});
 			}
 		},
 	}),
@@ -90,7 +94,11 @@ export const movie = {
 					)
 				).filter((movie) => movie !== undefined && movie !== null);
 			} catch (error) {
-				throw new Error("Error finding movie from AI suggestions.");
+				console.error("Error finding movie from AI suggestions.", error);
+				throw new ActionError({
+					message: "Error finding movie from AI suggestions.",
+					code: "INTERNAL_SERVER_ERROR",
+				});
 			}
 		},
 	}),
@@ -131,7 +139,11 @@ export const movie = {
 				}
 				return availibleMovie ?? input[0];
 			} catch (error) {
-				throw new Error("Error selecting a movie from available options.");
+				console.error("Error selecting a movie from available options.", error);
+				throw new ActionError({
+					message: "Error selecting a movie from available options.",
+					code: "INTERNAL_SERVER_ERROR",
+				});
 			}
 		},
 	}),
@@ -141,8 +153,11 @@ export const movie = {
 				await context.session?.destroy();
 				return true;
 			} catch (error) {
-				console.error("Error resetting session", error);
-				return false;
+				console.error("Error resetting session.", error);
+				throw new ActionError({
+					message: "Error resetting session.",
+					code: "INTERNAL_SERVER_ERROR",
+				});
 			}
 		},
 	}),

@@ -15,3 +15,11 @@ At any rate, I hope this is useful to some of you.
 
 Enjoy,
 Steve
+
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="sledsworth" data-color="gold" data-emoji="☕"  data-font="Bree" data-text="Buy me a coffee" data-outline-color="gold" data-font-color="black" data-coffee-color="#FFDD00" ></script>
+
+## Credits
+
+This product uses the TMDB API but is not endorsed or certified by TMDB.
+
+<img src="tmdb.svg" alt="The Movie Database logo" width="200"/>

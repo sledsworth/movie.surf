@@ -5,6 +5,7 @@ interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
 	glow?: boolean;
 	className?: string;
 	dialogtarget?: string;
+	href?: string;
 }
 
 const {
@@ -12,13 +13,20 @@ const {
 	glow,
 	type = "button",
 	className = "",
+	href,
 	...buttonProps
 } = Astro.props;
 ---
 
-<button transition:persist class={`${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
+{href ? (
+  <a class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} href={href}>
+      <slot />
+  </a>
+) : (
+<button transition:persist class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
   <slot />
 </button>
+)}
 <script>
   const buttons = document.querySelectorAll('button[dialogtarget]');
   console.log('initial buttons for dialogs', buttons)
@@ -30,7 +38,7 @@ const {
   });
 </script>
 <style>
-    button {
+  .button {
     appearance: none;
     border: none;
     cursor: pointer;
@@ -44,22 +52,26 @@ const {
     scroll-snap-align: start;
     scroll-margin-inline: 1rem;
     text-wrap: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  button.glow {
+  .button.glow {
     background-color: gold;
   }
 
-  button:not(:disabled):hover {
+  .button:not(:disabled):hover {
     background-color: goldenrod;
   }
 
-  button:not(:disabled):focus-visible {
+  .button:not(:disabled):focus-visible {
     outline: 4px solid gold;
     outline-offset: 4px;
   }
 
-  button:disabled:disabled {
+  .button:disabled:disabled {
     background-color: darkgray;
     color: white;
     cursor: not-allowed;

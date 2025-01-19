@@ -120,6 +120,14 @@ const shareImageUrl = movie
     event?.preventDefault();
     submitButton.disabled = true;
     console.log("Suggestion button clicked");
+
+
+
+    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+      showSkeleton: true,
+      title: 'Finding Suggestions...',
+      description: 'Asking the robot for a great movies based on your search request...'
+    }}));
     const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
     const formData = new FormData(form!);
     let formValues: MovieFormData = {
@@ -149,22 +157,54 @@ const shareImageUrl = movie
       }
     }
     console.log('using ai...', formValues);
+
+    try {
+
     const { data, error } = await actions.movie.suggestion(formValues);
     if (error) alert(error.message);
-    console.log('matches found, making sure they aren\'t hallucinations...', data);
-    if (data?.hasResults) {
-      const { data: movies, error: err } = await actions.movie.find(data.movies);
-      console.log('movie results verified, selecting movie...', movies);
-      if (movies && movies.length > 0) {
-        const {data: result, error: er } = await actions.movie.select(movies);
-        console.log('movie selected, updating UI...', result);
-        if (result) {
-          submitButton.disabled = false;
-          navigate('/movie/' + result.id);
-        }
-      } else {
-        console.log('no movies found');
-      }
+
+    if (!data?.hasResults) {
+      return
+    }
+
+    console.log('Matches found, making sure they aren\'t hallucinations...', data);
+    
+    
+    
+    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+      showSkeleton: true,
+      title: 'Verifying Suggestions...',
+      description: 'Determining which robot suggestions are real and not hallucinations...'
+    }}));
+    const { data: movies, error: err } = await actions.movie.find(data.movies);
+
+    if (err) alert(err.message)
+
+    if (!movies || movies?.length === 0) {
+      return
+    }
+
+    console.log('Movie results verified, selecting movie...', movies);
+    
+    
+    
+    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+      showSkeleton: true,
+      title: 'Making Recommendation...',
+      description: 'Plucking the best movie from the options...'
+    }}));
+    const {data: result, error: er } = await actions.movie.select(movies);
+
+    if (er) alert(er.message)
+
+    if (!result) {
+      return
+    }
+
+    console.log('Movie selected, updating UI...', result);
+    navigate('/movie/' + result.id);
+
+    } finally {
       submitButton.disabled = false;
     }
   });
@@ -238,6 +278,7 @@ const shareImageUrl = movie
     scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
     box-shadow: 0 0 24px -6px black;
+    clip-path: border-box;
   }
 
   .control-dock::after {
@@ -254,6 +295,18 @@ const shareImageUrl = movie
     max-width: 800px;
     margin: auto;
     pointer-events: none;
+  }
+
+  .control-dock::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+  }
+
+  .control-dock::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: gold;
+    box-shadow: 0 0 6px -2px gold;
+    cursor: pointer;
   }
 
   textarea {

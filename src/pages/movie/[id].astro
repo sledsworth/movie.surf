@@ -1,8 +1,6 @@
 ---
 import type { Movie, MovieFormData } from "@actions/movie";
-import { getMovieSuggestion } from "@data/movie";
-import { getMovieDetails } from "@data/tmdb";
-import Footer from "src/components/Footer.astro";
+import { getMovieDetails } from "@data/tmdb.new";
 import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
@@ -18,21 +16,6 @@ const formData: MovieFormData = {
 };
 
 let movie: Movie | null = null;
-if (Astro.request.method === "POST") {
-	try {
-		const data = await Astro.request.formData();
-
-		const movie = await getMovieSuggestion(data);
-		if (movie) {
-			return Astro.redirect(`/movie/${movie.id}`);
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-		}
-	}
-}
-
 if (id) {
 	movie = await getMovieDetails(id);
 }

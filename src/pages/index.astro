@@ -1,50 +1,24 @@
 ---
-import { getMovieSuggestion } from "@data/movie";
-import { getMovieDetails } from "@data/tmdb";
+import { getMovieDetails } from "@data/tmdb.new";
 import type { MovieFormData, Movie } from "src/actions/movie";
 import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
-const url = new URL(Astro.request.url)
-const id = url.searchParams.get("id")
+const url = new URL(Astro.request.url);
+const id = url.searchParams.get("id");
 
 const formData: MovieFormData = {
-  prompt: "",
-  good: true,
+	prompt: "",
+	good: true,
 	decade: 0,
 	genres: [],
 	providers: [],
 };
 
 let movie: Movie | null = null;
-if (Astro.request.method === "POST") {
-	try {
-		const data = await Astro.request.formData();
-
-		const movie = await getMovieSuggestion(data);
-		if (movie) {
-			return Astro.redirect(`/movie/${movie.id}`);
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-		}
-	}
-}
-
 if (id) {
 	movie = await getMovieDetails(id);
 }
 ---
 
 <MoviePage movie={movie} formData={formData} />
-<script id="session-store-script" data-movie-title={movie?.title}>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const movieTitle = document.getElementById("session-store-script").dataset.movieTitle;
-    const seenMovies = await JSON.parse(sessionStorage.getItem("seenMovies")) ?? [];
-    if (movieTitle && !seenMovies.includes(movieTitle)) {
-      seenMovies.push(movieTitle);
-      sessionStorage.setItem("seenMovies", JSON.stringify(seenMovies));
-    }
-  });
-</script>

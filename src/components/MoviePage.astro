@@ -262,6 +262,7 @@ const shareImageUrl = movie
     bottom: 0.5rem;
     width: calc(100% - 1rem);
     left: .5rem;
+    z-index: 100;
   }
 
   .control-dock {
@@ -299,13 +300,12 @@ const shareImageUrl = movie
 
   .control-dock::-webkit-scrollbar {
     -webkit-appearance: none;
-    width: 8px;
+    width: 6px;
   }
 
   .control-dock::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    background-color: gold;
-    box-shadow: 0 0 6px -2px gold;
+    border-radius: 4px;
+    background-color: white;
     cursor: pointer;
   }
 

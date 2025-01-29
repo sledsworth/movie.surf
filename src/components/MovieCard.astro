@@ -1,23 +1,23 @@
 ---
 import type { Movie, Provider } from "@actions/movie";
 import FormattedDate from "./FormattedDate.astro";
+import { getSharingDetails } from "src/utlils/shareDetails";
+import Button from "./Button.astro";
+import ShareButton from "./ShareButton.astro";
 
 interface Props {
 	movie: Movie | null | undefined;
 }
 
 const { movie } = Astro.props;
-// console.log(movie);
 
-const movieImageUrl = movie?.poster_path
-	? `https://image.tmdb.org/t/p/w500${movie?.poster_path}`
-	: "";
+const share = getSharingDetails(movie);
 ---
 
 
 {movie && (
 <article class="movie-card show">
-  <img class="movie-card-image" width="300" src={movieImageUrl} alt={movie.title} />
+  <img class="movie-card-image" width="300" src={share.imageUrl} alt={movie.title} />
   <section class="movie-card-details">
     <section class="movie-card-details-meta">
       <FormattedDate date={new Date(movie.release_date)} />
@@ -42,11 +42,16 @@ const movieImageUrl = movie?.poster_path
   </section>
   <p>{movie.tagline}</p>
   <p>{movie.overview}</p>
+  <section style="display: flex; gap: 1rem;">
   {movie.imdb_id && (
     <a href={`https://imdb.com/title/${movie.imdb_id}`}>
-      <img src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
+      <img width="96px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
     </a>
   )}
+  {share && (
+    <ShareButton url={share.url} />
+  )}
+  </section>
   </section>
 </article>
 <article class="movie-card movie-card-skeleton">

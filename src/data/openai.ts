@@ -5,7 +5,7 @@ import {
 	type MovieFormData,
 	type MovieSuggestionResults,
 } from "src/actions/movie";
-import { getGenreNameFromId } from "./tmdb.new";
+import { getGenreNameFromId } from "./tmdb";
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY,

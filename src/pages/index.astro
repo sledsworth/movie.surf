@@ -1,5 +1,5 @@
 ---
-import { getMovieDetails } from "@data/tmdb.new";
+import { getMovieDetails } from "@data/tmdb";
 import type { MovieFormData, Movie } from "src/actions/movie";
 import MoviePage from "src/components/MoviePage.astro";
 
@@ -21,4 +21,17 @@ if (id) {
 }
 ---
 
-<MoviePage movie={movie} formData={formData} />
+
+<MoviePage movie={movie} formData={formData}>
+  <p>Welcome!</p>
+  
+  <p>Movie.surf helps you find a movie without wading through endless streaming apps. Just configure the options you'd like in the dock below—genres, decades, streaming services—or just describe what you would like to see! We'll handle the rest.</p>
+</MoviePage>
+
+<style>
+  p {
+    color: white;
+    font-size: 1.2em;
+    text-align: left;
+  }
+</style>

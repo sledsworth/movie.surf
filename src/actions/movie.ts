@@ -1,5 +1,5 @@
-import { getAiMovieSuggestions } from "@data/openai.new";
-import { searchForMovie } from "@data/tmdb.new";
+import { getAiMovieSuggestions } from "@data/openai";
+import { searchForMovie } from "@data/tmdb";
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
 

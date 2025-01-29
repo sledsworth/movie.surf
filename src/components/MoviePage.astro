@@ -1,5 +1,5 @@
 ---
-import { getAllGenres, getAllMovieProviders } from "@data/tmdb.new";
+import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
 import Layout from "src/layouts/Layout.astro";
 import MovieCard from "./MovieCard.astro";
 import type { Movie, MovieFormData, Provider } from "@actions/movie";
@@ -9,6 +9,7 @@ import ShareButton from "./ShareButton.astro";
 import BrowserStore from "./BrowserStore.astro";
 import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 import Radio from "./Radio.astro";
+import { getSharingDetails } from "src/utlils/shareDetails";
 
 interface Props {
 	movie: Movie | null;
@@ -24,23 +25,14 @@ const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const providers = await getAllMovieProviders();
 
-const shareTitle = movie
-	? `🍿 Movie night!\n\n Let's watch "${movie?.title}"`
-	: "Movie Surf";
-// const shareDescription = "🍿 It's movie night!";
-const shareUrl = movie
-	? `https://movie.surf/movie/${movie?.id}`
-	: "https://movie.surf";
-const shareImageUrl = movie
-	? `https://image.tmdb.org/t/p/w500${movie?.poster_path}`
-	: "";
+const share = getSharingDetails(movie);
 ---
 <slot name="head">
-  <meta property="og:title" content={shareTitle} />
-  <meta property="og:description" content={shareTitle}>
+  <meta property="og:title" content={share.title} />
+  <meta property="og:description" content={share.title}>
   <meta property="og:type" content="website">
-  <meta property="og:url" content={shareUrl} />
-  <meta property="og:image" content={shareImageUrl} />
+  <meta property="og:url" content={share.url} />
+  <meta property="og:image" content={share.imageUrl} />
 </slot>
 <Layout title="Movie Surf">
   <BrowserStore>
@@ -95,7 +87,6 @@ const shareImageUrl = movie
     </Popover>
     <div class="control-dock-container">
       <div class="control-dock">
-        <ShareButton url={shareUrl} />
         <Button type="submit" variant="primary" id="new-movie-button" glow autofocus>New Movie</Button>
         <Button dialogtarget="prompt-popover">Describe</Button>
         <Button dialogtarget="genre-popover">Genres</Button>
@@ -106,6 +97,7 @@ const shareImageUrl = movie
     </div>
   </form>
 </BrowserStore>
+<slot></slot>
 <MovieCard movie={movie} />
 <!-- TODO: Is this needed if we get the server island working? -->
 <!-- <ScrollPositionRestore /> -->

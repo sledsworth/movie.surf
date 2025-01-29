@@ -1,0 +1,21 @@
+---
+import Button from "./Button.astro";
+---
+
+<Button class="reset-suggestions-button">Reset</Button>
+<script>
+import { actions } from "astro:actions";
+
+const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
+
+for (const resetButton of resetButtons) {
+  resetButton?.addEventListener("click", async () => {
+    resetButton.disabled = true;
+    console.log("Reset button clicked");
+    const { data, error } = await actions.movie.resetSession();
+    if (error) alert(error.message);
+    console.log('resetting...', data);
+    resetButton.disabled = false;
+  });
+}
+</script>

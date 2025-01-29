@@ -92,7 +92,6 @@ const share = getSharingDetails(movie);
         <Button dialogtarget="genre-popover">Genres</Button>
         <Button dialogtarget="decade-popover">Decade</Button>
         <Button dialogtarget="providers-popover">Services</Button>
-        <Button id="reset-suggestions-button">Reset</Button>
       </div>
     </div>
   </form>
@@ -107,7 +106,6 @@ const share = getSharingDetails(movie);
   import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
   const submitButton = document.querySelector("#new-movie-button") as HTMLButtonElement | null;
-  const resetButton = document.querySelector("#reset-suggestions-button") as HTMLButtonElement | null;
   submitButton?.addEventListener("click", async () => {
     event?.preventDefault();
     submitButton.disabled = true;
@@ -200,15 +198,6 @@ const share = getSharingDetails(movie);
       submitButton.disabled = false;
     }
   });
-  resetButton?.addEventListener("click", async () => {
-    event?.preventDefault();
-    resetButton.disabled = true;
-    console.log("Reset button clicked");
-    const { data, error } = await actions.movie.resetSession();
-    if (error) alert(error.message);
-    console.log('resetting...', data);
-    resetButton.disabled = false;
-  });
 </script>
 <style>
   .break:after {
@@ -267,7 +256,7 @@ const share = getSharingDetails(movie);
     border-radius: 2rem;
     padding: 1rem;
     box-sizing: border-box;
-    overflow-x: scroll;
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
     overscroll-behavior-x: contain;
     box-shadow: 0 0 24px -6px black;

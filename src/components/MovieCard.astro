@@ -41,15 +41,15 @@ const share = getSharingDetails(movie);
     </div>
   </section>
   <p>{movie.tagline}</p>
-  <p>{movie.overview}</p>
-  <section style="display: flex; gap: 1rem;">
+  <p class="movie-overview">{movie.overview}</p>
+  <section style="display: flex; gap: 1rem; align-self: flex-start; justify-content: space-between; width: 100%">
   {movie.imdb_id && (
-    <a href={`https://imdb.com/title/${movie.imdb_id}`}>
+    <a href={`https://imdb.com/title/${movie.imdb_id}`} style="flex: 1 1;">
       <img width="96px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
     </a>
   )}
   {share && (
-    <ShareButton url={share.url} />
+    <ShareButton style="flex: 0 1 80px;" url={share.url} />
   )}
   </section>
   </section>
@@ -143,13 +143,16 @@ const share = getSharingDetails(movie);
   
   .movie-card .movie-card-details {
     flex:  3 2 300px;
-    max-width: 600px;
   }
   
   .movie-card h2 {
-    font-size: calc(1rem + 3vw);
+    font-size: clamp(1rem, calc(1rem + 3vw), 3rem);
     margin: 0;
     line-height: 1;
+  }
+
+  .movie-card .movie-overview {
+    flex-grow: 2;
   }
 
   .movie-card-skeleton {

@@ -1,9 +1,13 @@
+---
+---
+<browser-store transition:persist>
+  <slot></slot>
+</browser-store>
+<script>
 class BrowserStoreElement extends HTMLElement {
 	private form: HTMLFormElement | null = null;
 	private slotElement: HTMLSlotElement | null | undefined = null;
 	private abortController: AbortController | null = null;
-
-	public submitOnLoad = false;
 
 	constructor() {
 		super();
@@ -46,6 +50,7 @@ class BrowserStoreElement extends HTMLElement {
 						formValues = { ...formValues, [key]: value };
 					}
 				}
+        console.log(formValues)
 				localStorage.setItem(`${this.form?.name}`, JSON.stringify(formValues));
 			});
 		}
@@ -68,7 +73,6 @@ class BrowserStoreElement extends HTMLElement {
 			signal: this.abortController?.signal,
 		});
 		this.form = this.querySelector("form");
-		this.submitOnLoad = this.hasAttribute("submit-on-load");
 		const data = JSON.parse(localStorage.getItem(`${this.form?.name}`) ?? "{}");
 		// const formData = new FormData(this.form as HTMLFormElement);
 		const checkboxes = this.form?.querySelectorAll(`[type="checkbox"]`) ?? [];
@@ -90,6 +94,7 @@ class BrowserStoreElement extends HTMLElement {
 					this.handleRadio(key, value);
 					break;
 				case "textarea":
+          console.log(value, input.value)
 					input.value = value as string;
 					break;
 				default:
@@ -99,24 +104,8 @@ class BrowserStoreElement extends HTMLElement {
 					break;
 			}
 		}
-		if (this.submitOnLoad) {
-			this.form?.requestSubmit();
-		}
-	}
-
-	attributcChangedCallback(name: string, oldValue: string, newValue: string) {
-		if (oldValue !== newValue) {
-			if (name === "submit-on-load") this.submitOnLoad = newValue === "true";
-		}
-	}
-}
-
-class BrowserStore {
-	private storageType: "localStorage" | "sessionStorage";
-
-	constructor(storageType: "localStorage" | "sessionStorage") {
-		this.storageType = storageType;
 	}
 }
 
 customElements.define("browser-store", BrowserStoreElement);
+</script>

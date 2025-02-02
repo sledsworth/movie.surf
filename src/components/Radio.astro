@@ -1,0 +1,73 @@
+---
+interface Props {
+	label: string;
+	name: string;
+	value: string;
+	checked: boolean;
+}
+
+const { label, name, value, checked } = Astro.props;
+---
+
+<label>
+  <input type="radio" name={name} value={value} checked={checked} />
+  {label}
+</label>
+<style>
+  label {
+    display: grid;
+    grid-template-columns: 1em auto;
+    gap: 0.5em;
+  }
+
+  label:focus-within {
+    color: var(--form-control-color);
+  }
+
+  input[type="radio"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    /* Remove most all native input styles */
+    appearance: none;
+    /* For iOS < 15 */
+    background-color: var(--form-background);
+    /* Not removed via appearance */
+    margin: 0;
+
+    font: inherit;
+    color: currentColor;
+    width: 1em;
+    height: 1em;
+    border: 0.1em solid currentColor;
+    border-radius: 50%;
+
+    display: grid;
+    place-content: center;
+  }
+
+  input[type="radio"]::before {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset .8em .8em gold;
+    /* Windows High Contrast Mode */
+    background-color: CanvasText;
+  }
+
+  input[type="radio"]:checked::before {
+    transform: scale(1);
+  }
+
+  input[type="radio"]:focus {
+    outline: none;
+  }
+
+  label:has(input[type="radio"]:focus) {
+    outline: 2px solid gold;
+    outline-offset: -2px;
+    border-radius: 24px;
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+
+interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
+	variant?: "primary" | "secondary";
+	glow?: boolean;
+	className?: string;
+	dialogtarget?: string;
+	href?: string;
+}
+
+const {
+	variant = "secondary",
+	glow,
+	type = "button",
+	className = "",
+	href,
+	...buttonProps
+} = Astro.props;
+---
+
+{href ? (
+  <a class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} href={href}>
+      <slot />
+  </a>
+) : (
+<button transition:persist class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
+  <slot />
+</button>
+)}
+<script>
+  const buttons = document.querySelectorAll('button[dialogtarget]');
+  console.log('initial buttons for dialogs', buttons)
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const dialog = document.getElementById(button.getAttribute('dialogtarget') as string) as HTMLDialogElement;
+      dialog?.showModal();
+    });
+  });
+</script>
+<style>
+  .button {
+    appearance: none;
+    border: none;
+    cursor: pointer;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: white;
+    color: black;
+    font-weight: 800;
+    font-size: 1rem;
+    flex: 1;
+    scroll-snap-align: start;
+    scroll-margin-inline: 1rem;
+    text-wrap: nowrap;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .button.glow {
+    background-color: gold;
+  }
+
+  .button:not(:disabled):hover {
+    background-color: goldenrod;
+  }
+
+  .button:not(:disabled):focus-visible {
+    outline: 4px solid gold;
+    outline-offset: 4px;
+  }
+
+  .button:disabled:disabled {
+    background-color: darkgray;
+    color: white;
+    cursor: not-allowed;
+    box-shadow: none;
+    animation: none;
+  }
+
+</style>

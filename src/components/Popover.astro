@@ -1,0 +1,113 @@
+---
+import closeIcon from "../icons/close.svg?raw";
+
+interface Props {
+	title: string;
+	id: string;
+}
+
+const { title, id } = Astro.props;
+---
+
+<dialog class="popover" id={id}>
+  <fieldset>
+  <header>
+    <legend>{title}</legend>
+    <button type="button" aria-label="close">
+      <Fragment set:html={closeIcon} />
+    </button>
+  </header>
+  <slot></slot>
+  </fieldset>
+</dialog>
+<script>
+  const dialogs = document.querySelectorAll('dialog');
+  dialogs.forEach(dialog => {
+    const close = dialog.querySelector('button[aria-label="close"]');
+    close?.addEventListener('click', () => {
+      dialog.close();
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target === event.currentTarget) {
+        (event.currentTarget as HTMLDialogElement)?.close()
+      }
+    });
+  });
+</script>
+<style>
+  .popover {
+    bottom: -8rem;
+    padding: 0 0 13rem 0;
+    top: initial;
+    position: fixed;
+    margin: auto;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    background: #000;
+    border-radius: 2rem 2rem 0 0;
+    color: #fff;
+    border: none;
+    /* visibility: hidden; */
+    /* opacity: 0; */
+    transform-origin: bottom;
+    transform: translate(0, 800px);
+    transition: all .4s cubic-bezier(0.485, -0.050, 0.285, 1.105) allow-discrete;
+    z-index: 100;
+  }
+
+  dialog[open] {
+    transform: translate(0, 0);
+    /* visibility: visible; */
+    /* opacity: 1; */
+  }
+
+  @starting-style {
+    dialog[open] {
+      /* opacity: 0; */
+      /* visibility: hidden; */
+      transform: translate(0, 800px);
+    }
+  }
+
+  fieldset {
+    border: none;
+    padding: 0 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: sticky;
+    padding-top: 1rem;
+    top: 0;
+    background: black;
+    border-bottom: 1px solid white;
+  }
+
+  button[aria-label="close"] {
+    all: unset;
+    color: white;
+    padding: .5rem;
+    height: 48px;
+    width: 48px;
+    box-sizing: border-box;
+    border-radius: 48px;
+    transition: background .3s;
+  }
+
+  button[aria-label="close"]:hover {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  legend {
+    font-size: 2rem;
+    font-family: "ltc-broadway-engraved", sans-serif;
+    padding: .5rem;
+  }
+</style>

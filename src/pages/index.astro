@@ -1,281 +1,37 @@
 ---
-import { getMovieSuggestion } from "@data/movie";
-import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
-
-import Layout from "src/layouts/Layout.astro";
+import { getMovieDetails } from "@data/tmdb";
+import type { MovieFormData, Movie } from "src/actions/movie";
+import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
+const url = new URL(Astro.request.url);
+const id = url.searchParams.get("id");
 
-const movieGenres = await getAllGenres({ type: "movie" });
+const formData: MovieFormData = {
+	prompt: "",
+	good: true,
+	decade: 0,
+	genres: [],
+	providers: [],
+};
 
-if (Astro.request.method === "POST") {
-	try {
-		const data = await Astro.request.formData();
-
-		const movie = await getMovieSuggestion(data);
-		if (movie) {
-			return Astro.redirect(`/movie/${movie.id}`);
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-		}
-	}
+let movie: Movie | null = null;
+if (id) {
+	movie = await getMovieDetails(id);
 }
-
-const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
-const providers = await getAllMovieProviders();
 ---
-<Layout title="Movie Surf">
-  <browser-store>
-<form name="movie-search-details" method="POST">
-  <div class="popover" id="prompt-popover">
-    <fieldset>
-      <legend>Prompt</legend>
-      <textarea autofocus rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
-      <aside>
-        <h2>Examples</h2>
-        <ul>
-          <li>George Clooney's worst performance (God help us if it isn't Batman & Robin).</li>
-          <li>The best whodonit' (that's not Knives Out).</li>
-          <li>The worst movie of all time.</li>
-          <li>Some movie about doing taxes.</li>
-          <li>A movie where Brad Pitt is always eating.</li>
-          <li>Steven Spielberg's best flick.</li>
-        </ul>
-      </aside>
-    </fieldset>
-  </div>
-  <div class="popover" id="genre-popover">
-    <fieldset>
-      <legend>Genres</legend>
-      <ul class="genre-list">
-        {movieGenres.map(
-          (genre: { id: number; name: string; }) => (
-          <li><label>
-            <input name="genres" type="checkbox" value={genre.id} />
-            {genre.name}
-          </label></li>
-        ))}
-      </ul>
-    </fieldset>
-  </div>
-  <div class="popover" id="decade-popover">
-      <fieldset>
-      <legend>Decade</legend>
-      <ul class="genre-list">
-        <li>
-          <label>
-            <input name="decade" type="radio" value="0" />
-            All
-          </label>
-        </li>
-        {decades.map(decade => (<li><label>
-          <input name="decade" type="radio" value={decade}>
-          {decade}'s
-        </label></li>))}
-      </ul>
-      </fieldset>
-  </div>
-  <div class="popover" id="providers-popover">
-    <fieldset>
-      <legend>Services</legend>
-      <ul class="genre-list">
-        {providers?.map(
-          (provider: { id: number; name: string; logo: string; url: string }) => (
-          <li><label>
-            <input name="providers" type="checkbox" value={provider.id} />
-            <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo}`} alt={provider.name} title={provider.name} />
-            {provider.name}
-          </label></li>
-        ))}
-      </ul>
-      </fieldset>
-  </div>
-  <button name="new-movie-button" class="glow" type="submit">Find Movie</button>
-</form>
-  </browser-store>
-</Layout>
-<script src="../components/browser-store.ts"></script>
-<script>
-  const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
-  const textarea = form?.elements.namedItem("prompt") as HTMLTextAreaElement | null;
-  const submitButton = form?.elements.namedItem("new-movie-button") as HTMLButtonElement | null;
-  submitButton?.addEventListener("click", (event) => {
-    event.preventDefault();
-    document.body.setAttribute("inert", "");
-    const hiddenInput = document.createElement("input");
-    hiddenInput.type = "hidden";
-    hiddenInput.name = "seenMovies";
-    hiddenInput.value = JSON.stringify(
-      JSON.parse(sessionStorage.getItem("seenMovies") || "[]"),
-    );
-    form?.appendChild(hiddenInput);
-    form?.submit();
-    // submitButton.disabled = true;
-    // TODO: if form submit fails, remove inert
-  });
-  textarea?.addEventListener("keydown", (event: KeyboardEvent) => {
-    console.log(event.key);
-    if (!event.shiftKey && event.key === "Enter") {
-      form?.submit();
-    }
-  });
-</script>
-<style is:global>
 
-  main {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding-bottom: 6rem;
-  }
 
-  aside {
-    flex: 1 1;
-    padding: 1rem 2rem;
-    background-color: black;
+<MoviePage movie={movie} formData={formData}>
+  <p>Welcome!</p>
+  
+  <p>Movie.surf helps you find a movie without wading through endless streaming apps. Just configure the options you'd like in the dock below—genres, decades, streaming services—or just describe what you would like to see! We'll handle the rest.</p>
+</MoviePage>
+
+<style>
+  p {
     color: white;
-    border-radius: 1rem;
-
-    h2 {
-      margin: 1rem 0 0;
-    }
-
-    ul {
-      margin: 0;
-      padding: .5rem;
-    }
-
-    li {
-      margin: .5rem 0;
-    }
+    font-size: 1.2em;
+    text-align: left;
   }
-
-  form {
-    flex: 2 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  textarea {
-    appearance: none;
-    border: none;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    background-color: white;
-    color: black;
-    border: 2px solid black;
-    font-size: 1rem;
-    resize: none;
-    height: 100%;
-    width: 100%;
-  }
-  
-  button {
-    appearance: none;
-    border: none;
-    cursor: pointer;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    background-color: white;
-    color: black;
-    font-weight: 800;
-    font-size: 1rem;
-    flex: 1;
-    scroll-snap-align: start;
-    scroll-margin-inline: 1rem;
-    text-wrap: nowrap;
-  }
-
-  button.glow {
-    background-color: gold;
-  }
-
-  button:hover {
-    background-color: goldenrod;
-  }
-
-
-.genre-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: .5rem;
-    flex-wrap: wrap;
-    overflow-x: auto;
-    accent-color: gold;
-  
-    li {
-      flex: 0 1 240px;
-    }
-
-    label {
-      cursor: pointer;
-      display: inline-block;
-      padding: .25rem 1rem .25rem .25rem;
-      color: white;
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-    }
-  }
-
-
- input[type="checkbox"] {
-  appearance: none;
-  margin: 0;
-  width: 1.25rem;
-  height: 1.25rem;
-  background-color: white;
-  border-radius: .25rem;
-  display: grid;
-  place-content: center;
-  cursor: pointer;
-}
-
-input[type="checkbox"]:checked {
-  background: url(/checkmark.svg);
-  background-size: 1rem 1.25rem;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: gold;
-  box-shadow: 0 0 6px -2px gold;
-  animation: glow-checkmark 2s ease infinite alternate;
-}
-
-input[type="checkbox"]:focus-visible {
-  outline: none;
-}
-
-label:has(input[type="checkbox"]:focus-visible) {
-  outline: max(2px, 0.15em) solid currentColor;
-  outline-offset: max(2px, 0.15em);
-}
-
-.popover {
-  margin: auto;
-  max-width: 800px;
-  box-sizing: border-box;
-  background: #000;
-  border-radius: 2rem;
-  color: #fff;
-  border: none;
-}
-
-fieldset {
-  border: none;
-  padding: 2rem 1rem;
-  display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-legend {
-  font-size: 2rem;
-  font-family: "ltc-broadway-engraved", sans-serif;
-  padding: .5rem;
-}
 </style>

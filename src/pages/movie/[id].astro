@@ -1,56 +1,24 @@
 ---
-import { getMovieSuggestion } from "@data/movie";
-import { getMovieDetails, getRandomMovie, type Movie } from "@data/tmdb";
+import type { Movie, MovieFormData } from "@actions/movie";
+import { getMovieDetails } from "@data/tmdb";
 import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
+
 const id = Astro.params.id;
 
-interface MovieForm {
-	genres: number[];
-	good: boolean;
-	decade?: number;
-	page: number;
-	providers?: number[];
-}
-
-const formData: MovieForm = {
+const formData: MovieFormData = {
+	prompt: "",
 	genres: [],
 	good: true,
-	decade: undefined,
-	page: 1,
+	decade: 0,
 	providers: [],
 };
 
-let randomMovie: Movie | null = null;
-if (Astro.request.method === "POST") {
-	try {
-		const data = await Astro.request.formData();
-
-		const movie = await getMovieSuggestion(data);
-		if (movie) {
-			return Astro.redirect(`/movie/${movie.id}`);
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.message);
-		}
-	}
-}
-
+let movie: Movie | null = null;
 if (id) {
-	randomMovie = await getMovieDetails(id);
+	movie = await getMovieDetails(id);
 }
 ---
 
-<MoviePage randomMovie={randomMovie} formData={formData} />
-<script id="session-store-script" data-movie-title={randomMovie?.title}>
-  document.addEventListener("DOMContentLoaded", async () => {
-    const movieTitle = document.getElementById("session-store-script").dataset.movieTitle;
-    const seenMovies = await JSON.parse(sessionStorage.getItem("seenMovies")) ?? [];
-    if (movieTitle && !seenMovies.includes(movieTitle)) {
-      seenMovies.push(movieTitle);
-      sessionStorage.setItem("seenMovies", JSON.stringify(seenMovies));
-    }
-  });
-</script>
+<MoviePage movie={movie} formData={formData} />

@@ -7,15 +7,19 @@ import {
 } from "src/actions/movie";
 import { getGenreNameFromId } from "./tmdb";
 
+const apiKey = process.env.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY;
+const aiModel: OpenAI.Chat.ChatModel =
+	process.env.OPENAI_MODEL ?? import.meta.env.OPENAI_MODEL ?? "gpt-4o";
+
 const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY,
+	apiKey,
 });
 
 export async function getAiMovieSuggestions(
 	movieFormData: MovieFormData,
 ): Promise<MovieSuggestionResults> {
 	const prompts: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [];
-	console.log(movieFormData);
+
 	if (movieFormData.prompt) {
 		prompts.push({
 			content: movieFormData.prompt,
@@ -53,7 +57,7 @@ export async function getAiMovieSuggestions(
 	let completion: OpenAI.Chat.Completions.ChatCompletion;
 	try {
 		completion = await openai.chat.completions.create({
-			model: "gpt-4o",
+			model: aiModel,
 			temperature: 1.5,
 			// top_p: 1,
 			messages: [

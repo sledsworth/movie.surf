@@ -1,5 +1,6 @@
 ---
 import Button from "./Button.astro";
+import shareSVG from "../icons/share.svg?raw";
 
 interface Props {
 	url: string;
@@ -14,7 +15,9 @@ const { url, text, title, imageUrl, style } = Astro.props;
 
 <share-button url={url} text={text} title={title} image-url={imageUrl}>
   <slot>
-    <Button style={style} variant="primary">Share</Button>
+    <Button title="Share movie" aria-label="share movie" style={style} variant="primary">
+      <Fragment set:html={shareSVG} />
+    </Button>
   </slot>
 </share-button>
 <style>

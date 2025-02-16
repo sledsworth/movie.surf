@@ -1,7 +1,23 @@
 {
-  "name": "stale-star",
+  "name": "movie.surf",
+  "description": "A movie recommendation app using AI and TMDB.",
+  "author": "Steve Ledsworth",
+  "license": "MIT",
+  "private": true,
+  "homepage": "https://movie.surf",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sledsworth/movie.surf.git"
+  },
+  "keywords": [
+    "astro",
+    "movie",
+    "recommendation",
+    "ai",
+    "tmdb"
+  ],
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "scripts": {
     "start": "netlify dev",
     "build": "astro check && astro build",
@@ -13,17 +29,15 @@
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
-    "@astrojs/cloudflare": "12.1.0",
-    "@astrojs/netlify": "6.0.1",
-    "@astrojs/svelte": "^7.0.3",
-    "@netlify/blobs": "8.1.0",
-    "astro": "^5.1.3",
-    "openai": "^4.77.3",
-    "typescript": "^5.7.2",
-    "zod": "3.24.1"
+    "@astrojs/netlify": "^6.2.0",
+    "@netlify/blobs": "^8.1.1",
+    "astro": "^5.3.0",
+    "openai": "^4.85.1",
+    "typescript": "^5.7.3",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "netlify-cli": "^18.0.0"
+    "netlify-cli": "^18.1.0"
   }
 }

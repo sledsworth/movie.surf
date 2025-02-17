@@ -10,15 +10,13 @@ const { title, id } = Astro.props;
 ---
 
 <dialog class="popover" id={id}>
-  <fieldset>
   <header>
-    <legend>{title}</legend>
+    <h1>{title}</h1>
     <button type="button" aria-label="close">
       <Fragment set:html={closeIcon} />
     </button>
   </header>
   <slot></slot>
-  </fieldset>
 </dialog>
 <script>
   const dialogs = document.querySelectorAll('dialog');
@@ -51,7 +49,7 @@ const { title, id } = Astro.props;
     /* visibility: hidden; */
     /* opacity: 0; */
     transform-origin: bottom;
-    transform: translate(0, 800px);
+    transform: translate(0, 1000px);
     transition: all .4s cubic-bezier(0.485, -0.050, 0.285, 1.105) allow-discrete;
     z-index: 100;
   }
@@ -66,24 +64,15 @@ const { title, id } = Astro.props;
     dialog[open] {
       /* opacity: 0; */
       /* visibility: hidden; */
-      transform: translate(0, 800px);
+      transform: translate(0, 1000px);
     }
-  }
-
-  fieldset {
-    border: none;
-    padding: 0 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
   }
 
   header {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     position: sticky;
-    padding-top: 1rem;
+    padding: 1rem 1rem 0 0;
     top: 0;
     background: black;
     border-bottom: 1px solid white;
@@ -105,9 +94,10 @@ const { title, id } = Astro.props;
     background: rgba(255, 255, 255, 0.2);
   }
 
-  legend {
+  h1 {
     font-size: 2rem;
     font-family: "ltc-broadway-engraved", sans-serif;
-    padding: .5rem;
+    padding: .5rem 1rem;
+    margin: 0;
   }
 </style>

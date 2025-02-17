@@ -50,7 +50,6 @@ class BrowserStoreElement extends HTMLElement {
 						formValues = { ...formValues, [key]: value };
 					}
 				}
-        console.log(formValues)
 				localStorage.setItem(`${this.form?.name}`, JSON.stringify(formValues));
 			});
 		}
@@ -66,6 +65,16 @@ class BrowserStoreElement extends HTMLElement {
 			}
 		}
 	}
+
+  handleSelect(key: string, value: string) {
+    const select = this.form?.querySelector(`[name="${key}"]`) as HTMLSelectElement;
+    const options = select.querySelectorAll("option");
+    for (const option of options) {
+      if (option.value === value) {
+        option.selected = true;
+      }
+    }
+  }
 
 	connectedCallback() {
 		this.slotElement = this.shadowRoot?.querySelector("slot");
@@ -94,9 +103,10 @@ class BrowserStoreElement extends HTMLElement {
 					this.handleRadio(key, value);
 					break;
 				case "textarea":
-          console.log(value, input.value)
 					input.value = value as string;
 					break;
+        case "select-one":
+          this.handleSelect(key, value);
 				default:
 					this.form
 						?.querySelector(`[name="${key}"]`)

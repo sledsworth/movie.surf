@@ -5,10 +5,8 @@ import MovieCard from "./MovieCard.astro";
 import type { Movie, MovieFormData, Provider } from "@actions/movie";
 import Popover from "./Popover.astro";
 import Button from "./Button.astro";
-import ShareButton from "./ShareButton.astro";
 import BrowserStore from "./BrowserStore.astro";
 import ScrollPositionRestore from "./ScrollPositionRestore.astro";
-import Radio from "./Radio.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
 
 interface Props {
@@ -37,22 +35,7 @@ const share = getSharingDetails(movie);
 <Layout title="Movie Surf">
   <BrowserStore>
   <form name="movie-search-details" method="POST" transition:persist>
-    <Popover title="Details" id="prompt-popover">
-        <fieldset>
-          <h2>Description</h2>
-          <textarea rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
-          <aside>
-            <p>Need some inspiration? Try one of these:</p>
-            <ul>
-              <li>George Clooney's worst performance (God help us if it isn't Batman & Robin).</li>
-              <li>The best whodonit' (that's not Knives Out).</li>
-              <li>The worst movie of all time.</li>
-              <li>Some movie about doing taxes.</li>
-              <li>A movie where Brad Pitt is always eating.</li>
-              <li>Steven Spielberg's best flick.</li>
-            </ul>
-          </aside>
-        </fieldset>
+    <Popover title="Filters" id="prompt-popover">
         <fieldset>
           <h2>Genre</h2>
           <ul class="genre-list">
@@ -96,23 +79,17 @@ const share = getSharingDetails(movie);
             ))}
           </ul>
         </fieldset>
-        <div style={{ 
-          position: 'sticky',
-          bottom: '-5rem',
-          top: 'auto',
-          margin: '3rem 1rem',
-          padding: '1rem',
-          background: 'black',
-        }}>
-                <Button style={{ 
-                  width: '100%'
-                }} type="submit" variant="primary" name="new-movie-button" glow autofocus>New Movie</Button>
-                </div>
+        <div class="popover-footer-button">
+          <Button style={{ 
+            width: '100%'
+          }} type="submit" variant="primary" name="new-movie-button" glow>Next Movie</Button>
+        </div>
     </Popover>
     <div class="control-dock-container">
       <div class="control-dock">
-        <Button type="submit" variant="primary" name="new-movie-button" glow autofocus>New Movie</Button>
-        <Button dialogtarget="prompt-popover">Describe</Button>
+        <textarea rows="8" name="prompt" placeholder="Brad Pitt's worst performance" />
+        <Button style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Next Movie</Button>
+        <Button style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filters</Button>
         <!-- <Button dialogtarget="genre-popover">Genres</Button>
         <Button dialogtarget="decade-popover">Decade</Button>
         <Button dialogtarget="providers-popover">Services</Button> -->
@@ -288,6 +265,7 @@ const share = getSharingDetails(movie);
 
   .control-dock {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
     max-width: 800px;
@@ -301,33 +279,6 @@ const share = getSharingDetails(movie);
     overscroll-behavior-x: contain;
     box-shadow: 0 0 24px -6px black;
     clip-path: border-box;
-  }
-
-  .control-dock::after {
-    content: "";
-    width: 100%;
-    box-shadow: inset 0px 0px 10px 10px black;
-    position: absolute;
-    height: 100%;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    border-radius: 2rem;
-    max-width: 800px;
-    margin: auto;
-    pointer-events: none;
-  }
-
-  .control-dock::-webkit-scrollbar {
-    -webkit-appearance: none;
-    width: 6px;
-  }
-
-  .control-dock::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
   }
 
   fieldset {
@@ -355,6 +306,7 @@ const share = getSharingDetails(movie);
     border: 2px solid black;
     font-size: 1rem;
     resize: none;
+    width: 100%;
   }
 
   textarea:focus-visible {
@@ -421,5 +373,13 @@ const share = getSharingDetails(movie);
     ul {
       margin: .5rem 0 0;
     }
+  }
+
+  .popover-footer-button {
+    position: sticky;
+    bottom: 0;
+    margin: 2rem 0 0;
+    padding: 2rem;
+    background: black;
   }
 </style>

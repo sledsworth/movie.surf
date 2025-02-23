@@ -64,7 +64,6 @@ export const movie = {
 	suggestion: defineAction({
 		input: MovieFormDataSchema,
 		handler: async (input, context) => {
-			console.log("movieFormData", input, context.session);
 			await context.session?.set("movieFormData", input);
 			const seenMovies: Movie[] =
 				(await context.session?.get("viewedMovies")) ?? [];
@@ -73,9 +72,9 @@ export const movie = {
 					...input,
 					seenMovies: seenMovies?.map((movie) => movie.title),
 				});
-				// console.log(suggestions);
 				return suggestions;
 			} catch (error) {
+				// TODO: Redirect to open ai error page that asks for money on a 429
 				console.error("Error getting AI movie suggestions.", error);
 				throw new ActionError({
 					message: "Error getting AI movie suggestions.",
@@ -109,8 +108,8 @@ export const movie = {
 				(await context.session?.get("viewedMovies")) ?? [];
 			const formData = await context.session?.get("movieFormData");
 			try {
-				console.log("formData", formData);
-				console.log("viewed movie ids: ", viewedMovies);
+				console.debug("select -> formData: ", formData);
+				console.debug("select -> viewedMovies (session): ", viewedMovies);
 				let availibleMovie: Movie | undefined;
 				for (const movie of input) {
 					console.log("provided", formData?.providers, movie.providers);
@@ -130,7 +129,10 @@ export const movie = {
 								title: movie.title,
 								release_date: movie.release_date,
 							});
-							console.log("viewed movie id added: ", viewedMovies);
+							console.debug(
+								"select -> viewedMovies (session) -> updated: ",
+								viewedMovies,
+							);
 							context.session?.set("viewedMovies", viewedMovies);
 							return movie;
 						}

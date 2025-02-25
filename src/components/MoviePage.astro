@@ -8,6 +8,8 @@ import Button from "./Button.astro";
 import BrowserStore from "./BrowserStore.astro";
 import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
+import ResetButton from "./ResetButton.astro";
+import PreviousSuggestions from "./PreviousSuggestions.astro";
 
 interface Props {
 	movie: Movie | null;
@@ -15,9 +17,6 @@ interface Props {
 }
 
 const { movie, formData } = Astro.props;
-
-const seenMovies = (await Astro.session?.get("viewedMovies")) || [];
-console.log("seen", seenMovies);
 
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
@@ -81,8 +80,9 @@ const share = getSharingDetails(movie);
         </fieldset>
         <div class="popover-footer-button">
           <Button style={{ 
-            width: '100%'
+            flex: '2 1 300px'
           }} type="submit" variant="primary" name="new-movie-button" glow>Next Movie</Button>
+            <ResetButton />
         </div>
     </Popover>
     <div class="control-dock-container">
@@ -99,6 +99,7 @@ const share = getSharingDetails(movie);
 </BrowserStore>
 <slot></slot>
 <MovieCard movie={movie} />
+<PreviousSuggestions movieId={movie?.id} />
 <!-- TODO: Is this needed if we get the server island working? -->
 <!-- <ScrollPositionRestore /> -->
 </Layout>
@@ -257,7 +258,7 @@ const share = getSharingDetails(movie);
 
   .control-dock-container {
     position: fixed;
-    bottom: 2rem;
+    bottom: .5rem;
     width: calc(100% - 1rem);
     left: .5rem;
     z-index: 100;
@@ -274,11 +275,7 @@ const share = getSharingDetails(movie);
     border-radius: 2rem;
     padding: 1rem;
     box-sizing: border-box;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-x: contain;
     box-shadow: 0 0 24px -6px black;
-    clip-path: border-box;
   }
 
   fieldset {
@@ -382,10 +379,13 @@ const share = getSharingDetails(movie);
   }
 
   .popover-footer-button {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
     position: sticky;
     bottom: 0;
     margin: 2rem 0 0;
-    padding: 2rem;
+    padding: 2rem 1rem;
     background: black;
   }
 </style>

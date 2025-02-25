@@ -1,0 +1,57 @@
+---
+import type { LimitedMovie } from "@actions/movie";
+import { actions } from "astro:actions";
+import MovieCardCompact from "./MovieCardCompact.astro";
+
+interface Props {
+	movieId?: number;
+}
+
+const { movieId } = Astro.props;
+
+const { data, error } = await await Astro.callAction(
+	actions.movie.previousSuggestions,
+	{},
+);
+let previousSuggestions: LimitedMovie[] = [];
+if (error) {
+	console.error(error);
+} else {
+	previousSuggestions = data;
+}
+const filteredMovies = previousSuggestions
+	.filter((movie) => movie.id !== movieId)
+	.reverse();
+---
+{filteredMovies.length > 0 && (<aside>
+  <h2>Previous Movies</h2>
+  <ol>
+    {filteredMovies.map((suggestion) => (
+      <li>
+        <MovieCardCompact movie={suggestion} />
+      </li>
+    ))}
+  </ol>
+</aside>)}
+<style>
+  aside {
+    background: black;
+    padding: 1rem;
+    border-radius: 2rem;
+    margin: 0 0 2rem;
+  }
+
+  h2 {
+    color: white;
+    margin: .5rem;
+  }
+
+  ol {
+    display: flex;
+    padding: 0;
+    gap: 1rem;
+    list-style: none;
+    justify-items: start;
+    flex-wrap: wrap;
+  }
+</style>

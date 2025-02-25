@@ -2,7 +2,6 @@
 import type { Movie, Provider } from "@actions/movie";
 import FormattedDate from "./FormattedDate.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
-import Button from "./Button.astro";
 import ShareButton from "./ShareButton.astro";
 
 interface Props {
@@ -115,7 +114,7 @@ const share = getSharingDetails(movie);
     color: white;
     padding: 1rem;
     box-sizing: border-box;
-    margin: 0 0 8rem;
+    margin: 0 0 2rem;
   }
 
   .movie-card.show {

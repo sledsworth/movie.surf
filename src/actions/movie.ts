@@ -42,6 +42,13 @@ export const MovieSchema = z.object({
 	providers: z.array(ProviderSchema).optional(),
 });
 
+export const LimitedMovieSchema = z.object({
+	id: z.number(),
+	title: z.string(),
+	release_date: z.string(),
+	poster_path: z.union([z.string().optional(), z.null()]),
+});
+
 export const MovieFormDataSchema = z.object({
 	prompt: z.string().default("One of the best movies ever made."),
 	genres: z.array(z.coerce.number()),
@@ -52,6 +59,7 @@ export const MovieFormDataSchema = z.object({
 });
 
 export type Movie = z.infer<typeof MovieSchema>;
+export type LimitedMovie = z.infer<typeof LimitedMovieSchema>;
 export type MovieFormData = z.infer<typeof MovieFormDataSchema>;
 export type MovieSuggestion = z.infer<typeof MovieSuggestionSchema>;
 export type MovieSuggestionResults = z.infer<
@@ -104,7 +112,7 @@ export const movie = {
 	select: defineAction({
 		input: z.array(MovieSchema),
 		handler: async (input, context) => {
-			const viewedMovies: Partial<Movie>[] =
+			const viewedMovies: LimitedMovie[] =
 				(await context.session?.get("viewedMovies")) ?? [];
 			const formData = await context.session?.get("movieFormData");
 			try {
@@ -128,6 +136,7 @@ export const movie = {
 								id: movie.id,
 								title: movie.title,
 								release_date: movie.release_date,
+								poster_path: movie.poster_path,
 							});
 							console.debug(
 								"select -> viewedMovies (session) -> updated: ",
@@ -144,6 +153,22 @@ export const movie = {
 				console.error("Error selecting a movie from available options.", error);
 				throw new ActionError({
 					message: "Error selecting a movie from available options.",
+					code: "INTERNAL_SERVER_ERROR",
+				});
+			}
+		},
+	}),
+	previousSuggestions: defineAction({
+		handler: async (input, context) => {
+			try {
+				const viewedMovies: LimitedMovie[] =
+					(await context.session?.get("viewedMovies")) ?? [];
+				console.log("viewedMovies", viewedMovies);
+				return viewedMovies;
+			} catch (error) {
+				console.error("Error getting previous suggestions.", error);
+				throw new ActionError({
+					message: "Error getting previous suggestions.",
 					code: "INTERNAL_SERVER_ERROR",
 				});
 			}

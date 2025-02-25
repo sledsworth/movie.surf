@@ -1,6 +1,6 @@
-import type { Movie } from "@actions/movie";
+import type { LimitedMovie, Movie } from "@actions/movie";
 
-export function getSharingDetails(movie?: Movie | null) {
+export function getSharingDetails(movie?: Movie | LimitedMovie | null) {
 	return {
 		title: movie
 			? `🍿 Movie night!\n\n Let's watch "${movie?.title}"`

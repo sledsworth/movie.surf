@@ -1,0 +1,31 @@
+---
+import type { LimitedMovie } from "@actions/movie";
+import { getSharingDetails } from "src/utlils/shareDetails";
+
+interface Props {
+	movie: LimitedMovie | null | undefined;
+}
+
+const { movie } = Astro.props;
+
+// const share = getSharingDetails(movie);
+---
+
+
+{movie && (
+<a title=`${movie.title}` href=`/movie/${movie.id}` class="movie-card show">
+  <img class="movie-card-image" width="80" src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`} alt={movie.title} />
+</a>
+)}
+<style>
+a {
+  border: 4px solid transparent;
+  display: block;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+ a:hover {
+  border-color: gold;
+ }
+</style>

@@ -2,6 +2,7 @@
 import type { LimitedMovie } from "@actions/movie";
 import { actions } from "astro:actions";
 import MovieCardCompact from "./MovieCardCompact.astro";
+import ResetButton from "./ResetButton.astro";
 
 interface Props {
 	movieId?: number;
@@ -23,7 +24,7 @@ const filteredMovies = previousSuggestions
 	.filter((movie) => movie.id !== movieId)
 	.reverse();
 ---
-{filteredMovies.length > 0 && (<aside>
+{filteredMovies.length > 0 && (<aside id="previous-suggestions">
   <h2>Previous Movies</h2>
   <ol>
     {filteredMovies.map((suggestion) => (
@@ -32,12 +33,13 @@ const filteredMovies = previousSuggestions
       </li>
     ))}
   </ol>
+  <ResetButton transition:persist removeElementWithId="previous-suggestions" />
 </aside>)}
 <style>
   aside {
     background: black;
     padding: 1rem;
-    border-radius: 2rem;
+    border-radius: 1rem;
     margin: 0 0 2rem;
   }
 

@@ -2,7 +2,12 @@
 import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
 import Layout from "src/layouts/Layout.astro";
 import MovieCard from "./MovieCard.astro";
-import type { Movie, MovieFormData, Provider } from "@actions/movie";
+import type {
+	LimitedMovie,
+	Movie,
+	MovieFormData,
+	Provider,
+} from "@actions/movie";
 import Popover from "./Popover.astro";
 import Button from "./Button.astro";
 import BrowserStore from "./BrowserStore.astro";
@@ -21,6 +26,19 @@ const { movie, formData } = Astro.props;
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
 const providers = await getAllMovieProviders();
+
+const viewedMovies: LimitedMovie[] =
+	(await Astro.session?.get("viewedMovies")) ?? [];
+
+if (movie && !viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)) {
+	viewedMovies.push({
+		id: movie.id,
+		title: movie.title,
+		release_date: movie.release_date,
+		poster_path: movie.poster_path,
+	});
+	Astro.session?.set("viewedMovies", viewedMovies);
+}
 
 const share = getSharingDetails(movie);
 ---
@@ -82,7 +100,6 @@ const share = getSharingDetails(movie);
           <Button style={{ 
             flex: '2 1 300px'
           }} type="submit" variant="primary" name="new-movie-button" glow>Next Movie</Button>
-            <ResetButton />
         </div>
     </Popover>
     <div class="control-dock-container">

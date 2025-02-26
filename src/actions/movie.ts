@@ -132,17 +132,17 @@ export const movie = {
 						if (
 							!viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)
 						) {
-							viewedMovies.push({
-								id: movie.id,
-								title: movie.title,
-								release_date: movie.release_date,
-								poster_path: movie.poster_path,
-							});
+							// viewedMovies.push({
+							// 	id: movie.id,
+							// 	title: movie.title,
+							// 	release_date: movie.release_date,
+							// 	poster_path: movie.poster_path,
+							// });
 							console.debug(
 								"select -> viewedMovies (session) -> updated: ",
 								viewedMovies,
 							);
-							context.session?.set("viewedMovies", viewedMovies);
+							// context.session?.set("viewedMovies", viewedMovies);
 							return movie;
 						}
 						availibleMovie = movie;

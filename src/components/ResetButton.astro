@@ -1,21 +1,30 @@
 ---
 import Button from "./Button.astro";
+
+interface Props {
+	removeElementWithId?: string;
+}
+const { removeElementWithId } = Astro.props;
 ---
 
-<Button className="reset-suggestions-button">Reset Suggestions</Button>
+<Button className="reset-suggestions-button" data-remove={removeElementWithId}>Clear Movies</Button>
 <script>
 import { actions } from "astro:actions";
 
-const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
 
-for (const resetButton of resetButtons) {
-  resetButton?.addEventListener("click", async () => {
+const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
+  
+  for (const resetButton of resetButtons) {
+    resetButton?.addEventListener("click", async () => {
+    const removeElement = document.getElementById(resetButton?.dataset?.remove ?? '');
+    console.log(removeElement)
     resetButton.disabled = true;
-    console.log("Reset button clicked");
     const { data, error } = await actions.movie.resetSession();
     if (error) alert(error.message);
-    console.log('resetting...', data);
     resetButton.disabled = false;
+    if (removeElement) {
+      removeElement.remove();
+    }
   });
 }
 </script>

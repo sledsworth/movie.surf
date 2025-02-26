@@ -44,7 +44,8 @@ const { title, id } = Astro.props;
     width: 100%;
     max-width: 800px;
     box-sizing: border-box;
-    background: #000;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
     border-radius: 2rem 2rem 0 0;
     color: #fff;
     border: none;
@@ -85,7 +86,6 @@ const { title, id } = Astro.props;
     /* position: sticky; */
     padding: 1rem 1rem 0 0;
     top: 0;
-    background: black;
     border-bottom: 1px solid white;
   }
 

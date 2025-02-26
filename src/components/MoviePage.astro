@@ -96,11 +96,6 @@ const share = getSharingDetails(movie);
             ))}
           </ul>
         </fieldset>
-        <div class="popover-footer-button">
-          <Button style={{ 
-            flex: '2 1 300px'
-          }} type="submit" variant="primary" name="new-movie-button" glow>Next Movie</Button>
-        </div>
     </Popover>
     <div class="control-dock-container">
       <div class="control-dock">
@@ -397,16 +392,5 @@ const share = getSharingDetails(movie);
     ul {
       margin: .5rem 0 0;
     }
-  }
-
-  .popover-footer-button {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    position: sticky;
-    bottom: 0;
-    margin: 2rem 0 0;
-    padding: 2rem 1rem;
-    background: black;
   }
 </style>

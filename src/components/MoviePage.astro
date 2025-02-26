@@ -230,6 +230,13 @@ const share = getSharingDetails(movie);
       }
     });
   }
+
+  const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
+  textarea.addEventListener('focus', (event) => {
+    setTimeout(() => {
+      textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+    }, 0);
+  });
 </script>
 <style>
   .break:after {
@@ -319,17 +326,14 @@ const share = getSharingDetails(movie);
     width: 100%;
     height: .75rem;
     font-size: .75rem;
-    transition: all .25s ease;
+    transition: height .25s ease;
   }
 
-  textarea:focus-visible {
+  textarea:focus {
     outline: gold solid 4px;
     outline-offset: 2px;
     font-size: 1rem;
     padding: 1rem 1.5rem;
-  }
-
-  textarea:focus {
     height: 25vh;
   }
 

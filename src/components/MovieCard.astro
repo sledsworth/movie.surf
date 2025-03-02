@@ -48,7 +48,7 @@ const share = getSharingDetails(movie);
     </a>
   )}
   {share && (
-    <ShareButton style="flex: 0 0 80px; height: 48px; padding: .5rem 1rem;" url={share.url} />
+    <ShareButton transition:persist style="flex: 0 0 80px; height: 48px; padding: .5rem 1rem;" url={share.url} />
   )}
   </section>
   </section>

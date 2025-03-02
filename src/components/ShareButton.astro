@@ -50,6 +50,7 @@ class ShareButtonElement extends HTMLElement {
 	}
 
 	handleClick() {
+    console.log(this.shareData);
 		if (this.shareData) {
 			navigator.share(this.shareData);
 		}
@@ -104,6 +105,10 @@ class ShareButtonElement extends HTMLElement {
 			this.style.display = "contents";
 		}
 	}
+
+  disconnectedCallback() {
+    this.button?.removeEventListener("click", this.handleClick);
+  }
 
 	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
 		if (name === "image-url") {

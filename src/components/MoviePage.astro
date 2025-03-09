@@ -1,20 +1,20 @@
 ---
-import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
-import Layout from "src/layouts/Layout.astro";
-import MovieCard from "./MovieCard.astro";
 import type {
 	LimitedMovie,
 	Movie,
 	MovieFormData,
 	Provider,
 } from "@actions/movie";
-import Popover from "./Popover.astro";
-import Button from "./Button.astro";
-import BrowserStore from "./BrowserStore.astro";
-import ScrollPositionRestore from "./ScrollPositionRestore.astro";
+import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
+import Layout from "src/layouts/Layout.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
-import ResetButton from "./ResetButton.astro";
+import BrowserStore from "./BrowserStore.astro";
+import Button from "./Button.astro";
+import MovieCard from "./MovieCard.astro";
+import Popover from "./Popover.astro";
 import PreviousSuggestions from "./PreviousSuggestions.astro";
+import ResetButton from "./ResetButton.astro";
+import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 
 interface Props {
 	movie: Movie | null;
@@ -324,15 +324,16 @@ const share = getSharingDetails(movie);
     resize: none;
     width: 100%;
     height: 1rem;
-    font-size: 1rem;
-    transition: height .25s ease;
+    font-size: .85rem;
+    transition: all .25s ease;
   }
 
   textarea:focus {
-    outline: gold solid 2px;
-    outline-offset: 1px;
+    outline: rgb(255, 179, 0) solid 4px;
+    outline-offset: 2px;
     padding: 1rem 1.5rem;
     height: 25vh;
+    font-size: 1rem;
   }
 
   input[type="checkbox"] {
@@ -374,7 +375,7 @@ const share = getSharingDetails(movie);
   }
 
   label:has(input[type="checkbox"]:focus-visible) {
-    outline: 2px solid gold;
+    outline: 4px solid rgb(255, 179, 0);
     outline-offset: -2px;
     overflow-x: visible;
   }

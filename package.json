@@ -1,43 +1,36 @@
 {
-  "name": "movie.surf",
-  "description": "A movie recommendation app using AI and TMDB.",
-  "author": "Steve Ledsworth",
-  "license": "MIT",
-  "private": true,
-  "homepage": "https://movie.surf",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sledsworth/movie.surf.git"
-  },
-  "keywords": [
-    "astro",
-    "movie",
-    "recommendation",
-    "ai",
-    "tmdb"
-  ],
-  "type": "module",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "netlify dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro",
-    "check": "astro check",
-    "update": "npx npm-check -u",
-    "update:astro": "npx @astrojs/upgrade"
-  },
-  "dependencies": {
-    "@astrojs/check": "0.9.4",
-    "@astrojs/netlify": "^6.2.2",
-    "@netlify/blobs": "^8.1.1",
-    "astro": "^5.4.1",
-    "openai": "^4.86.1",
-    "typescript": "^5.8.2",
-    "zod": "^3.24.2"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "netlify-cli": "^19.0.0"
-  }
+	"name": "movie.surf",
+	"description": "A movie recommendation app using AI and TMDB.",
+	"author": "Steve Ledsworth",
+	"license": "MIT",
+	"private": true,
+	"homepage": "https://movie.surf",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sledsworth/movie.surf.git"
+	},
+	"keywords": ["astro", "movie", "recommendation", "ai", "tmdb"],
+	"type": "module",
+	"version": "1.0.0",
+	"scripts": {
+		"start": "netlify dev",
+		"build": "astro check && astro build",
+		"astro": "astro",
+		"check": "astro check && biome check --write",
+		"update": "npx npm-check -u",
+		"update:astro": "npx @astrojs/upgrade"
+	},
+	"dependencies": {
+		"@astrojs/check": "0.9.4",
+		"@astrojs/netlify": "^6.2.2",
+		"@netlify/blobs": "^8.1.1",
+		"astro": "^5.4.2",
+		"openai": "^4.86.2",
+		"typescript": "^5.8.2",
+		"zod": "^3.24.2"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"netlify-cli": "^19.0.2"
+	}
 }

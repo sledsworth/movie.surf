@@ -1,9 +1,9 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import {
-	MovieSuggestionResultsSchema,
 	type MovieFormData,
 	type MovieSuggestionResults,
+	MovieSuggestionResultsSchema,
 } from "src/actions/movie";
 import { getGenreNameFromId } from "./tmdb";
 

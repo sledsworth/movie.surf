@@ -7,7 +7,7 @@ interface Props {
 const { title, subtitle } = Astro.props;
 ---
 
-<a href="/">
+<a href="/" class="glow">
 <header transition:persist slot="header">
   <div class="light-bar">
     <div class="light alternate"></div>
@@ -29,7 +29,7 @@ const { title, subtitle } = Astro.props;
     <div class="light alternate"></div>
     <div class="light"></div>
   </div>
-  <div class="marquee-container glow">
+  <div class="marquee-container">
     <div class="marquee">
       <h1>{title}</h1>
       {subtitle && <p>{subtitle}</p>}
@@ -66,9 +66,16 @@ const { title, subtitle } = Astro.props;
     }
 
     a {
-        all: unset;
-        cursor: pointer;
-      }
+      display: block;
+      color: black;
+      border-radius: 1rem;
+      transition: all .1s ease;
+    }
+
+    a:hover {
+      transform: scale(1.025);
+      transform-origin: center
+    }
 
     .marquee {
       background: url(/marquee.svg) repeat;

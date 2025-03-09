@@ -9,7 +9,7 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<dialog class="popover" id={id}>
+<dialog inert class="popover" id={id}>
   <header>
     <h1>{title}</h1>
     <button type="button" aria-label="close">
@@ -25,10 +25,13 @@ const { title, id } = Astro.props;
   dialogs.forEach(dialog => {
     const close = dialog.querySelector('button[aria-label="close"]');
     close?.addEventListener('click', () => {
+      dialog.inert = true;
       dialog.close();
     });
+    // Close dialog when clicking the backdrop
     dialog.addEventListener('click', (event) => {
       if (event.target === event.currentTarget) {
+        dialog.inert = true;
         (event.currentTarget as HTMLDialogElement)?.close()
       }
     });
@@ -52,12 +55,12 @@ const { title, id } = Astro.props;
     /* visibility: hidden; */
     /* opacity: 0; */
     transform-origin: bottom;
-    transform: translate(0, 1000px);
+    transform: translate(0, 100vh);
     transition: all .4s cubic-bezier(0.485, -0.050, 0.285, 1.105) allow-discrete;
     z-index: 1000;
     overflow: hidden;
     max-height: 80vh;
-    bottom: -2rem;
+    bottom: 0;
     height: 100%;
     display: grid;
   }
@@ -75,7 +78,7 @@ const { title, id } = Astro.props;
 
   @starting-style {
     dialog[open] {
-      transform: translate(-2rem, 80vh);
+      transform: translate(0, 80vh);
       visibility: hidden;
       opacity: 0;
     }

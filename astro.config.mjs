@@ -7,7 +7,7 @@ export default defineConfig({
 	site: "https://movie.surf",
 
 	server: {
-		port: 3001,
+		port: 3002,
 	},
 
 	prefetch: true,

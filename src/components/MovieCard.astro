@@ -1,7 +1,7 @@
 ---
 import type { Movie, Provider } from "@actions/movie";
-import FormattedDate from "./FormattedDate.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
+import FormattedDate from "./FormattedDate.astro";
 import ShareButton from "./ShareButton.astro";
 
 interface Props {
@@ -30,12 +30,14 @@ const share = getSharingDetails(movie);
     </section>
   <section>
     <div style="display: flex; gap: .5rem;">
-      {movie.providers !== undefined 
+      {movie.providers !== undefined
         && movie.providers.map((provider: Provider) => (
-        <img 
-          width="36" 
-          src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} 
+        <a href={provider.url} style="display: flex;"><img
+          width="36"
+          height="36"
+          src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
           alt={provider.provider_name} title={provider.provider_name} />
+        </a>
       ))}
     </div>
   </section>
@@ -43,7 +45,7 @@ const share = getSharingDetails(movie);
   <p class="movie-overview">{movie.overview}</p>
   <section style="display: flex; gap: 1rem; align-self: flex-start; justify-content: space-between; width: 100%">
   {movie.imdb_id && (
-    <a href={`https://imdb.com/title/${movie.imdb_id}`} style="flex: 0 0 96px;">
+    <a href={`https://imdb.com/title/${movie.imdb_id}`} style="display: flex; flex: 0 0 96px;">
       <img width="96px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
     </a>
   )}
@@ -91,7 +93,7 @@ const share = getSharingDetails(movie);
 
       movieCardSkeleton!.querySelector('.movie-title')!.textContent = customEvent.detail.title;
       movieCardSkeleton!.querySelector('.movie-overview')!.textContent = customEvent.detail.description;
-      
+
       if (customEvent.detail.showSkeleton) {
         movieCard?.classList.remove('show');
         movieCardSkeleton?.classList.add('show');
@@ -120,7 +122,7 @@ const share = getSharingDetails(movie);
   .movie-card.show {
     display: flex;
   }
-  
+
   .movie-card-details-meta {
     display: flex;
     gap: 1rem;
@@ -131,7 +133,7 @@ const share = getSharingDetails(movie);
     margin-bottom: 1rem;
     width: 100%;
   }
-  
+
   .movie-card .movie-card-image {
     aspect-ratio: 2 / 3;
     flex: 1 3 160px;
@@ -139,11 +141,11 @@ const share = getSharingDetails(movie);
     width: 200px;
 		border-radius: .5rem;
   }
-  
+
   .movie-card .movie-card-details {
     flex:  3 2 300px;
   }
-  
+
   .movie-card h2 {
     font-size: clamp(1rem, calc(1rem + 3vw), 2.7rem);
     margin: 0 0 1rem;

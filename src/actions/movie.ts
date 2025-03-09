@@ -73,7 +73,7 @@ export const movie = {
 	suggestion: defineAction({
 		input: MovieFormDataSchema,
 		handler: async (input, context) => {
-			await context.session?.set("movieFormData", input);
+			context.session?.set("movieFormData", input);
 			const seenMovies: Movie[] =
 				(await context.session?.get("viewedMovies")) ?? [];
 			try {
@@ -94,7 +94,7 @@ export const movie = {
 	}),
 	find: defineAction({
 		input: z.array(MovieSuggestionSchema),
-		handler: async (input, context): Promise<Movie[]> => {
+		handler: async (input): Promise<Movie[]> => {
 			try {
 				return (
 					await Promise.all(
@@ -160,7 +160,7 @@ export const movie = {
 		},
 	}),
 	previousSuggestions: defineAction({
-		handler: async (input, context) => {
+		handler: async (_input, context) => {
 			try {
 				const viewedMovies: LimitedMovie[] =
 					(await context.session?.get("viewedMovies")) ?? [];
@@ -176,9 +176,9 @@ export const movie = {
 		},
 	}),
 	resetSession: defineAction({
-		handler: async (input, context) => {
+		handler: async (_input, context) => {
 			try {
-				await context.session?.destroy();
+				context.session?.destroy();
 				return true;
 			} catch (error) {
 				console.error("Error resetting session.", error);

@@ -13,13 +13,13 @@ import { actions } from "astro:actions";
 
 
 const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
-  
+
   for (const resetButton of resetButtons) {
     resetButton?.addEventListener("click", async () => {
     const removeElement = document.getElementById(resetButton?.dataset?.remove ?? '');
     console.log(removeElement)
     resetButton.disabled = true;
-    const { data, error } = await actions.movie.resetSession();
+    const { error } = await actions.movie.resetSession();
     if (error) alert(error.message);
     resetButton.disabled = false;
     if (removeElement) {

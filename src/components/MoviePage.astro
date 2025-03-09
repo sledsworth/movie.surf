@@ -13,7 +13,6 @@ import Button from "./Button.astro";
 import MovieCard from "./MovieCard.astro";
 import Popover from "./Popover.astro";
 import PreviousSuggestions from "./PreviousSuggestions.astro";
-import ResetButton from "./ResetButton.astro";
 import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 
 interface Props {
@@ -170,9 +169,9 @@ const share = getSharingDetails(movie);
     }
 
     console.log('Matches found, making sure they aren\'t hallucinations...', data);
-    
-    
-    
+
+
+
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
       title: 'Verifying Suggestions...',
@@ -187,9 +186,9 @@ const share = getSharingDetails(movie);
     }
 
     console.log('Movie results verified, selecting movie...', movies);
-    
-    
-    
+
+
+
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
       title: 'Making Recommendation...',
@@ -232,7 +231,7 @@ const share = getSharingDetails(movie);
   }
 
   const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
-  textarea.addEventListener('focus', (event) => {
+  textarea.addEventListener('focus', () => {
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
     }, 0);

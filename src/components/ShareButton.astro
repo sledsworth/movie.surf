@@ -56,18 +56,16 @@ class ShareButtonElement extends HTMLElement {
 		}
 	}
 
-	urlToFiles(url?: string | null): Promise<File[]> {
+	async urlToFiles(url?: string | null): Promise<File[]> {
 		if (!url) {
 			return Promise.resolve([]);
 		}
-		return fetch(url)
-			.then((response) => response.blob())
-			.then((blob) => {
-				return [new File([blob], url)];
-			});
+		const response = await fetch(url);
+const blob = await response.blob();
+return [new File([blob], url)];
 	}
 
-	handleSlotChange(event: Event) {
+	handleSlotChange() {
 		this.button = this.slotElement?.assignedElements()[0] as HTMLButtonElement;
     if (!this.button) {
       return;
@@ -110,7 +108,7 @@ class ShareButtonElement extends HTMLElement {
     this.button?.removeEventListener("click", this.handleClick);
   }
 
-	attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+	attributeChangedCallback(name: string, _oldValue: string, newValue: string) {
 		if (name === "image-url") {
 			this.urlToFiles(newValue).then((files) => {
 				this.shareData = {

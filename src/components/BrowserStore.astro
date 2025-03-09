@@ -39,7 +39,7 @@ class BrowserStoreElement extends HTMLElement {
 	handleSlotChange() {
 		this.form = this.querySelector("form");
 		if (this.form) {
-			this.form.addEventListener("change", (event: Event) => {
+			this.form.addEventListener("change", () => {
 				const formData = new FormData(this.form as HTMLFormElement);
 				let formValues = {};
 				for (const key of formData.keys()) {

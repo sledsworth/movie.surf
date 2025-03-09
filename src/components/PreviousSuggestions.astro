@@ -10,7 +10,7 @@ interface Props {
 
 const { movieId } = Astro.props;
 
-const { data, error } = await await Astro.callAction(
+const { data, error } = await Astro.callAction(
 	actions.movie.previousSuggestions,
 	{},
 );

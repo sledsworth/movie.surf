@@ -1,14 +1,11 @@
 ---
 import type { LimitedMovie } from "@actions/movie";
-import { getSharingDetails } from "src/utlils/shareDetails";
 
 interface Props {
 	movie: LimitedMovie | null | undefined;
 }
 
 const { movie } = Astro.props;
-
-// const share = getSharingDetails(movie);
 ---
 
 

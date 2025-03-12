@@ -101,9 +101,6 @@ const share = getSharingDetails(movie);
         <textarea name="prompt" placeholder="Brad Pitt's worst performance" />
         <Button style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Next Movie</Button>
         <Button style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filters</Button>
-        <!-- <Button dialogtarget="genre-popover">Genres</Button>
-        <Button dialogtarget="decade-popover">Decade</Button>
-        <Button dialogtarget="providers-popover">Services</Button> -->
       </div>
     </div>
   </form>
@@ -111,7 +108,7 @@ const share = getSharingDetails(movie);
 <slot></slot>
 <MovieCard movie={movie} />
 <PreviousSuggestions movieId={movie?.id} />
-<!-- TODO: Is this needed if we get the server island working? -->
+{/* TODO: Is this needed if we get the server island working? */}
 <ScrollPositionRestore />
 </Layout>
 <script>

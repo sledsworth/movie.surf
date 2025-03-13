@@ -24,7 +24,7 @@ const { title } = Astro.props;
     <slot name="head" />
     <ClientRouter />
 	</head>
-	<body>
+	<body tabindex="0">
     <div class="container">
       <slot name="header">
         <Header title="Movie Surf" />
@@ -78,6 +78,22 @@ const { title } = Astro.props;
 
     body:has(dialog[open]) {
       overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      outline: 4px solid transparent;
+      outline-offset: -4px;
+      transition: outline 0.25s;
+      pointer-events: none;
+    }
+
+    body:focus-visible::before {
+      outline: 4px solid rgb(255, 179, 0);
+      outline-offset: -4px;
     }
 
     .container {

@@ -1,5 +1,6 @@
 ---
 import closeIcon from "../icons/close.svg?raw";
+import Button from "./Button.astro";
 
 interface Props {
 	title: string;
@@ -9,12 +10,12 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<dialog inert class="popover" id={id}>
+<dialog inert class="popover" id={id} tabindex="0">
   <header>
     <h1>{title}</h1>
-    <button type="button" aria-label="close">
+    <Button aria-label="close">
       <Fragment set:html={closeIcon} />
-    </button>
+    </Button>
   </header>
   <div class="content">
     <slot></slot>
@@ -76,6 +77,11 @@ const { title, id } = Astro.props;
     opacity: 1;
   }
 
+  dialog:focus-visible {
+    outline: 4px solid rgb(255, 179, 0);
+    outline-offset: -4px;
+  }
+
   @starting-style {
     dialog[open] {
       transform: translate(0, 80vh);
@@ -105,7 +111,7 @@ const { title, id } = Astro.props;
 
   button[aria-label="close"]:hover {
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.2);
+    color: black;
   }
 
   h1 {

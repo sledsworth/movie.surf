@@ -73,15 +73,6 @@ const share = getSharingDetails(movie);
             ))}
           </select>
         </fieldset>
-				<!-- <ul class="genre-list">
-					<li>
-            <Radio label="All" name="decade" value="0" checked={formData.decade === 0} />
-					</li>
-					{decades.map(decade => (
-          <li>
-            <Radio label={`${decade}'s`} name="decade" value={decade.toString()} checked={formData.decade === decade} />
-          </li>))}
-				</ul> -->
         <fieldset>
           <h2>Streaming Services</h2>
           <ul class="genre-list">
@@ -115,11 +106,10 @@ const share = getSharingDetails(movie);
   import { actions } from 'astro:actions';
   import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
+  let  promise: null | Promise<void> = null;
 
   async function handleSubmit(event: Event) {
-    event?.preventDefault();
-    const submitButton = event?.currentTarget as HTMLButtonElement;
-
+    console.log('submitting form...');
 
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
@@ -203,25 +193,31 @@ const share = getSharingDetails(movie);
     navigate('/movie/' + result.id);
 
     } finally {
-      submitButton.disabled = false;
+      promise = null;
     }
   }
 
   const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
   for (const button of submitButtons) {
     button.addEventListener("click", async (event) => {
+      event?.preventDefault();
+
       submitButtons.forEach((btn) => {
-        btn.disabled = true;
+        btn.textContent = "Submitting..."
       });
       const dialogs = document.querySelectorAll("dialog");
       dialogs.forEach((dialog) => {
+        dialog.inert = true;
         dialog.close();
       });
       try {
-        await handleSubmit(event);
+        if (!promise) {
+          promise = handleSubmit(event);
+        }
+        await promise;
       } finally {
         submitButtons.forEach((btn) => {
-          btn.disabled = false;
+          btn.textContent = "New Movie"
         });
       }
     });
@@ -360,6 +356,11 @@ const share = getSharingDetails(movie);
     border-radius: .5rem;
     font-size: 1rem;
     font-weight: bold;
+  }
+
+  select:focus {
+    outline: rgb(255, 179, 0) solid 4px;
+    outline-offset: 2px;
   }
 
   label:has(input[type="checkbox"]) {

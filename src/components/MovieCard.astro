@@ -53,7 +53,7 @@ const share = getSharingDetails(movie);
     <ShareButton transition:persist style="flex: 0 0 80px; height: 48px; padding: .5rem 1rem;" url={share.url} />
   )}
   </section>
-  </section>
+</section>
 </article>
 <article class="movie-card movie-card-skeleton">
   <div class="movie-card-image skeleton" />
@@ -83,13 +83,13 @@ const share = getSharingDetails(movie);
 </article>
 )}
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
-    const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;;
-
+  // document.addEventListener('astro:page-load', () => {
+    console.log('movie card loaded');
     document.addEventListener('movie-card--update', (event: Event) => {
       const customEvent = event as CustomEvent<{ showSkeleton: boolean, title: string, description: string }>;
       console.log('suggestion event', customEvent.detail);
+      const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
+      const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;
 
       movieCardSkeleton!.querySelector('.movie-title')!.textContent = customEvent.detail.title;
       movieCardSkeleton!.querySelector('.movie-overview')!.textContent = customEvent.detail.description;
@@ -102,7 +102,7 @@ const share = getSharingDetails(movie);
         movieCardSkeleton?.classList.remove('show');
       }
     });
-  });
+  // });
 </script>
 <style>
   .movie-card {

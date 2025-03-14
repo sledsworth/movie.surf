@@ -108,7 +108,7 @@ const share = getSharingDetails(movie);
   import type { MovieFormData } from 'src/actions/movie';
   let  promise: null | Promise<void> = null;
 
-  async function handleSubmit(event: Event) {
+  async function handleSubmit() {
     console.log('submitting form...');
 
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
@@ -212,7 +212,7 @@ const share = getSharingDetails(movie);
       });
       try {
         if (!promise) {
-          promise = handleSubmit(event);
+          promise = handleSubmit();
         }
         await promise;
       } finally {

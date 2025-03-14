@@ -16,7 +16,9 @@ const share = getSharingDetails(movie);
 
 {movie && (
 <article class="movie-card show">
-  <img class="movie-card-image" width="300" src={share.imageUrl} alt={movie.title} />
+  <div class="movie-card-image-container">
+    <img class="movie-card-image" width="300" src={share.imageUrl} alt={movie.title} />
+  </div>
   <section class="movie-card-details">
     <section class="movie-card-details-meta">
       <FormattedDate date={new Date(movie.release_date)} />
@@ -28,32 +30,30 @@ const share = getSharingDetails(movie);
         (genre: { name: string; }) => (<span>{genre.name}</span>)
       )}
     </section>
-  <section>
-    <div style="display: flex; gap: .5rem;">
-      {movie.providers !== undefined
-        && movie.providers.map((provider: Provider) => (
-        <a href={provider.url} style="display: flex;"><img
-          width="36"
-          height="36"
-          src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-          alt={provider.provider_name} title={provider.provider_name} />
-        </a>
-      ))}
-    </div>
+    <section>
+      <div style="display: flex; gap: .5rem;">
+          {movie.providers !== undefined
+          && movie.providers.map((provider: Provider) => (
+          <a href={provider.url}><img
+            width="36"
+            height="36"
+            src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
+            alt={provider.provider_name} title={provider.provider_name} />
+          </a>
+        ))}
+        {movie.imdb_id && (
+          <a href={`https://imdb.com/title/${movie.imdb_id}`} style="justify-self: flex-end;">
+            <img height="36px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
+          </a>
+        )}
+      </div>
+    </section>
+    <p>{movie.tagline}</p>
+    <p class="movie-overview">{movie.overview}</p>
+    {share && (
+      <ShareButton transition:persist style="width: 100%; height: 48px; padding: .5rem 1rem;" url={share.url} />
+    )}
   </section>
-  <p>{movie.tagline}</p>
-  <p class="movie-overview">{movie.overview}</p>
-  <section style="display: flex; gap: 1rem; align-self: flex-start; justify-content: space-between; width: 100%">
-  {movie.imdb_id && (
-    <a href={`https://imdb.com/title/${movie.imdb_id}`} style="display: flex; flex: 0 0 96px;">
-      <img width="96px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
-    </a>
-  )}
-  {share && (
-    <ShareButton transition:persist style="flex: 0 0 80px; height: 48px; padding: .5rem 1rem;" url={share.url} />
-  )}
-  </section>
-</section>
 </article>
 <article class="movie-card movie-card-skeleton">
   <div class="movie-card-image skeleton" />
@@ -134,16 +134,40 @@ const share = getSharingDetails(movie);
     width: 100%;
   }
 
-  .movie-card .movie-card-image {
-    aspect-ratio: 2 / 3;
+  .movie-card .movie-card-image-container {
     flex: 1 3 160px;
     height: fit-content;
     width: 200px;
-		border-radius: .5rem;
+    position: relative;
+  }
+
+  @media screen and (max-width: 554px) {
+    .movie-card .movie-card-image-container {
+      margin-bottom: -9rem;
+    }
+    .movie-card .movie-card-image-container::after {
+      box-shadow: inset 0px -300px 300px -80px black;
+      z-index: 1;
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  .movie-card .movie-card-image {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: .5rem;
   }
 
   .movie-card .movie-card-details {
     flex:  3 2 300px;
+    z-index: 3;
   }
 
   .movie-card h2 {

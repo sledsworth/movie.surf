@@ -55,27 +55,32 @@ const share = getSharingDetails(movie);
     )}
   </section>
 </article>
-<article class="movie-card movie-card-skeleton show">
-  <span class="skeleton" style="width: 100px;"></span>
-  <span class="skeleton" style="width: 80px;"></span>
+<article class="movie-card movie-card-skeleton">
+  <div class="movie-card-image-container skeleton">
+    <div class="movie-card-image skeleton" />
+  </div>
   <section class="movie-card-details">
+    <div class="movie-card-details-meta">
+      <span class="skeleton" style="width: 60px;"></span>
+      <span class="skeleton" style="width: 120px;"></span>
+    </div>
     <h2 class="movie-title">Finding Suggestions...</h2>
     <section class="movie-card-details-meta">
-      <span class="skeleton" style="width: 120px;"></span>
-      <span class="skeleton" style="width: 80px;"></span>
-      <span class="skeleton" style="width: 100px;"></span>
+      <span class="skeleton" style="flex: 1 1 120px;"></span>
+      <span class="skeleton" style="flex: 1 1 40px;"></span>
+      <span class="skeleton" style="flex: 1 1 80px;"></span>
     </section>
   <section>
     <div style="display: flex; gap: .5rem;">
       <div class="skeleton" style="width: 36px; height: 36px;" />
-      <div class="skeleton" style="width: 36px; height: 36px;" />
+      <div class="skeleton" style="width: 64px; height: 36px;" />
     </div>
   </section>
   <p class="movie-overview">Asking the robot for a great movie based on your search request...</p>
   <p class="skeleton" style="width: 100%;"></p>
   <p class="skeleton" style="width: 80%;"></p>
   <p class="skeleton" style="width: 20%;"></p>
-  <p class="skeleton" style="width: 50%;"></p>
+  <p class="skeleton" style="width: 100%; height: 48px; margin-block: 0;"></p>
   </section>
 </article>
 )}
@@ -138,9 +143,21 @@ const share = getSharingDetails(movie);
     position: relative;
   }
 
+  .movie-card .movie-card-image {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: .5rem;
+    height: 100%;
+  }
+
   @media screen and (max-width: 554px) {
     .movie-card .movie-card-image-container {
       margin-bottom: -9rem;
+
+      &.skeleton {
+        display: none;
+      }
     }
     .movie-card .movie-card-image-container::after {
       box-shadow: inset 0px -300px 300px -80px black;
@@ -153,13 +170,6 @@ const share = getSharingDetails(movie);
       top: 0;
       left: 0;
     }
-  }
-
-  .movie-card .movie-card-image {
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    border-radius: .5rem;
   }
 
   .movie-card .movie-card-details {
@@ -195,7 +205,7 @@ const share = getSharingDetails(movie);
   }
 
   .skeleton {
-    border-radius: 1rem;
+    border-radius: .5rem;
     height: 1rem;
     width: 100%;
     clip-path: content-box;

@@ -81,7 +81,7 @@ const { title, subtitle } = Astro.props;
     .marquee {
       background: url(/marquee.svg) repeat;
       background-color: white;
-      padding: 2.25rem .5rem 1.75rem;
+      padding: 2.5rem .5rem 2rem;
       border-radius: .25rem;
       width: 100%;
       box-sizing: border-box;
@@ -152,6 +152,9 @@ const { title, subtitle } = Astro.props;
     }
     .light-bar.light-bar--vertical .light:nth-last-child(-n + 1) {
       display: none;
+    }
+    .marquee {
+      padding: 2rem .5rem 1.5rem;
     }
   }
 

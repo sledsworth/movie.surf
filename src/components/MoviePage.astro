@@ -315,10 +315,10 @@ const share = getSharingDetails(movie);
     width: 100%;
     height: 1rem;
     font-size: .85rem;
-    transition: all .25s ease;
+    transition: all .1s ease;
   }
 
-  textarea:hover {
+  textarea:not(:focus):hover {
     transform: scale(1.025);
   }
 

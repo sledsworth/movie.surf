@@ -113,7 +113,7 @@ const share = getSharingDetails(movie);
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
       title: 'Finding Suggestions...',
-      description: 'Asking the robot for a great movies based on your search request...'
+      description: 'Asking the robot for movies based on your search request...'
     }}));
     const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
     const formData = new FormData(form!);

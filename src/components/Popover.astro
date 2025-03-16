@@ -53,8 +53,6 @@ const { title, id } = Astro.props;
     border-radius: 2rem 2rem 0 0;
     color: #fff;
     border: none;
-    /* visibility: hidden; */
-    /* opacity: 0; */
     transform-origin: bottom;
     transform: translate(0, 100vh);
     transition: all .4s cubic-bezier(0.485, -0.050, 0.285, 1.105) allow-discrete;
@@ -64,6 +62,7 @@ const { title, id } = Astro.props;
     bottom: 0;
     height: 100%;
     display: grid;
+    box-shadow: 0 0 6px -2px gold;
   }
 
   .content {

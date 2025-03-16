@@ -9,7 +9,7 @@ const { title, subtitle } = Astro.props;
 
 <a href="/" class="glow">
 <header transition:persist slot="header">
-  <div class="light-bar">
+  <div class="light-bar light-bar--vertical">
     <div class="light alternate"></div>
     <div class="light"></div>
     <div class="light alternate"></div>
@@ -48,7 +48,7 @@ const { title, subtitle } = Astro.props;
     <div class="light alternate"></div>
     <div class="light"></div>
   </div>
-  <div class="light-bar">
+  <div class="light-bar light-bar--vertical">
     <div class="light alternate"></div>
     <div class="light"></div>
     <div class="light alternate"></div>
@@ -60,7 +60,7 @@ const { title, subtitle } = Astro.props;
 <style>
       h1 {
       text-align: center;
-      font-size: clamp(3rem,calc(2rem + 3vw),5.5rem);
+      font-size: 3rem;
       margin: 0;
       line-height: 1;
     }
@@ -81,7 +81,7 @@ const { title, subtitle } = Astro.props;
     .marquee {
       background: url(/marquee.svg) repeat;
       background-color: white;
-      padding: 3rem 2rem 2rem;
+      padding: 2.5rem .5rem 2rem;
       border-radius: .25rem;
       width: 100%;
       box-sizing: border-box;
@@ -95,7 +95,7 @@ const { title, subtitle } = Astro.props;
       background-color: black;
       /* background-clip: padding-box;
       border-image: url(#circle) 27 round; */
-      min-height: 8rem;
+      /* min-height: 8rem; */
       grid-column: 1 / 4;
       grid-row: 1 / 4;
       display: flex;
@@ -144,19 +144,40 @@ const { title, subtitle } = Astro.props;
   }
 
   @media screen and (max-width: 600px) {
+    h1 {
+      font-size: 2.5rem;
+    }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 4) {
       display: none;
+    }
+    .light-bar.light-bar--vertical .light:nth-last-child(-n + 1) {
+      display: none;
+    }
+    .marquee {
+      padding: 2rem .5rem 1.5rem;
     }
   }
 
   @media screen and (max-width: 440px) {
+    h1 {
+      font-size: 2rem;
+    }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 6) {
+      display: none;
+    }
+    .light-bar.light-bar--vertical .light:nth-last-child(-n + 1) {
       display: none;
     }
   }
 
   @media screen and (max-width: 360px) {
+    h1 {
+      font-size: 1.75rem;
+    }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 8) {
+      display: none;
+    }
+    .light-bar.light-bar--vertical .light:nth-last-child(-n + 2) {
       display: none;
     }
   }
@@ -166,7 +187,7 @@ const { title, subtitle } = Astro.props;
     grid-template-columns: 1.25rem 1fr 1.25rem;
     grid-template-rows: 1.25rem 1fr 1.25rem;
     align-items: center;
-    margin: 3rem 0;
+    margin: 1rem 0 2rem;
   }
 
   .light {

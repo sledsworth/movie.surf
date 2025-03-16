@@ -90,7 +90,7 @@ const share = getSharingDetails(movie);
     <div class="control-dock-container">
       <div class="control-dock">
         <textarea name="prompt" placeholder="Brad Pitt's worst performance" />
-        <Button style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Next Movie</Button>
+        <Button style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>New Movie</Button>
         <Button style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filters</Button>
       </div>
     </div>
@@ -106,15 +106,14 @@ const share = getSharingDetails(movie);
   import { actions } from 'astro:actions';
   import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
-  let  promise: null | Promise<void> = null;
+
+  let promise: null | Promise<void> = null;
 
   async function handleSubmit(event: Event) {
-    console.log('submitting form...');
-
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
       title: 'Finding Suggestions...',
-      description: 'Asking the robot for a great movies based on your search request...'
+      description: 'Asking the robot for movies based on your search request...'
     }}));
     const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
     const formData = new FormData(form!);
@@ -178,7 +177,7 @@ const share = getSharingDetails(movie);
 
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
-      title: 'Making Recommendation...',
+      title: 'Making Suggestion...',
       description: 'Plucking the best movie from the options...'
     }}));
     const {data: result, error: er } = await actions.movie.select(movies);
@@ -200,8 +199,7 @@ const share = getSharingDetails(movie);
   const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
   for (const button of submitButtons) {
     button.addEventListener("click", async (event) => {
-      event?.preventDefault();
-
+      event.preventDefault();
       submitButtons.forEach((btn) => {
         btn.textContent = "Submitting..."
       });
@@ -317,7 +315,11 @@ const share = getSharingDetails(movie);
     width: 100%;
     height: 1rem;
     font-size: .85rem;
-    transition: all .25s ease;
+    transition: all .1s ease;
+  }
+
+  textarea:not(:focus):hover {
+    transform: scale(1.025);
   }
 
   textarea:focus {
@@ -351,11 +353,12 @@ const share = getSharingDetails(movie);
   }
 
   select {
-    max-width: max-content;
     padding: .5rem 1rem;
     border-radius: .5rem;
     font-size: 1rem;
     font-weight: bold;
+    width: 100%;
+    max-width: 400px;
   }
 
   select:focus {

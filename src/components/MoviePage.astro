@@ -222,6 +222,11 @@ const share = getSharingDetails(movie);
   }
 
   const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
+  textarea.addEventListener('keydown', (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+      submitButtons[0]?.click();
+    }
+  });
   textarea.addEventListener('focus', () => {
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = textarea.value.length;

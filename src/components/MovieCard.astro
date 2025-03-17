@@ -1,14 +1,15 @@
 ---
-import type { Movie, Provider } from "@actions/movie";
+import type { Movie, MovieFormData, Provider } from "@actions/movie";
 import { getSharingDetails } from "src/utlils/shareDetails";
 import FormattedDate from "./FormattedDate.astro";
 import ShareButton from "./ShareButton.astro";
 
 interface Props {
 	movie: Movie | null | undefined;
+	formData?: MovieFormData;
 }
 
-const { movie } = Astro.props;
+const { movie, formData } = Astro.props;
 
 const share = getSharingDetails(movie);
 ---
@@ -32,8 +33,19 @@ const share = getSharingDetails(movie);
     </section>
     <section>
       <div class="movie-card-providers">
-          {movie.providers !== undefined
-          && movie.providers.map((provider: Provider) => (
+        {movie.providers?.stream
+        && movie.providers?.stream?.map((provider: Provider) => (
+          <a href={provider.url} class:list={{ filtered: !formData?.providers?.includes(provider.provider_id) }}><img
+            width="36"
+            height="36"
+            src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
+            alt={provider.provider_name} title={provider.provider_name} />
+          </a>
+        ))}
+        {movie.providers?.buy
+        && movie.providers?.buy?.filter(
+          (provider: Provider) => formData?.providers?.includes(provider.provider_id))
+          .map((provider: Provider) => (
           <a href={provider.url}><img
             width="36"
             height="36"
@@ -73,6 +85,7 @@ const share = getSharingDetails(movie);
   <section>
     <div style="display: flex; gap: .5rem;">
       <div class="skeleton" style="width: 36px; height: 36px;" />
+      <div class="skeleton" style="width: 36px; height: 36px;" />
       <div class="skeleton" style="width: 64px; height: 36px;" />
     </div>
   </section>
@@ -85,11 +98,8 @@ const share = getSharingDetails(movie);
 </article>
 )}
 <script>
-  // document.addEventListener('astro:page-load', () => {
-    console.log('movie card loaded');
     document.addEventListener('movie-card--update', (event: Event) => {
       const customEvent = event as CustomEvent<{ showSkeleton: boolean, title: string, description: string }>;
-      console.log('suggestion event', customEvent.detail);
       const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
       const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;
 
@@ -104,7 +114,6 @@ const share = getSharingDetails(movie);
         movieCardSkeleton?.classList.remove('show');
       }
     });
-  // });
 </script>
 <style>
   .movie-card {
@@ -144,6 +153,10 @@ const share = getSharingDetails(movie);
   .movie-card-providers a {
     display: flex;
     transition: all .1s ease;
+  }
+
+  .movie-card-providers a.filtered {
+    filter: grayscale(100%);
   }
 
   .movie-card-providers a:hover {

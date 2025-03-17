@@ -28,7 +28,6 @@ const {
 )}
 <script>
   const buttons = document.querySelectorAll('button[dialogtarget]');
-  console.log('initial buttons for dialogs', buttons)
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const dialog = document.getElementById(button.getAttribute('dialogtarget') as string) as HTMLDialogElement;

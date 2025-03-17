@@ -53,7 +53,6 @@ export async function getAiMovieSuggestions(
 			role: "user",
 		});
 	}
-	// console.log(prompts);
 	let completion: OpenAI.Chat.Completions.ChatCompletion;
 	try {
 		completion = await openai.chat.completions.create({

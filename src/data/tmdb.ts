@@ -3,8 +3,11 @@ import type { Genre, Movie, Provider } from "src/actions/movie";
 const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
+	2: "https://www.apple.com/apple-tv-plus/", // TODO: Add correct URL for Apple
+	3: "https://play.google.com/store/search?q={search}&c=movies",
 	8: "https://www.netflix.com/",
 	9: "https://www.amazon.com/gp/video/",
+	10: "https://www.amazon.com/s?k={search}&i=instant-video",
 	15: "https://www.hulu.com/",
 	43: "https://www.starz.com/",
 	283: "https://www.crunchyroll.com/",
@@ -16,6 +19,12 @@ const PROVIDER_URLS: { [key: number]: string } = {
 	1770: "https://www.paramountplus.com/",
 	1899: "https://www.max.com/",
 };
+
+const PURCHASE_PROVIDERS = [
+	2, // Apple TV
+	3, // Google Play
+	10, // Amazon Video
+];
 
 const MAIN_PROVIDERS = [
 	8, // Netflix
@@ -66,7 +75,10 @@ export async function getMovieDetails(
 			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
 		);
 		const data = await response.json();
-		const providers = await getMainMovieStreamProviders(movieId);
+		const providers = await getMainMovieStreamProviders({
+			movieId,
+			search: data.title,
+		});
 		return { ...data, providers };
 	} catch (error) {
 		console.error("Error fetching movie details:", error);
@@ -107,7 +119,7 @@ export async function getAllMovieProviders() {
 			throw new Error("Error fetching all movie providers");
 		}
 		const data = await response.json();
-		return data.results
+		const stream = data.results
 			.filter((provider: Provider) =>
 				MAIN_PROVIDERS.includes(provider.provider_id),
 			)
@@ -115,23 +127,49 @@ export async function getAllMovieProviders() {
 				...provider,
 				url: PROVIDER_URLS[provider.provider_id],
 			}));
+		const buy = data.results
+			.filter((provider: Provider) =>
+				PURCHASE_PROVIDERS.includes(provider.provider_id),
+			)
+			.map((provider: Provider) => ({
+				...provider,
+				url: PROVIDER_URLS[provider.provider_id],
+			}));
+		return {
+			stream,
+			buy,
+		};
 	} catch (error) {
 		console.error("Error fetching all movie providers:", error);
 		throw error;
 	}
 }
 
-export async function getMainMovieStreamProviders(movieId: number | string) {
-	const allProviders = await getMovieWatchProviders(movieId, []);
-	return allProviders.flatrate.filter((provider) =>
-		MAIN_PROVIDERS.includes(provider.provider_id),
-	);
+export async function getMainMovieStreamProviders(options: {
+	movieId: number | string;
+	filteredProviders?: number[];
+	search?: string;
+}) {
+	const allProviders = await getMovieWatchProviders(options);
+	return {
+		stream: allProviders.flatrate.filter((provider) =>
+			MAIN_PROVIDERS.includes(provider.provider_id),
+		),
+		buy: allProviders.buy.filter((provider) =>
+			PURCHASE_PROVIDERS.includes(provider.provider_id),
+		),
+	};
 }
 
-export async function getMovieWatchProviders(
-	movieId: number | string,
-	filteredProviders: number[],
-) {
+export async function getMovieWatchProviders({
+	movieId,
+	filteredProviders = [],
+	search = "",
+}: {
+	movieId: number | string;
+	filteredProviders?: number[];
+	search?: string;
+}) {
 	try {
 		const response = await fetch(
 			`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${TMDB_API_KEY}`,
@@ -140,13 +178,13 @@ export async function getMovieWatchProviders(
 		const providers = data.results.US;
 		return {
 			flatrate: providers?.flatrate
-				? filterProviders(providers.flatrate, filteredProviders)
+				? await filterProviders(providers.flatrate, filteredProviders, search)
 				: [],
 			buy: providers?.buy
-				? filterProviders(providers.buy, filteredProviders)
+				? await filterProviders(providers.buy, filteredProviders, search)
 				: [],
 			rent: providers?.rent
-				? filterProviders(providers.rent, filteredProviders)
+				? await filterProviders(providers.rent, filteredProviders, search)
 				: [],
 		};
 	} catch (error) {
@@ -158,6 +196,7 @@ export async function getMovieWatchProviders(
 export function filterProviders(
 	providers: Provider[],
 	filteredProviders: number[] = [],
+	search = "",
 ) {
 	const ignoredProviderIds = [
 		1825, // Amazon Channel for Max
@@ -171,10 +210,43 @@ export function filterProviders(
 		528, // AMC on Amazon
 		...filteredProviders,
 	];
-	return providers
-		.filter((provider) => !ignoredProviderIds.includes(provider.provider_id))
-		.map((provider: Provider) => ({
-			...provider,
-			url: PROVIDER_URLS[provider.provider_id],
-		}));
+
+	const encodedSearch = encodeURIComponent(search);
+
+	return Promise.all(
+		providers
+			.filter((provider) => !ignoredProviderIds.includes(provider.provider_id))
+			.map(async (provider: Provider) => {
+				let url = PROVIDER_URLS[provider.provider_id]?.replace(
+					"{search}",
+					encodedSearch,
+				);
+				if (provider.provider_id === 2) {
+					url = (await getAppleTVStoreLink(search)) ?? "";
+				}
+				return {
+					...provider,
+					url,
+				};
+			}),
+	);
+}
+
+export async function getAppleTVStoreLink(search: string) {
+	const searchURL = new URL("https://itunes.apple.com/search");
+
+	searchURL.searchParams.set("media", "movie");
+	searchURL.searchParams.set("entity", "movie");
+	searchURL.searchParams.set("lang", "en_us");
+	searchURL.searchParams.set("country", "US");
+	searchURL.searchParams.set("term", search);
+
+	try {
+		const response = await fetch(searchURL);
+		const data = await response.json();
+		return data.results[0].trackViewUrl;
+	} catch (error) {
+		console.error("Error fetching Apple TV store link:", error);
+		return null;
+	}
 }

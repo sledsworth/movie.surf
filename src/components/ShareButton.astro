@@ -50,7 +50,6 @@ class ShareButtonElement extends HTMLElement {
 	}
 
 	handleClick() {
-    console.log(this.shareData);
 		if (this.shareData) {
 			navigator.share(this.shareData);
 		}

@@ -1,19 +1,11 @@
 ---
 import { getMovieDetails } from "@data/tmdb";
-import type { Movie, MovieFormData } from "src/actions/movie";
+import type { Movie } from "src/actions/movie";
 import MoviePage from "src/components/MoviePage.astro";
 
 export const prerender = false;
 const url = new URL(Astro.request.url);
 const id = url.searchParams.get("id");
-
-const formData: MovieFormData = {
-	prompt: "",
-	good: true,
-	decade: 0,
-	genres: [],
-	providers: [],
-};
 
 let movie: Movie | null = null;
 if (id) {
@@ -22,9 +14,9 @@ if (id) {
 ---
 
 
-<MoviePage movie={movie} formData={formData}>
+<MoviePage movie={movie}>
   <p>Welcome!</p>
-  
+
   <p>Movie.surf helps you find a movie without wading through endless streaming apps. Just configure the options you'd like in the dock below—genres, decades, streaming services—or just describe what you would like to see! We'll handle the rest.</p>
 </MoviePage>
 

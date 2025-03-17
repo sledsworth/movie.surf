@@ -1,5 +1,5 @@
 ---
-import type { Movie, MovieFormData } from "@actions/movie";
+import type { Movie } from "@actions/movie";
 import { getMovieDetails } from "@data/tmdb";
 import MoviePage from "src/components/MoviePage.astro";
 
@@ -7,18 +7,10 @@ export const prerender = false;
 
 const id = Astro.params.id;
 
-const formData: MovieFormData = {
-	prompt: "",
-	genres: [],
-	good: true,
-	decade: 0,
-	providers: [],
-};
-
 let movie: Movie | null = null;
 if (id) {
 	movie = await getMovieDetails(id);
 }
 ---
 
-<MoviePage movie={movie} formData={formData} />
+<MoviePage movie={movie} />

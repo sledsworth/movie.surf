@@ -17,10 +17,9 @@ import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 
 interface Props {
 	movie: Movie | null;
-	formData: MovieFormData;
 }
 
-const { movie, formData } = Astro.props;
+const { movie } = Astro.props;
 
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
@@ -28,6 +27,14 @@ const providers = await getAllMovieProviders();
 
 const viewedMovies: LimitedMovie[] =
 	(await Astro.session?.get("viewedMovies")) ?? [];
+
+const formData: MovieFormData = (await Astro.session?.get("movieFormData")) ?? {
+	prompt: "",
+	good: true,
+	decade: 0,
+	genres: [],
+	providers: [],
+};
 
 if (movie && !viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)) {
 	viewedMovies.push({
@@ -74,9 +81,22 @@ const share = getSharingDetails(movie);
           </select>
         </fieldset>
         <fieldset>
-          <h2>Streaming Services</h2>
+          <h2>Streaming</h2>
           <ul class="genre-list">
-            {providers?.map(
+            {providers?.stream?.map(
+              (provider: Provider) => (
+              <li><label>
+                <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
+                <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+                {provider.provider_name}
+              </label></li>
+            ))}
+          </ul>
+          </fieldset>
+          <fieldset>
+          <h2>Purchase</h2>
+          <ul class="genre-list">
+            {providers?.buy?.map(
               (provider: Provider) => (
               <li><label>
                 <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
@@ -97,7 +117,7 @@ const share = getSharingDetails(movie);
   </form>
 </BrowserStore>
 <slot></slot>
-<MovieCard movie={movie} />
+<MovieCard movie={movie} formData={formData} />
 <PreviousSuggestions movieId={movie?.id} />
 {/* TODO: Is this needed if we get the server island working? */}
 <ScrollPositionRestore />
@@ -109,7 +129,7 @@ const share = getSharingDetails(movie);
 
   let promise: null | Promise<void> = null;
 
-  async function handleSubmit(event: Event) {
+  async function handleSubmit() {
     document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
       showSkeleton: true,
       title: 'Finding Suggestions...',
@@ -210,7 +230,7 @@ const share = getSharingDetails(movie);
       });
       try {
         if (!promise) {
-          promise = handleSubmit(event);
+          promise = handleSubmit();
         }
         await promise;
       } finally {
@@ -234,12 +254,6 @@ const share = getSharingDetails(movie);
   });
 </script>
 <style>
-  .break:after {
-    margin: 0 0 0 1rem;
-    content: "|";
-    display: inline-block;
-  }
-
   .genre-list {
     list-style: none;
     padding: 0 1rem;

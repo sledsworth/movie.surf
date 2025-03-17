@@ -27,6 +27,11 @@ export const ProviderSchema = z.object({
 	url: z.string().optional(),
 });
 
+export const AllProvidersSchema = z.object({
+	buy: z.array(ProviderSchema).optional(),
+	stream: z.array(ProviderSchema).optional(),
+});
+
 export const MovieSchema = z.object({
 	id: z.number(),
 	imdb_id: z.union([z.string().optional(), z.null()]),
@@ -40,7 +45,7 @@ export const MovieSchema = z.object({
 	vote_count: z.number(),
 	genres: z.array(GenreSchema),
 	runtime: z.number(),
-	providers: z.array(ProviderSchema).optional(),
+	providers: AllProvidersSchema,
 });
 
 export const LimitedMovieSchema = z.object({
@@ -124,7 +129,10 @@ export const movie = {
 					console.log("provided", formData?.providers, movie.providers);
 					if (
 						formData?.providers === undefined ||
-						(movie.providers?.filter(
+						([
+							...(movie.providers?.stream ?? []),
+							...(movie.providers?.buy ?? []),
+						].filter(
 							(provider: Provider) =>
 								(formData?.providers ?? []).includes(provider.provider_id) ??
 								false,
@@ -133,17 +141,10 @@ export const movie = {
 						if (
 							!viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)
 						) {
-							// viewedMovies.push({
-							// 	id: movie.id,
-							// 	title: movie.title,
-							// 	release_date: movie.release_date,
-							// 	poster_path: movie.poster_path,
-							// });
 							console.debug(
 								"select -> viewedMovies (session) -> updated: ",
 								viewedMovies,
 							);
-							// context.session?.set("viewedMovies", viewedMovies);
 							return movie;
 						}
 						availibleMovie = movie;

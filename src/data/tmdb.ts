@@ -244,7 +244,6 @@ export async function getAppleTVStoreLink(search: string) {
 	try {
 		const response = await fetch(searchURL);
 		const data = await response.json();
-		console.log(data);
 		return data.results[0].trackViewUrl;
 	} catch (error) {
 		console.error("Error fetching Apple TV store link:", error);

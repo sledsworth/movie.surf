@@ -98,11 +98,8 @@ const share = getSharingDetails(movie);
 </article>
 )}
 <script>
-  // document.addEventListener('astro:page-load', () => {
-    console.log('movie card loaded');
     document.addEventListener('movie-card--update', (event: Event) => {
       const customEvent = event as CustomEvent<{ showSkeleton: boolean, title: string, description: string }>;
-      console.log('suggestion event', customEvent.detail);
       const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
       const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;
 
@@ -117,7 +114,6 @@ const share = getSharingDetails(movie);
         movieCardSkeleton?.classList.remove('show');
       }
     });
-  // });
 </script>
 <style>
   .movie-card {

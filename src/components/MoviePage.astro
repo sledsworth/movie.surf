@@ -163,7 +163,6 @@ const share = getSharingDetails(movie);
           }
       }
     }
-    console.log('using ai...', formValues);
 
     try {
 
@@ -174,7 +173,6 @@ const share = getSharingDetails(movie);
       return
     }
 
-    console.log('Matches found, making sure they aren\'t hallucinations...', data);
 
 
 
@@ -191,7 +189,6 @@ const share = getSharingDetails(movie);
       return
     }
 
-    console.log('Movie results verified, selecting movie...', movies);
 
 
 
@@ -208,7 +205,6 @@ const share = getSharingDetails(movie);
       return
     }
 
-    console.log('Movie selected, updating UI...', result);
     navigate('/movie/' + result.id);
 
     } finally {

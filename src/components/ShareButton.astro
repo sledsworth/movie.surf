@@ -60,8 +60,8 @@ class ShareButtonElement extends HTMLElement {
 			return Promise.resolve([]);
 		}
 		const response = await fetch(url);
-const blob = await response.blob();
-return [new File([blob], url)];
+    const blob = await response.blob();
+    return [new File([blob], url)];
 	}
 
 	handleSlotChange() {
@@ -92,9 +92,9 @@ return [new File([blob], url)];
 
 		const imageUrl = this.getAttribute("image-url");
 		this.shareData = {
-			title: this.getAttribute("title") || "",
-			text: this.getAttribute("text") || "",
-			url: this.getAttribute("url") || "",
+			title: this.getAttribute("title") ?? undefined,
+			text: this.getAttribute("text") ?? undefined,
+			url: this.getAttribute("url") ?? undefined,
 			files: await this.urlToFiles(imageUrl),
 		};
 

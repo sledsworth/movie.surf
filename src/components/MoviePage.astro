@@ -171,7 +171,6 @@ const share = getSharingDetails(movie);
     finally {
       promise = null;
     }
-    throw new Error("Promise was not resolved");
   }
 
   const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
@@ -203,6 +202,9 @@ const share = getSharingDetails(movie);
   textarea.addEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       submitButtons[0]?.click();
+    }
+    if (event.key === 'Escape') {
+      textarea.blur();
     }
   });
   textarea.addEventListener('focus', () => {

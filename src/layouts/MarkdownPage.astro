@@ -1,0 +1,31 @@
+---
+import MoviePage from "src/components/MoviePage.astro";
+
+interface Props {
+	frontmatter: {
+		title: string;
+		upsell?: boolean;
+		inlineControlDock?: boolean;
+		showPreviousSuggestions?: boolean;
+	};
+}
+
+const {
+	frontmatter: { title, upsell, inlineControlDock, showPreviousSuggestions },
+} = Astro.props;
+---
+
+<MoviePage movie={null} title={title} upsell={upsell} inlineControlDock={inlineControlDock} showPreviousSuggestions={showPreviousSuggestions}>
+  <div>
+    <slot />
+  </div>
+</MoviePage>
+<style>
+  div {
+    background: black;
+    color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+</style>

@@ -11,7 +11,13 @@ export const MovieSuggestionSchema = z.object({
 export const MovieSuggestionResultsSchema = z.object({
 	movies: z.array(MovieSuggestionSchema),
 	hasResults: z.boolean(),
-	error: z.string().optional(),
+	error: z
+		.object({
+			message: z.string().optional(),
+			status: z.number().optional(),
+			name: z.string().optional(),
+		})
+		.optional(),
 });
 
 export const GenreSchema = z.object({
@@ -164,7 +170,6 @@ export const movie = {
 			try {
 				const viewedMovies: LimitedMovie[] =
 					(await context.session?.get("viewedMovies")) ?? [];
-				console.log("viewedMovies", viewedMovies);
 				return viewedMovies;
 			} catch (error) {
 				console.error("Error getting previous suggestions.", error);

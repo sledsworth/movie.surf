@@ -15,7 +15,7 @@ const { url, text, title, imageUrl, style } = Astro.props;
 
 <share-button url={url} text={text} title={title} image-url={imageUrl}>
   <slot>
-    <Button title="Share movie" aria-label="share movie" style={style} variant="primary">
+    <Button id="share-movie-button" title="Share movie" aria-label="share movie" style={style} variant="primary">
       <Fragment set:html={shareSVG} />
     </Button>
   </slot>
@@ -60,8 +60,8 @@ class ShareButtonElement extends HTMLElement {
 			return Promise.resolve([]);
 		}
 		const response = await fetch(url);
-const blob = await response.blob();
-return [new File([blob], url)];
+    const blob = await response.blob();
+    return [new File([blob], url)];
 	}
 
 	handleSlotChange() {
@@ -92,9 +92,9 @@ return [new File([blob], url)];
 
 		const imageUrl = this.getAttribute("image-url");
 		this.shareData = {
-			title: this.getAttribute("title") || "",
-			text: this.getAttribute("text") || "",
-			url: this.getAttribute("url") || "",
+			title: this.getAttribute("title") ?? undefined,
+			text: this.getAttribute("text") ?? undefined,
+			url: this.getAttribute("url") ?? undefined,
 			files: await this.urlToFiles(imageUrl),
 		};
 

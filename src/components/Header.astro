@@ -8,7 +8,7 @@ const { title, subtitle } = Astro.props;
 ---
 
 <a href="/" class="glow">
-<header transition:persist slot="header">
+<header slot="header">
   <div class="light-bar light-bar--vertical">
     <div class="light alternate"></div>
     <div class="light"></div>
@@ -74,7 +74,7 @@ const { title, subtitle } = Astro.props;
     }
 
     a:hover {
-      transform: scale(1.025);
+      transform: scale(1.0125, 1.025);
       transform-origin: center
     }
 

@@ -33,7 +33,7 @@ const filteredMovies = previousSuggestions
       </li>
     ))}
   </ol>
-  <ResetButton transition:persist removeElementWithId="previous-suggestions" />
+  <ResetButton id="reset-button" removeElementWithId="previous-suggestions" />
 </aside>)}
 <style>
   aside {
@@ -58,6 +58,7 @@ const filteredMovies = previousSuggestions
   }
 
   li {
-    flex: 1 1 100px;
+    flex: 1 1 120px;
+    max-width: 180px;
   }
 </style>

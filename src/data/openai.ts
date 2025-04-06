@@ -13,6 +13,8 @@ const aiModel: OpenAI.Chat.ChatModel =
 
 const openai = new OpenAI({
 	apiKey,
+	timeout: 25 * 1000, // 25 second timeout
+	maxRetries: 3,
 });
 
 export async function getAiMovieSuggestions(
@@ -77,11 +79,28 @@ export async function getAiMovieSuggestions(
 			},
 		});
 	} catch (error) {
+		if (error instanceof OpenAI.APIError) {
+			console.error(
+				`Error fetching movie suggestions: [${error.status}] ${error.message}`,
+			);
+
+			return {
+				movies: [],
+				hasResults: false,
+				error: {
+					message: error.message,
+					status: error.status,
+					name: error.name,
+				},
+			};
+		}
 		console.error("Error fetching movie suggestions:", error);
 		return {
 			movies: [],
 			hasResults: false,
-			error: `Failed to find movies from prompt. [${error}]`,
+			error: {
+				message: `Failed to find movies from prompt. [${error}]`,
+			},
 		};
 	}
 
@@ -96,7 +115,9 @@ export async function getAiMovieSuggestions(
 		return {
 			movies: [],
 			hasResults: false,
-			error: "Failed to find movies from prompt.",
+			error: {
+				message: "Failed to find movies from prompt.",
+			},
 		};
 	}
 }

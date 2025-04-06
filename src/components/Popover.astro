@@ -10,10 +10,10 @@ interface Props {
 const { title, id } = Astro.props;
 ---
 
-<dialog inert class="popover" id={id} tabindex="0">
+<dialog inert class="popover" id={id} tabindex="0" transition:persist="filter-dialog">
   <header>
     <h1>{title}</h1>
-    <Button aria-label="close">
+    <Button id="filter-close-button" aria-label="close">
       <Fragment set:html={closeIcon} />
     </Button>
   </header>
@@ -50,7 +50,7 @@ const { title, id } = Astro.props;
     box-sizing: border-box;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(20px);
-    border-radius: 2rem 2rem 0 0;
+    border-radius: 1rem 1rem 0 0;
     color: #fff;
     border: none;
     transform-origin: bottom;

@@ -1,12 +1,17 @@
 ---
 import Button from "./Button.astro";
----
 
+interface Props {
+	upsell?: boolean;
+}
+
+const { upsell } = Astro.props;
+---
 <footer>
-  <section class="sell">
+  {upsell && <section class="sell">
     <p>This site costs me money! I give it away for free because I'm a terrible business person—and I'm not sure anyone would pay for a service like this? That's where you come in! Prove me wrong that this is a worthy investment with your hard-earned dollars.</p>
-    <Button variant="primary" id="buy-me-a-coffee-link" glow href="https://buymeacoffee.com/sledsworth">☕️ Buy me a coffee</Button>
-  </section>
+    <Button id="show-support-button" variant="primary" glow href="https://buymeacoffee.com/sledsworth">Show Support</Button>
+  </section> }
   {/* TODO: #1 Finish about page and renable link */}
   {false &&<a href="/about">About</a>}
   <p>Made with ❤️ by <a href="https://sledsworth.com">Steve Ledsworth</a>.</p>
@@ -20,13 +25,7 @@ import Button from "./Button.astro";
     flex-direction: column;
     align-items: center;
   }
-  footer a {
-    color: white;
-    font-weight: bold;
-  }
-  footer a:hover {
-    text-decoration: underline;
-  }
+
   footer p {
     color: white;
   }

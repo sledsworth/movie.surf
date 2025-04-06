@@ -2,14 +2,16 @@
 import MoviePage from "src/components/MoviePage.astro";
 
 interface Props {
-  frontmatter: {
-    title: string;
-    upsell?: boolean;
-    inlineControlDock?: boolean;
-  };
+	frontmatter: {
+		title: string;
+		upsell?: boolean;
+		inlineControlDock?: boolean;
+	};
 }
 
-const { frontmatter: { title, upsell, inlineControlDock } } = Astro.props;
+const {
+	frontmatter: { title, upsell, inlineControlDock },
+} = Astro.props;
 ---
 
 <MoviePage movie={null} title={title} upsell={upsell} inlineControlDock={inlineControlDock}>

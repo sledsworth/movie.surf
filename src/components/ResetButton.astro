@@ -3,11 +3,12 @@ import Button from "./Button.astro";
 
 interface Props {
 	removeElementWithId?: string;
+	id: string;
 }
-const { removeElementWithId } = Astro.props;
+const { removeElementWithId, id } = Astro.props;
 ---
 
-<Button className="reset-suggestions-button" data-remove={removeElementWithId}>Clear Movies</Button>
+<Button id={id} className="reset-suggestions-button" data-remove={removeElementWithId}>Clear Movies</Button>
 <script>
 import { actions } from "astro:actions";
 

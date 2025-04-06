@@ -1,20 +1,11 @@
 ---
-import type {
-	LimitedMovie,
-	Movie,
-	MovieFormData,
-	Provider,
-} from "@actions/movie";
-import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
+import type { LimitedMovie, Movie, MovieFormData } from "@actions/movie";
 import Layout from "src/layouts/Layout.astro";
 import { getSharingDetails } from "src/utlils/shareDetails";
-import BrowserStore from "./BrowserStore.astro";
-import Button from "./Button.astro";
+import ControlDock from "./ControlDock.astro";
 import MovieCard from "./MovieCard.astro";
-import Popover from "./Popover.astro";
 import PreviousSuggestions from "./PreviousSuggestions.astro";
 import ScrollPositionRestore from "./ScrollPositionRestore.astro";
-import ControlDock from "./ControlDock.astro";
 
 interface Props {
 	movie: Movie | null;

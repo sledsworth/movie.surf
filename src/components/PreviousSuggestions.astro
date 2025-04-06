@@ -24,7 +24,7 @@ const filteredMovies = previousSuggestions
 	.filter((movie) => movie.id !== movieId)
 	.reverse();
 
-console.log('filteredmovies', filteredMovies.length)
+console.log("filteredmovies", filteredMovies.length);
 ---
 {filteredMovies.length > 0 && (<aside id="previous-suggestions">
   <h2>Previous Movies</h2>
@@ -35,7 +35,7 @@ console.log('filteredmovies', filteredMovies.length)
       </li>
     ))}
   </ol>
-  <ResetButton removeElementWithId="previous-suggestions" />
+  <ResetButton id="reset-button" removeElementWithId="previous-suggestions" />
 </aside>)}
 <style>
   aside {

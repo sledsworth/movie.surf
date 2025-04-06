@@ -1,16 +1,16 @@
 ---
-import BrowserStore from "./BrowserStore.astro";
-import Popover from "./Popover.astro";
-import Button from "./Button.astro";
 import type { MovieFormData, Provider } from "@actions/movie";
 import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
+import BrowserStore from "./BrowserStore.astro";
+import Button from "./Button.astro";
+import Popover from "./Popover.astro";
 
 interface Props {
-  formData: MovieFormData;
-  inlineDock?: boolean;
+	formData: MovieFormData;
+	inlineDock?: boolean;
 }
 
-const { inlineDock, formData, } = Astro.props;
+const { inlineDock, formData } = Astro.props;
 
 const movieGenres = await getAllGenres({ type: "movie" });
 const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];

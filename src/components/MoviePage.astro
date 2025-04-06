@@ -160,7 +160,15 @@ const share = getSharingDetails(movie);
 
     navigate('/movie/' + result.id);
 
-    } finally {
+    } catch (error) {
+      console.error(error);
+      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+        showSkeleton: true,
+        title: 'Error',
+        description: 'Something went wrong while fetching suggestions. Please try again later.'
+      }}));
+    }
+    finally {
       promise = null;
     }
   }
@@ -194,6 +202,9 @@ const share = getSharingDetails(movie);
   textarea.addEventListener('keydown', (event: KeyboardEvent) => {
     if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
       submitButtons[0]?.click();
+    }
+    if (event.key === 'Escape') {
+      textarea.blur();
     }
   });
   textarea.addEventListener('focus', () => {

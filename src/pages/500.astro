@@ -1,0 +1,39 @@
+---
+import Layout from "src/layouts/Layout.astro";
+
+interface Props {
+	error: unknown;
+}
+
+const { error } = Astro.props;
+---
+
+<Layout title="error | movie.surf">
+  <div>
+    <h1>Something Went Wrong</h1>
+    <p>I'm just a mere mortal and clearly goofed up. Sorry about that!</p>
+    <ul>
+      <li><a href="mailto:support@movie.surf">Report the issue</a></li>
+      <li><a href="/">Home</a></li>
+    </ul>
+    <hr />
+    <p>{error instanceof Error ? error.message : "Unknown error"}</p>
+  </div>
+</Layout>
+<style>
+  div {
+    background: black;
+    color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  hr {
+    margin: 2rem 0;
+  }
+
+  li {
+    margin-bottom: .5rem;
+  }
+</style>

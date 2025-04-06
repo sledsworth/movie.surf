@@ -160,9 +160,18 @@ const share = getSharingDetails(movie);
 
     navigate('/movie/' + result.id);
 
-    } finally {
+    } catch (error) {
+      console.error(error);
+      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+        showSkeleton: false,
+        title: 'Error',
+        description: 'Something went wrong while fetching suggestions. Please try again later.'
+      }}));
+    }
+    finally {
       promise = null;
     }
+    throw new Error("Promise was not resolved");
   }
 
   const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;

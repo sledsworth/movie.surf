@@ -163,7 +163,7 @@ const share = getSharingDetails(movie);
     } catch (error) {
       console.error(error);
       document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-        showSkeleton: false,
+        showSkeleton: true,
         title: 'Error',
         description: 'Something went wrong while fetching suggestions. Please try again later.'
       }}));

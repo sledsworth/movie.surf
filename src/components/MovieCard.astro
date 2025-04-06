@@ -12,6 +12,15 @@ interface Props {
 const { movie, formData } = Astro.props;
 
 const share = getSharingDetails(movie);
+
+const providers = [
+	...(movie?.providers?.stream ?? []),
+	...(movie?.providers?.buy ?? []),
+].sort((a, b) => {
+	if (!formData?.providers?.includes(a.provider_id)) return 1;
+	if (!formData?.providers?.includes(b.provider_id)) return -1;
+	return 0;
+});
 ---
 
 
@@ -33,20 +42,8 @@ const share = getSharingDetails(movie);
     </section>
     <section>
       <div class="movie-card-providers">
-        {movie.providers?.stream
-        && movie.providers?.stream?.map((provider: Provider) => (
+        {providers.map((provider: Provider) => (
           <a href={provider.url} class:list={{ filtered: !formData?.providers?.includes(provider.provider_id) }}><img
-            width="36"
-            height="36"
-            src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
-            alt={provider.provider_name} title={provider.provider_name} />
-          </a>
-        ))}
-        {movie.providers?.buy
-        && movie.providers?.buy?.filter(
-          (provider: Provider) => formData?.providers?.includes(provider.provider_id))
-          .map((provider: Provider) => (
-          <a href={provider.url}><img
             width="36"
             height="36"
             src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}

@@ -12,31 +12,46 @@ interface Props {
 	upsell?: boolean;
 	inlineControlDock?: boolean;
 	title?: string;
+	showPreviousSuggestions?: boolean;
 }
 
-const { movie, upsell, inlineControlDock, title } = Astro.props;
+const {
+	movie,
+	upsell,
+	inlineControlDock,
+	title,
+	showPreviousSuggestions = true,
+} = Astro.props;
 
 const pageTitle = `${title ?? movie?.title} | movie.surf`;
 
-const viewedMovies: LimitedMovie[] =
-	(await Astro.session?.get("viewedMovies")) ?? [];
-
-const formData: MovieFormData = (await Astro.session?.get("movieFormData")) ?? {
+let formData: MovieFormData = {
 	prompt: "",
 	good: true,
 	decade: 0,
 	genres: [],
 	providers: [],
 };
+if (!Astro.isPrerendered) {
+	const data = await Astro.session?.get("movieFormData");
+	if (data) {
+		formData = { ...formData, ...data };
+	}
+	const viewedMovies: LimitedMovie[] =
+		(await Astro.session?.get("viewedMovies")) ?? [];
 
-if (movie && !viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)) {
-	viewedMovies.push({
-		id: movie.id,
-		title: movie.title,
-		release_date: movie.release_date,
-		poster_path: movie.poster_path,
-	});
-	Astro.session?.set("viewedMovies", viewedMovies);
+	if (
+		movie &&
+		!viewedMovies.find((viewedMovie) => viewedMovie.id === movie.id)
+	) {
+		viewedMovies.push({
+			id: movie.id,
+			title: movie.title,
+			release_date: movie.release_date,
+			poster_path: movie.poster_path,
+		});
+		Astro.session?.set("viewedMovies", viewedMovies);
+	}
 }
 
 const share = getSharingDetails(movie);
@@ -52,7 +67,7 @@ const share = getSharingDetails(movie);
   <slot></slot>
   <ControlDock transition:persist="control-dock" formData={formData} inlineDock={inlineControlDock} />
   <MovieCard movie={movie} formData={formData} />
-  <PreviousSuggestions movieId={movie?.id} />
+  {showPreviousSuggestions && <PreviousSuggestions movieId={movie?.id} />}
   <ScrollPositionRestore />
 </Layout>
 <script>

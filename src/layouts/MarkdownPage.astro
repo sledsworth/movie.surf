@@ -6,15 +6,16 @@ interface Props {
 		title: string;
 		upsell?: boolean;
 		inlineControlDock?: boolean;
+		showPreviousSuggestions?: boolean;
 	};
 }
 
 const {
-	frontmatter: { title, upsell, inlineControlDock },
+	frontmatter: { title, upsell, inlineControlDock, showPreviousSuggestions },
 } = Astro.props;
 ---
 
-<MoviePage movie={null} title={title} upsell={upsell} inlineControlDock={inlineControlDock}>
+<MoviePage movie={null} title={title} upsell={upsell} inlineControlDock={inlineControlDock} showPreviousSuggestions={showPreviousSuggestions}>
   <div>
     <slot />
   </div>

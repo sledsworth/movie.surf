@@ -5,6 +5,7 @@ interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
 	className?: string;
 	dialogtarget?: string;
 	href?: string;
+	id: string;
 }
 
 const {
@@ -13,16 +14,17 @@ const {
 	type = "button",
 	className = "",
 	href,
+	id,
 	...buttonProps
 } = Astro.props;
 ---
 
 {href ? (
-  <a class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} href={href}>
+  <a id={id} class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} href={href}>
       <slot />
   </a>
 ) : (
-<button transition:persist class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
+<button id={id} transition:persist={id} class={`button ${variant} ${glow ? 'glow ' : ''}${className}`} type={type} {...buttonProps}>
   <slot />
 </button>
 )}
@@ -48,8 +50,6 @@ const {
     font-weight: 800;
     font-size: 1rem;
     flex: 1;
-    scroll-snap-align: start;
-    scroll-margin-inline: 1rem;
     text-wrap: nowrap;
     text-decoration: none;
     display: flex;
@@ -57,6 +57,7 @@ const {
     justify-content: center;
     transition: all .1s ease;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .button.glow {
@@ -65,14 +66,14 @@ const {
 
   .button:not(:disabled):hover {
     background-color: rgb(255, 179, 0);
-    transform: scale(1.025);
+    transform: scale(1.0125, 1.025);
     transform-origin: center;
   }
 
   .button:not(:disabled):focus-visible {
     outline: 4px solid rgb(255, 179, 0);
     outline-offset: 2px;
-    transform: scale(1.025);
+    transform: scale(1.0125, 1.025);
     transform-origin: center;
   }
 

@@ -1,0 +1,252 @@
+---
+import BrowserStore from "./BrowserStore.astro";
+import Popover from "./Popover.astro";
+import Button from "./Button.astro";
+import type { MovieFormData, Provider } from "@actions/movie";
+import { getAllGenres, getAllMovieProviders } from "@data/tmdb";
+
+interface Props {
+  formData: MovieFormData;
+  inlineDock?: boolean;
+}
+
+const { inlineDock, formData, } = Astro.props;
+
+const movieGenres = await getAllGenres({ type: "movie" });
+const decades = [1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+const providers = await getAllMovieProviders();
+---
+<BrowserStore>
+<form name="movie-search-details" method="POST">
+  <Popover title="Filter" id="prompt-popover">
+      <fieldset>
+        <h2>Genre</h2>
+        <ul class="genre-list">
+          {movieGenres.map(
+            (genre: { id: number; name: string; }) => (
+            <li><label>
+              <input name="genres" type="checkbox" value={genre.id} checked={formData.genres.includes(genre.id)} />
+              {genre.name}
+            </label></li>
+          ))}
+        </ul>
+      </fieldset>
+      <fieldset>
+        <h2>Decade</h2>
+        <select name="decade" id="decade">
+          <option value="0">All</option>
+          {decades.map(decade => (
+            <option value={decade} selected={formData.decade === decade} data-decade={decade} data-value={formData.decade}>{decade}'s</option>
+          ))}
+        </select>
+      </fieldset>
+      <fieldset>
+        <h2>Streaming</h2>
+        <ul class="genre-list">
+          {providers?.stream?.map(
+            (provider: Provider) => (
+            <li><label>
+              <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
+              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              {provider.provider_name}
+            </label></li>
+          ))}
+        </ul>
+        </fieldset>
+        <fieldset>
+        <h2>Purchase</h2>
+        <ul class="genre-list">
+          {providers?.buy?.map(
+            (provider: Provider) => (
+            <li><label>
+              <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
+              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              {provider.provider_name}
+            </label></li>
+          ))}
+        </ul>
+      </fieldset>
+  </Popover>
+  <div class:list={{ 'control-dock-container': !inlineDock, 'control-dock-inline': inlineDock }}>
+    <div class="control-dock">
+      <textarea name="prompt" placeholder="Brad Pitt's worst performance" />
+      <Button id="new-movie-submit" style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Search</Button>
+      <Button id="filter-movie-button" style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filter</Button>
+    </div>
+  </div>
+</form>
+</BrowserStore>
+<style>
+  .genre-list {
+    list-style: none;
+    padding: 0 1rem;
+    margin: 0;
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    accent-color: gold;
+
+    li {
+      flex: 0 1 280px;
+    }
+
+    label {
+      cursor: pointer;
+      display: inline-block;
+      padding: .25rem 1rem .25rem .25rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .control-dock-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    z-index: 100;
+  }
+
+  .control-dock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 1rem 1rem 0 0;
+    padding: .5rem;
+    box-sizing: border-box;
+    box-shadow: 0 0 6px -2px gold;
+  }
+
+  .control-dock-inline .control-dock {
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  fieldset {
+    border: none;
+    padding: 0 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  fieldset h2 {
+    font-size: 1.5rem;
+    font-family: "ltc-broadway-engraved", sans-serif;
+    border-bottom: 1px solid white;
+    width: 60%;
+    margin: 2rem 0 1rem;
+  }
+
+  textarea {
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    resize: none;
+    width: 100%;
+    height: 1rem;
+    font-size: .85rem;
+    transition: all .1s ease;
+  }
+
+  .control-dock-container textarea:not(:focus):hover {
+    transform: scale(1.0125, 1.025);
+  }
+
+  textarea:focus {
+    outline: rgb(255, 179, 0) solid 4px;
+    outline-offset: 2px;
+    padding: 1rem 1.5rem;
+    height: 25vh;
+    font-size: 1rem;
+  }
+
+  .control-dock-inline textarea {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    height: 30vh;
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    margin: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: white;
+    border-radius: .25rem;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"]:checked {
+    background: url(/checkmark.svg);
+    background-size: 1rem 1.25rem;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: gold;
+    box-shadow: 0 0 6px -2px gold;
+    animation: glow-checkmark 2s ease infinite alternate;
+  }
+
+  select {
+    padding: .5rem 1rem;
+    border-radius: .5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  select:focus {
+    outline: rgb(255, 179, 0) solid 4px;
+    outline-offset: 2px;
+  }
+
+  label:has(input[type="checkbox"]) {
+    border-radius: 8px;
+  }
+
+  input[type="checkbox"]:focus-visible {
+    outline: none;
+  }
+
+  label:has(input[type="checkbox"]:focus-visible) {
+    outline: 4px solid rgb(255, 179, 0);
+    outline-offset: -2px;
+    overflow-x: visible;
+  }
+
+  label:has(input[type="checkbox"]):hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  aside {
+    font-size: .8rem;
+    color: lightgray;
+    font-style: italic;
+
+    p {
+      margin: 0;
+    }
+    ul {
+      margin: .5rem 0 0;
+    }
+  }
+</style>

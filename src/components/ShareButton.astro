@@ -15,7 +15,7 @@ const { url, text, title, imageUrl, style } = Astro.props;
 
 <share-button url={url} text={text} title={title} image-url={imageUrl}>
   <slot>
-    <Button title="Share movie" aria-label="share movie" style={style} variant="primary">
+    <Button id="share-movie-button" title="Share movie" aria-label="share movie" style={style} variant="primary">
       <Fragment set:html={shareSVG} />
     </Button>
   </slot>

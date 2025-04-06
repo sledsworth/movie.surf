@@ -63,7 +63,7 @@ const share = getSharingDetails(movie);
     <p>{movie.tagline}</p>
     <p class="movie-overview">{movie.overview}</p>
     {share && (
-      <ShareButton transition:persist style="width: 100%; height: 48px; padding: .5rem 1rem;" url={share.url} />
+      <ShareButton style="width: 100%; height: 48px; padding: .5rem 1rem;" url={share.url} />
     )}
   </section>
 </article>
@@ -103,8 +103,10 @@ const share = getSharingDetails(movie);
       const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
       const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;
 
-      movieCardSkeleton!.querySelector('.movie-title')!.textContent = customEvent.detail.title;
-      movieCardSkeleton!.querySelector('.movie-overview')!.textContent = customEvent.detail.description;
+      if (movieCardSkeleton) {
+        movieCardSkeleton.querySelector('.movie-title')!.textContent = customEvent.detail.title;
+        movieCardSkeleton.querySelector('.movie-overview')!.textContent = customEvent.detail.description;
+      }
 
       if (customEvent.detail.showSkeleton) {
         movieCard?.classList.remove('show');

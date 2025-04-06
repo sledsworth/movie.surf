@@ -23,8 +23,6 @@ if (error) {
 const filteredMovies = previousSuggestions
 	.filter((movie) => movie.id !== movieId)
 	.reverse();
-
-console.log("filteredmovies", filteredMovies.length);
 ---
 {filteredMovies.length > 0 && (<aside id="previous-suggestions">
   <h2>Previous Movies</h2>

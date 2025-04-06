@@ -171,7 +171,6 @@ export const movie = {
 			try {
 				const viewedMovies: LimitedMovie[] =
 					(await context.session?.get("viewedMovies")) ?? [];
-				console.log("viewedMovies", viewedMovies);
 				return viewedMovies;
 			} catch (error) {
 				console.error("Error getting previous suggestions.", error);

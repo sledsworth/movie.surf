@@ -78,6 +78,7 @@ export async function getMovieDetails(
 		const providers = await getMainMovieStreamProviders({
 			movieId,
 			search: data.title,
+			year: new Date(data.release_date).getFullYear(),
 		});
 		return { ...data, providers };
 	} catch (error) {
@@ -149,6 +150,7 @@ export async function getMainMovieStreamProviders(options: {
 	movieId: number | string;
 	filteredProviders?: number[];
 	search?: string;
+	year?: number;
 }) {
 	const allProviders = await getMovieWatchProviders(options);
 	return {
@@ -165,10 +167,12 @@ export async function getMovieWatchProviders({
 	movieId,
 	filteredProviders = [],
 	search = "",
+	year,
 }: {
 	movieId: number | string;
 	filteredProviders?: number[];
 	search?: string;
+	year?: number;
 }) {
 	try {
 		const response = await fetch(
@@ -178,13 +182,18 @@ export async function getMovieWatchProviders({
 		const providers = data.results.US;
 		return {
 			flatrate: providers?.flatrate
-				? await filterProviders(providers.flatrate, filteredProviders, search)
+				? await filterProviders(
+						providers.flatrate,
+						filteredProviders,
+						search,
+						year,
+					)
 				: [],
 			buy: providers?.buy
-				? await filterProviders(providers.buy, filteredProviders, search)
+				? await filterProviders(providers.buy, filteredProviders, search, year)
 				: [],
 			rent: providers?.rent
-				? await filterProviders(providers.rent, filteredProviders, search)
+				? await filterProviders(providers.rent, filteredProviders, search, year)
 				: [],
 		};
 	} catch (error) {
@@ -197,6 +206,7 @@ export function filterProviders(
 	providers: Provider[],
 	filteredProviders: number[] = [],
 	search = "",
+	year?: number,
 ) {
 	const ignoredProviderIds = [
 		1825, // Amazon Channel for Max
@@ -222,7 +232,7 @@ export function filterProviders(
 					encodedSearch,
 				);
 				if (provider.provider_id === 2) {
-					url = (await getAppleTVStoreLink(search)) ?? "";
+					url = (await getAppleTVStoreLink(search, year)) ?? "";
 				}
 				return {
 					...provider,
@@ -232,7 +242,7 @@ export function filterProviders(
 	);
 }
 
-export async function getAppleTVStoreLink(search: string) {
+export async function getAppleTVStoreLink(search: string, year?: number) {
 	const searchURL = new URL("https://itunes.apple.com/search");
 
 	searchURL.searchParams.set("media", "movie");
@@ -244,7 +254,13 @@ export async function getAppleTVStoreLink(search: string) {
 	try {
 		const response = await fetch(searchURL);
 		const data = await response.json();
-		return data.results[0].trackViewUrl;
+		const filteredResults = data.results.filter(
+			(movie: { releaseDate: string }) => {
+				const releaseYear = new Date(movie.releaseDate).getFullYear();
+				return releaseYear === year;
+			},
+		);
+		return filteredResults.length > 0 ? filteredResults[0].trackViewUrl : null;
 	} catch (error) {
 		console.error("Error fetching Apple TV store link:", error);
 		return null;

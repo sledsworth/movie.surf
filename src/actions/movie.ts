@@ -94,9 +94,8 @@ export const movie = {
 				});
 				return suggestions;
 			} catch (error) {
-				if (error)
-					// TODO: Redirect to open ai error page that asks for money on a 429
-					console.error("Error getting AI movie suggestions.", error);
+				// TODO: Redirect to open ai error page that asks for money on a 429
+				console.error("Error getting AI movie suggestions.", error);
 				throw new ActionError({
 					message: "Error getting AI movie suggestions.",
 					code: "INTERNAL_SERVER_ERROR",

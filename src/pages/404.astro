@@ -1,8 +1,8 @@
 ---
-import Layout from "src/layouts/Layout.astro";
+import MoviePage from "src/components/MoviePage.astro";
 ---
 
-<Layout title="not found | movie.surf">
+<MoviePage movie={null} title="Not Found" upsell={false} inlineControlDock={false} showPreviousSuggestions={false}>
   <div>
     <h1>Page Not Found</h1>
     <p>Sorry, the page you are looking for does not exist.</p>
@@ -11,7 +11,7 @@ import Layout from "src/layouts/Layout.astro";
       <li><a href="/">Home</a></li>
     </ul>
   </div>
-</Layout>
+</MoviePage>
 <style>
   div {
     background: black;

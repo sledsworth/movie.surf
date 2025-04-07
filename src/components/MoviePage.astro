@@ -123,7 +123,7 @@ const share = getSharingDetails(movie);
     }
 
     if (!data?.hasResults) {
-      return
+      throw new Error("No results found");
     }
 
 
@@ -161,12 +161,7 @@ const share = getSharingDetails(movie);
     navigate('/movie/' + result.id);
 
     } catch (error) {
-      console.error(error);
-      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-        showSkeleton: true,
-        title: 'Error',
-        description: 'Something went wrong while fetching suggestions. Please try again later.'
-      }}));
+      navigate('/500');
     }
     finally {
       promise = null;

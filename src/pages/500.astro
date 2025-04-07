@@ -1,5 +1,5 @@
 ---
-import Layout from "src/layouts/Layout.astro";
+import MoviePage from "src/components/MoviePage.astro";
 
 interface Props {
 	error: unknown;
@@ -8,7 +8,7 @@ interface Props {
 const { error } = Astro.props;
 ---
 
-<Layout title="error | movie.surf">
+<MoviePage movie={null} title="Error" upsell={false} inlineControlDock={false} showPreviousSuggestions={false}>
   <div>
     <h1>Something Went Wrong</h1>
     <p>I'm just a mere mortal and clearly goofed up. Sorry about that!</p>
@@ -19,7 +19,7 @@ const { error } = Astro.props;
     <hr />
     <p>{error instanceof Error ? error.message : "Unknown error"}</p>
   </div>
-</Layout>
+</MoviePage>
 <style>
   div {
     background: black;

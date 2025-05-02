@@ -15,8 +15,7 @@ const { upsell } = Astro.props;
     </p>
     <Button id="show-support-button" variant="primary" glow href="https://buymeacoffee.com/sledsworth">Show Support</Button>
   </section> }
-  {/* TODO: #1 Finish about page and renable link */}
-  {false &&<a href="/about">About</a>}
+  <a href="/about">About movie.surf</a>
   <p>Made with ❤️ by <a href="https://sledsworth.com">Steve Ledsworth</a>.</p>
 </footer>
 <style>
@@ -40,8 +39,12 @@ const { upsell } = Astro.props;
     margin: 2rem 0;
   }
 
-  .sell p {
-    flex: 2 1 400px;
-    font-size: .8em;
+  .sell {
+    margin-bottom: 6rem;
+
+    p {
+      flex: 2 1 400px;
+      font-size: .8em;
+    }
   }
 </style>

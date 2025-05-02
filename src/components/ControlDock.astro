@@ -69,7 +69,7 @@ const providers = await getAllMovieProviders();
   </Popover>
   <div class:list={{ 'control-dock-container': !inlineDock, 'control-dock-inline': inlineDock }}>
     <div class="control-dock">
-      <textarea transition:persist="prompt-input" name="prompt" placeholder="Brad Pitt's worst performance" />
+      <textarea transition:persist="prompt-input" name="prompt" placeholder="Brad Pitt's worst performance">{formData.prompt}</textarea>
       <Button id="new-movie-submit" style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Search</Button>
       <Button id="filter-movie-button" style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filter</Button>
     </div>

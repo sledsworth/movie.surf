@@ -9,13 +9,7 @@
 		"type": "git",
 		"url": "https://github.com/sledsworth/movie.surf.git"
 	},
-	"keywords": [
-		"astro",
-		"movie",
-		"recommendation",
-		"ai",
-		"tmdb"
-	],
+	"keywords": ["astro", "movie", "recommendation", "ai", "tmdb"],
 	"type": "module",
 	"version": "1.0.0",
 	"scripts": {

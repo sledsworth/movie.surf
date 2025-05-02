@@ -9,7 +9,10 @@ const { upsell } = Astro.props;
 ---
 <footer>
   {upsell && <section class="sell">
-    <p>This site costs me money! I give it away for free because I'm a terrible business person—and I'm not sure anyone would pay for a service like this? That's where you come in! Prove me wrong that this is a worthy investment with your hard-earned dollars.</p>
+    <p>
+      This site costs me money! I give it away for free because I'm not sure anyone would pay for a service like this? 
+      And I'm a terrible businessperson. At any rate, if you like this site and want it to exist in the future, consider supporting it!
+    </p>
     <Button id="show-support-button" variant="primary" glow href="https://buymeacoffee.com/sledsworth">Show Support</Button>
   </section> }
   {/* TODO: #1 Finish about page and renable link */}

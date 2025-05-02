@@ -1,0 +1,53 @@
+---
+// Usage: <PromptButton>Click me</PromptButton>
+// When clicked it will update the `#prompt-input` textarea element with the button's text
+
+---
+
+
+<button type="button" class="prompt-button"><slot></slot></button>
+
+<style>
+  .prompt-button {
+    all: unset;
+    display: block;
+    color: white;
+    font-weight: bold;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    margin-bottom: .5rem;
+    cursor: pointer;
+  }
+
+  .prompt-button:hover {
+    text-decoration: underline;
+    text-decoration-color: gold;
+  }
+</style>
+<script>
+function handleButtonClick(event: Event) {
+  const button = event.currentTarget as HTMLButtonElement
+  const prompt = button.textContent
+  const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement
+  const searchButton = document.querySelector('button[name="new-movie-button"]') as HTMLButtonElement
+
+  if (textarea && prompt) {
+    textarea.value = prompt
+    searchButton?.click()
+  }
+}
+document.addEventListener("astro:page-load", () => {
+  const buttons = document.querySelectorAll('.prompt-button')
+  buttons.forEach(button => {
+      button.addEventListener('click', handleButtonClick)
+  })
+})
+document.addEventListener("astro:page-unload", () => {
+  const buttons = document.querySelectorAll('.prompt-button')
+  buttons.forEach(button => {
+      button.removeEventListener('click', handleButtonClick)
+  })
+})
+</script>

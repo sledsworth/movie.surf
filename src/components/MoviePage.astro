@@ -26,7 +26,7 @@ const {
 const pageTitle = `${title ?? movie?.title} | movie.surf`;
 
 let formData: MovieFormData = {
-	prompt: "",
+	prompt: "The best movie of all time.",
 	good: true,
 	decade: 0,
 	genres: [],
@@ -74,137 +74,141 @@ const share = getSharingDetails(movie);
   import { actions } from 'astro:actions';
   import { navigate } from 'astro:transitions/client';
   import type { MovieFormData } from 'src/actions/movie';
+  
+    let promise: null | Promise<void> = null;
 
-  let promise: null | Promise<void> = null;
-
-  async function handleSubmit() {
-    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-      showSkeleton: true,
-      title: 'Finding Suggestions...',
-      description: 'Asking the robot for movies based on your search request...'
-    }}));
-    const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
-    const formData = new FormData(form!);
-    let formValues: MovieFormData = {
-      genres: [],
-      good: true,
-      prompt: "",
-    };
-    for (const key of formData.keys()) {
-      const value = formData.getAll(key);
-      switch(key) {
-        case "genres":
-        case "providers":
-          formValues = { ...formValues, [key]: value.map(Number) };
-          break;
-        case "decade":
-          formValues = { ...formValues, [key]: Number(value[0]) };
-          break;
-        case "good":
-          formValues = { ...formValues, [key]: value[0] === "true" };
-          break;
-        default:
-          if (value.length === 1) {
-            formValues = { ...formValues, [key]: value[0] };
-          } else {
-            formValues = { ...formValues, [key]: value };
-          }
-      }
-    }
-
-    try {
-
-    const { data, error } = await actions.movie.suggestion(formValues);
-    if (error) throw error;
-
-    if (data.error?.status === 429) {
-      navigate('/ai-cost/');
-      return
-    }
-
-    if (!data?.hasResults) {
-      throw new Error("No results found");
-    }
-
-
-
-
-    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-      showSkeleton: true,
-      title: 'Verifying Suggestions...',
-      description: 'Determining which robot suggestions are real and not hallucinations...'
-    }}));
-    const { data: movies, error: err } = await actions.movie.find(data.movies);
-
-    if (err) throw err;
-
-    if (!movies || movies?.length === 0) {
-      return
-    }
-
-
-
-
-    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-      showSkeleton: true,
-      title: 'Making Suggestion...',
-      description: 'Plucking the best movie from the options...'
-    }}));
-    const {data: result, error: er } = await actions.movie.select(movies);
-
-    if (er) throw er;
-
-    if (!result) {
-      return
-    }
-
-    navigate('/movie/' + result.id);
-
-    } catch (error) {
-      navigate('/500');
-    }
-    finally {
-      promise = null;
-    }
-  }
-
-  const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
-  for (const button of submitButtons) {
-    button.addEventListener("click", async (event) => {
-      event.preventDefault();
-      submitButtons.forEach((btn) => {
-        btn.textContent = "Searching..."
-      });
-      const dialogs = document.querySelectorAll("dialog");
-      dialogs.forEach((dialog) => {
-        dialog.inert = true;
-        dialog.close();
-      });
-      try {
-        if (!promise) {
-          promise = handleSubmit();
+    async function handleSubmit() {
+      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+        showSkeleton: true,
+        title: 'Finding Suggestions...',
+        description: 'Asking the robot for movies based on your search request...'
+      }}));
+      const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
+      const formData = new FormData(form!);
+      let formValues: MovieFormData = {
+        genres: [],
+        good: true,
+        prompt: "",
+      };
+      for (const key of formData.keys()) {
+        const value = formData.getAll(key);
+        switch(key) {
+          case "genres":
+          case "providers":
+            formValues = { ...formValues, [key]: value.map(Number) };
+            break;
+          case "decade":
+            formValues = { ...formValues, [key]: Number(value[0]) };
+            break;
+          case "good":
+            formValues = { ...formValues, [key]: value[0] === "true" };
+            break;
+          default:
+            if (value.length === 1) {
+              formValues = { ...formValues, [key]: value[0] };
+            } else {
+              formValues = { ...formValues, [key]: value };
+            }
         }
-        await promise;
-      } finally {
-        submitButtons.forEach((btn) => {
-          btn.textContent = "Search"
+      }
+
+      try {
+        const { data, error } = await actions.movie.suggestion(formValues);
+        if (error) throw error;
+
+        if (data.error?.status === 429) {
+          navigate('/ai-cost/');
+          return
+        }
+
+        if (!data?.hasResults) {
+          throw new Error("No results found");
+        }
+
+
+
+
+        document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+          showSkeleton: true,
+          title: 'Verifying Suggestions...',
+          description: 'Determining which robot suggestions are real and not hallucinations...'
+        }}));
+        const { data: movies, error: err } = await actions.movie.find(data.movies);
+
+        if (err) throw err;
+
+        if (!movies || movies?.length === 0) {
+          return
+        }
+
+
+
+
+        document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
+          showSkeleton: true,
+          title: 'Making Suggestion...',
+          description: 'Plucking the best movie from the options...'
+        }}));
+        const {data: result, error: er } = await actions.movie.select(movies);
+
+        if (er) throw er;
+
+        if (!result) {
+          return
+        }
+
+        navigate('/movie/' + result.id);
+
+      } catch (error) {
+        navigate('/500', {
+          state: {
+            error,
+          },
         });
       }
-    });
-  }
+      finally {
+        promise = null;
+      }
+    }
+  
+    const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
+    for (const button of submitButtons) {
+      button.addEventListener("click", async (event) => {
+        event.preventDefault();
+        submitButtons.forEach((btn) => {
+          btn.textContent = "Searching..."
+        });
+        const dialogs = document.querySelectorAll("dialog");
+        dialogs.forEach((dialog) => {
+          dialog.inert = true;
+          dialog.close();
+        });
+        try {
+          if (!promise) {
+            promise = handleSubmit();
+          }
+          await promise;
+        } finally {
+          submitButtons.forEach((btn) => {
+            btn.textContent = "Search"
+          });
+        }
+      });
+    }
 
-  const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
-  textarea.addEventListener('keydown', (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
-      submitButtons[0]?.click();
-    }
-    if (event.key === 'Escape') {
-      textarea.blur();
-    }
-  });
-  textarea.addEventListener('focus', () => {
-    setTimeout(() => {
-      textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
-    }, 0);
-  });
+    const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
+    textarea.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+        submitButtons[0]?.click();
+      }
+      if (event.key === 'Escape') {
+        textarea.blur();
+      }
+    });
+    textarea.addEventListener('focus', () => {
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+      }, 0);
+    });
+
 </script>

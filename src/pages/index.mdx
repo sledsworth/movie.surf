@@ -4,9 +4,24 @@ title: home
 upsell: true
 inlineControlDock: true
 ---
+import PromptButton from '../components/PromptButton.astro';
 export const prerender = false;
 
 
 ## Welcome!
 
-Movie.surf helps you find a movie without wading through endless streaming apps. Just configure the options you'd like in the dock below—genres, decades, streaming services—or just describe what you would like to see! We'll handle the rest.
+Movie.surf helps you find a movie without wading through endless streaming apps. Set some filters below to help focus your search or just type a prompt and go!
+
+- [About movie.surf](/about)
+
+---
+
+### Example Prompts
+
+- <PromptButton>I'm in the mood for a romantic comedy.</PromptButton>
+- <PromptButton>Show me an action movie from the 90s.</PromptButton>
+- <PromptButton>What's a good sci-fi film on Netflix right now?</PromptButton>
+- <PromptButton>I'm looking for a movie with a strong female lead.</PromptButton>
+- <PromptButton>A kid-friendly movie that's still fun for adults.</PromptButton>
+- <PromptButton>A movie with a twist ending.</PromptButton>
+- <PromptButton>A movie where Brad Pitt is always eating.</PromptButton>

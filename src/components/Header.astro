@@ -5,6 +5,8 @@ interface Props {
 }
 
 const { title, subtitle } = Astro.props;
+
+const isHomePage = Astro.url.pathname === "/";
 ---
 
 <a href="/" class="glow">
@@ -31,7 +33,7 @@ const { title, subtitle } = Astro.props;
   </div>
   <div class="marquee-container">
     <div class="marquee">
-      <h1>{title}</h1>
+      {isHomePage ? <h1 class="site-title">{title}</h1> : <div class="site-title">{title}</div>}
       {subtitle && <p>{subtitle}</p>}
     </div>
   </div>
@@ -58,9 +60,12 @@ const { title, subtitle } = Astro.props;
 </header>
 </a>
 <style>
-      h1 {
-      text-align: center;
+    .site-title {
+      font-family: "ltc-broadway-engraved", sans-serif;
+      font-weight: 400;
+      font-style: normal;
       font-size: 3rem;
+      text-align: center;
       margin: 0;
       line-height: 1;
     }
@@ -144,7 +149,7 @@ const { title, subtitle } = Astro.props;
   }
 
   @media screen and (max-width: 600px) {
-    h1 {
+    .site-title {
       font-size: 2.5rem;
     }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 4) {
@@ -159,7 +164,7 @@ const { title, subtitle } = Astro.props;
   }
 
   @media screen and (max-width: 440px) {
-    h1 {
+    .site-title {
       font-size: 2rem;
     }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 6) {
@@ -171,7 +176,7 @@ const { title, subtitle } = Astro.props;
   }
 
   @media screen and (max-width: 360px) {
-    h1 {
+    .site-title {
       font-size: 1.75rem;
     }
     .light-bar.light-bar--horizontal .light:nth-last-child(-n + 8) {

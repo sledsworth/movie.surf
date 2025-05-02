@@ -13,13 +13,30 @@ const { error } = Astro.props;
     <h1>Something Went Wrong</h1>
     <p>I'm just a mere mortal and clearly goofed up. Sorry about that!</p>
     <ul>
-      <li><a href="mailto:hi@movie.surf">Report the issue</a></li>
+      <li><a class="error-report-link" href={`mailto:hi@movie.surf?subject=Error using movie.surf&body=Error: ${encodeURIComponent(error instanceof Error ? error.message : "Unknown error")}`}>Report the issue</a></li>
       <li><a href="/">Home</a></li>
     </ul>
     <hr />
-    <p>{error instanceof Error ? error.message : "Unknown error"}</p>
+    <h2>Nerdy Details</h2>
+    <p id="error-details">{error instanceof Error ? error.message : "Unknown error"}</p>
   </div>
 </MoviePage>
+<script>
+document.addEventListener("astro:page-load", () => {
+  const errorDetails = document.getElementById("error-details") as HTMLParagraphElement;
+  const errorReportLink = document.querySelector(".error-report-link") as HTMLAnchorElement;
+  const historyError = history.state?.error;
+
+  if (historyError) {
+    if (errorDetails) {
+      errorDetails.innerText = historyError.message;
+    }
+    if (errorReportLink) {
+      errorReportLink.href = `mailto:hi@movie.surf?subject=Error using movie.surf&body=${encodeURIComponent(`\n\n\n---\nError: ${historyError.message}`)}`;
+    }
+  }
+});
+</script>
 <style>
   div {
     background: black;
@@ -27,10 +44,6 @@ const { error } = Astro.props;
     padding: 1rem;
     border-radius: 1rem;
     margin-bottom: 2rem;
-  }
-
-  hr {
-    margin: 2rem 0;
   }
 
   li {

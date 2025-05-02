@@ -9,7 +9,13 @@
 		"type": "git",
 		"url": "https://github.com/sledsworth/movie.surf.git"
 	},
-	"keywords": ["astro", "movie", "recommendation", "ai", "tmdb"],
+	"keywords": [
+		"astro",
+		"movie",
+		"recommendation",
+		"ai",
+		"tmdb"
+	],
 	"type": "module",
 	"version": "1.0.0",
 	"scripts": {
@@ -22,16 +28,16 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "0.9.4",
-		"@astrojs/mdx": "^4.2.3",
-		"@astrojs/netlify": "^6.2.5",
-		"@netlify/blobs": "^8.1.2",
-		"astro": "^5.6.1",
-		"openai": "^4.91.1",
+		"@astrojs/mdx": "^4.2.6",
+		"@astrojs/netlify": "^6.3.2",
+		"@netlify/blobs": "^9.0.0",
+		"astro": "^5.7.10",
+		"openai": "^4.96.2",
 		"typescript": "^5.8.3",
-		"zod": "^3.24.2"
+		"zod": "^3.24.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"netlify-cli": "^19.1.5"
+		"netlify-cli": "^20.1.1"
 	}
 }

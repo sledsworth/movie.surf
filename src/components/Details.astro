@@ -1,0 +1,63 @@
+---
+interface Props {
+	id: string;
+	open: boolean;
+}
+
+const { id, open } = Astro.props;
+---
+
+<details id={id} open={open}>
+  <summary><slot name="summary"></slot></summary>
+  <slot></slot>
+</details>
+<script>
+  const details = document.querySelectorAll('details')
+  for (const detail of details) {
+    const openState = localStorage.getItem(detail.id)
+    detail.open = openState === 'true';
+
+    detail.addEventListener('toggle', (event) => {
+      localStorage.setItem(detail.id, detail.open ? 'true' : 'false')
+    })
+  }
+</script>
+<style>
+  summary {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: .5rem;
+    border-radius: .5rem;
+  }
+
+  summary:hover {
+    background-color: rgb(45, 45, 45);
+  }
+
+  summary:focus-visible {
+    outline: 4px solid rgb(255, 179, 0);
+    outline-offset: 2px;
+  }
+
+  summary::marker {
+    content: none;
+  }
+
+  summary::after {
+    content: "";
+    background-image: url(/details.svg);
+    filter: invert();
+    height: 24px;
+    width: 24px;
+    display: block;
+    background-size: 24px;
+    transition: all .2s ease;
+  }
+
+  details[open] summary::after {
+    transform: rotate(90deg);
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import type OpenAI from "openai";
+
+const aiModel: OpenAI.Chat.ChatModel =
+	process.env.OPENAI_MODEL ?? import.meta.env.OPENAI_MODEL ?? "gpt-4.1";
+---
+
+<span>({aiModel})</span>
+<style>
+  span {
+    font-size: .85rem;
+    color: grey;
+  }
+</style>

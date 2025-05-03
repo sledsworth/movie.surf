@@ -5,10 +5,12 @@ upsell: true
 inlineControlDock: true
 ---
 import PromptButton from '../components/PromptButton.astro';
+import Details from '../components/Details.astro';
+
 export const prerender = false;
 
-
-## Welcome!
+<Details id="welcome-details" open>
+<h2 slot="summary">Welcome!</h2>
 
 Movie.surf helps you find a movie without wading through endless streaming apps. Set some filters below to help focus your search or just type a prompt and go!
 
@@ -25,3 +27,4 @@ Movie.surf helps you find a movie without wading through endless streaming apps.
 - <PromptButton>A kid-friendly movie that's still fun for adults.</PromptButton>
 - <PromptButton>A movie with a twist ending.</PromptButton>
 - <PromptButton>A movie where Brad Pitt is always eating.</PromptButton>
+</Details>

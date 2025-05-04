@@ -1,7 +1,7 @@
 ---
 interface Props {
 	id: string;
-	open: boolean;
+	open?: boolean;
 }
 
 const { id, open } = Astro.props;
@@ -15,7 +15,7 @@ const { id, open } = Astro.props;
   const details = document.querySelectorAll('details')
   for (const detail of details) {
     const openState = localStorage.getItem(detail.id)
-    detail.open = openState === 'true';
+    detail.open = openState !== 'false';
 
     detail.addEventListener('toggle', (event) => {
       localStorage.setItem(detail.id, detail.open ? 'true' : 'false')

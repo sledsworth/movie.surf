@@ -6,7 +6,6 @@
 
 
 <button type="button" class="prompt-button"><slot></slot></button>
-
 <style>
   .prompt-button {
     all: unset;
@@ -24,6 +23,12 @@
   .prompt-button:hover {
     text-decoration: underline;
     text-decoration-color: gold;
+  }
+
+  .prompt-button:focus-visible {
+    outline: 4px solid rgb(255, 179, 0);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 </style>
 <script>

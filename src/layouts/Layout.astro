@@ -115,100 +115,104 @@ const { title, upsell } = Astro.props;
       font-style: normal;
     }
 
-  .glow {
-    box-shadow: 0 0 20px 6px gold;
-    animation: glow 2s ease infinite alternate;
-    transition: box-shadow 0.5s;
-  }
-
-  .glow:hover,
-  .glow:focus {
-    animation: glow-intense 2s ease infinite alternate;
-  }
-
-  @keyframes glow-checkmark {
-    0% {
-      box-shadow: 0 0 6px -2px gold;
-    }
-    100% {
-      box-shadow: 0 0 10px 2px gold;
-    }
-  }
-
-  @keyframes glow {
-    0% {
-      box-shadow: 0 0 60px -10px gold;
-    }
-    100% {
-      box-shadow: 0 0 60px 0px gold;
-    }
-  }
-
-
-  @keyframes glow-intense {
-    0% {
-      box-shadow: 0 0 100px 0px gold;
-    }
-    100% {
-      box-shadow: 0 0 100px 10px gold;
-    }
-  }
-
-  @keyframes lightOn {
-    0% {
-      opacity: .4;
-      box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
+    h2 {
+      margin-top: 3rem;
     }
 
-    50% {
-      opacity: .95;
-      box-shadow: inset 0 0 -10px 40px gold, 0 0 60px 10px gold;
+    .glow {
+      box-shadow: 0 0 20px 6px gold;
+      animation: glow 2s ease infinite alternate;
+      transition: box-shadow 0.5s;
     }
 
-    100% {
-      opacity: .4;
-      box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
+    .glow:hover,
+    .glow:focus {
+      animation: glow-intense 2s ease infinite alternate;
     }
-  }
 
-  p {
-    line-height: 1.4;
-  }
+    @keyframes glow-checkmark {
+      0% {
+        box-shadow: 0 0 6px -2px gold;
+      }
+      100% {
+        box-shadow: 0 0 10px 2px gold;
+      }
+    }
 
-  a {
-    color: white;
-    font-weight: bold;
-    text-decoration: underline;
-    text-decoration-style: dashed;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
-  }
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 60px -10px gold;
+      }
+      100% {
+        box-shadow: 0 0 60px 0px gold;
+      }
+    }
 
-  a:hover {
-    text-decoration-style: solid;
-    text-decoration-color: rgb(255, 179, 0);
-  }
 
-  a:focus {
-    outline: 4px solid rgb(255, 179, 0);
-    outline-offset: 2px;
-    border-radius: .25rem;
-  }
+    @keyframes glow-intense {
+      0% {
+        box-shadow: 0 0 100px 0px gold;
+      }
+      100% {
+        box-shadow: 0 0 100px 10px gold;
+      }
+    }
 
-  hr {
-    margin: 2rem 0;
-    border: none;
-    border-top: 1px solid darkgoldenrod;
-    width: 100%;
-    max-width: 400px;
-  }
+    @keyframes lightOn {
+      0% {
+        opacity: .4;
+        box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
+      }
 
-  ul {
-    padding: 0 0 0 1rem;
-  }
+      50% {
+        opacity: .95;
+        box-shadow: inset 0 0 -10px 40px gold, 0 0 60px 10px gold;
+      }
 
-  li {
-    margin-bottom: .5rem;
-  }
+      100% {
+        opacity: .4;
+        box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
+      }
+    }
+
+    p {
+      line-height: 1.4;
+    }
+
+    a {
+      color: white;
+      font-weight: bold;
+      text-decoration: underline;
+      text-decoration-style: dashed;
+      text-underline-offset: 4px;
+      text-decoration-thickness: 1px;
+    }
+
+    a:hover {
+      text-decoration-style: solid;
+      text-decoration-color: rgb(255, 179, 0);
+    }
+
+    a:focus {
+      outline: 4px solid rgb(255, 179, 0);
+      outline-offset: 2px;
+      border-radius: .25rem;
+    }
+
+    hr {
+      margin: 2rem 0;
+      border: none;
+      border-top: 1px solid darkgoldenrod;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    ul {
+      padding: 0 0 0 1rem;
+    }
+
+    li {
+      margin-bottom: .5rem;
+    }
   </style>
 </html>

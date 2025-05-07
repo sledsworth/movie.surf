@@ -11,20 +11,30 @@ const { removeElementWithId, id } = Astro.props;
 <Button id={id} className="reset-suggestions-button" data-remove={removeElementWithId}>Clear Movies</Button>
 <script>
 import { actions } from "astro:actions";
+let abortController: AbortController | null = null;
 
+document.addEventListener("astro:page-load", () => {
+  if (abortController) {
+    abortController.abort();
+  }
+  abortController = new AbortController();
 
-const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
+  const resetButtons = document.querySelectorAll(".reset-suggestions-button") as NodeListOf<HTMLButtonElement>;
 
   for (const resetButton of resetButtons) {
     resetButton?.addEventListener("click", async () => {
-    const removeElement = document.getElementById(resetButton?.dataset?.remove ?? '');
-    resetButton.disabled = true;
-    const { error } = await actions.movie.resetSession();
-    if (error) alert(error.message);
-    resetButton.disabled = false;
-    if (removeElement) {
-      removeElement.remove();
-    }
-  });
-}
+      const removeElement = document.getElementById(resetButton?.dataset?.remove ?? '');
+      resetButton.disabled = true;
+      const { error } = await actions.movie.resetSession();
+      if (error) alert(error.message);
+      resetButton.disabled = false;
+      if (removeElement) {
+        removeElement.remove();
+      }
+    }, { signal: abortController.signal });
+  }
+});
+document.addEventListener("astro:page-unload", () => {
+  abortController?.abort();
+});
 </script>

@@ -12,15 +12,26 @@ const { id, open } = Astro.props;
   <slot></slot>
 </details>
 <script>
-  const details = document.querySelectorAll('details')
-  for (const detail of details) {
-    const openState = localStorage.getItem(detail.id)
-    detail.open = openState !== 'false';
+  let abortController = new AbortController();
+  document.addEventListener("astro:page-load", () => {
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+    const details = document.querySelectorAll('details')
+    for (const detail of details) {
+      const openState = localStorage.getItem(detail.id)
+      console.log(detail.id, openState)
+      detail.open = openState !== 'false';
 
-    detail.addEventListener('toggle', (event) => {
-      localStorage.setItem(detail.id, detail.open ? 'true' : 'false')
-    })
-  }
+      detail.addEventListener('toggle', (event) => {
+        localStorage.setItem(detail.id, detail.open ? 'true' : 'false')
+      }, { signal: abortController.signal })
+    }
+  })
+  document.addEventListener("astro:page-unload", () => {
+    abortController.abort();
+  })
 </script>
 <style>
   summary {

@@ -22,8 +22,13 @@ const {
 	title,
 	showPreviousSuggestions = true,
 } = Astro.props;
+let pageTitle = title ?? movie?.title;
 
-const pageTitle = `${title ?? movie?.title} | movie.surf`;
+if (!pageTitle) {
+	pageTitle = "Movie Surf";
+} else {
+	pageTitle = `${pageTitle} | movie.surf`;
+}
 
 let formData: MovieFormData = {
 	prompt: "",

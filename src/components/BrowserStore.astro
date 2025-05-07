@@ -40,8 +40,9 @@ class BrowserStoreElement extends HTMLElement {
 		this.form = this.querySelector("form");
 		if (this.form) {
 			this.form.addEventListener("change", () => {
-				const formData = new FormData(this.form as HTMLFormElement);
+        const formData = new FormData(this.form as HTMLFormElement);
 				let formValues = {};
+        
 				for (const key of formData.keys()) {
 					const value = formData.getAll(key);
 					if (value.length === 1) {

@@ -40,6 +40,7 @@ function handleButtonClick(event: Event) {
 
   if (textarea && prompt) {
     textarea.value = prompt
+    textarea.form?.dispatchEvent(new Event('change'))
     searchButton?.click()
   }
 }

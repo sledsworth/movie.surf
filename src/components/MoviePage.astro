@@ -73,7 +73,7 @@ const share = getSharingDetails(movie);
   <ControlDock transition:persist="control-dock" formData={formData} inlineDock={inlineControlDock} />
   <MovieCard movie={movie} formData={formData} />
   {showPreviousSuggestions && <PreviousSuggestions movieId={movie?.id} />}
-  <ScrollPositionRestore />
+  <!-- <ScrollPositionRestore /> -->
 </Layout>
 <script>
   import { actions } from 'astro:actions';
@@ -85,6 +85,7 @@ const share = getSharingDetails(movie);
     async function handleSubmit() {
       document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
         showSkeleton: true,
+        scrollTo: true,
         title: 'Finding Suggestions...',
         description: 'Asking the robot for movies based on your search request...'
       }}));

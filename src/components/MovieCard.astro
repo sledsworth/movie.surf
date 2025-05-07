@@ -96,7 +96,7 @@ const providers = [
 )}
 <script>
     document.addEventListener('movie-card--update', (event: Event) => {
-      const customEvent = event as CustomEvent<{ showSkeleton: boolean, title: string, description: string }>;
+      const customEvent = event as CustomEvent<{ showSkeleton: boolean, title: string, description: string, scrollTo?: boolean }>;
       const movieCard = document.querySelector('.movie-card') as HTMLElement | null;
       const movieCardSkeleton = document.querySelector('.movie-card-skeleton') as HTMLElement | null;
 
@@ -105,12 +105,21 @@ const providers = [
         movieCardSkeleton.querySelector('.movie-overview')!.textContent = customEvent.detail.description;
       }
 
+      let cardRef
       if (customEvent.detail.showSkeleton) {
         movieCard?.classList.remove('show');
         movieCardSkeleton?.classList.add('show');
+        cardRef = movieCardSkeleton;
       } else {
         movieCard?.classList.add('show');
         movieCardSkeleton?.classList.remove('show');
+        cardRef = movieCard;
+      }
+
+      if (customEvent.detail.scrollTo) {
+        if (cardRef) {
+          cardRef.scrollIntoView({ behavior: 'smooth', block: 'center', });
+        }
       }
     });
 </script>

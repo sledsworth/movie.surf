@@ -10,8 +10,8 @@ const { movie } = Astro.props;
 
 
 {movie && (
-<a title=`${movie.title}` href=`/movie/${movie.id}` class="movie-card show">
-  <img class="movie-card-image" width="80" src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`} alt={movie.title} />
+<a title=`${movie.title}` href=`/movie/${movie.id}`>
+  <img width="80" src={`https://image.tmdb.org/t/p/w500${movie?.poster_path}`} alt={movie.title} />
 </a>
 )}
 <style>

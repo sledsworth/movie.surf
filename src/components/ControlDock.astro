@@ -70,7 +70,7 @@ const providers = await getAllMovieProviders();
   <div class:list={{ 'control-dock-container': !inlineDock, 'control-dock-inline': inlineDock }}>
     <div class="control-dock">
       <textarea aria-label="Movie search prompt" transition:persist="prompt-input" name="prompt">{formData.prompt}</textarea>
-      <Button id="new-movie-submit" style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus>Search</Button>
+      <Button id="new-movie-submit" style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus={!inlineDock}>Search</Button>
       <Button id="filter-movie-button" style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filter</Button>
     </div>
   </div>

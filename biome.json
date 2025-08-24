@@ -1,11 +1,17 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
 	"files": {
-		"ignore": ["dist", ".netlify", "node_modules", ".nova", ".astro", ".vscode"]
+		"includes": [
+			"**",
+			"!**/dist",
+			"!**/.netlify",
+			"!**/node_modules",
+			"!**/.nova",
+			"!**/.astro",
+			"!**/.vscode"
+		]
 	},
-	"organizeImports": {
-		"enabled": true
-	},
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -14,7 +20,7 @@
 	},
 	"overrides": [
 		{
-			"include": ["*.astro"],
+			"includes": ["**/*.astro"],
 			"linter": {
 				"rules": {
 					"style": {

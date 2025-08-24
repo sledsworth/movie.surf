@@ -36,6 +36,7 @@ let formData: MovieFormData = {
 	decade: 0,
 	genres: [],
 	providers: [],
+	seenMovies: [],
 };
 if (!Astro.isPrerendered) {
 	const data = await Astro.session?.get("movieFormData");
@@ -61,45 +62,59 @@ if (!Astro.isPrerendered) {
 
 const share = getSharingDetails(movie);
 ---
+
 <slot name="head">
   <meta property="og:title" content={share.title} />
-  <meta property="og:description" content={share.title}>
-  <meta property="og:type" content="website">
+  <meta property="og:description" content={share.title} />
+  <meta property="og:type" content="website" />
   <meta property="og:url" content={share.url} />
   <meta property="og:image" content={share.imageUrl} />
 </slot>
 <Layout title={pageTitle} upsell={upsell}>
-  <slot></slot>
-  <ControlDock transition:persist="control-dock" formData={formData} inlineDock={inlineControlDock} />
+  <slot />
+  <ControlDock
+    transition:persist="control-dock"
+    formData={formData}
+    inlineDock={inlineControlDock}
+  />
   <MovieCard movie={movie} formData={formData} />
   {showPreviousSuggestions && <PreviousSuggestions movieId={movie?.id} />}
   <!-- <ScrollPositionRestore /> -->
 </Layout>
 <script>
-  import { actions } from 'astro:actions';
-  import { navigate } from 'astro:transitions/client';
-  import type { MovieFormData } from 'src/actions/movie';
+  import { actions } from "astro:actions";
+  import { navigate } from "astro:transitions/client";
+  import type { MovieFormData } from "src/actions/movie";
 
-  
   let promise: null | Promise<void> = null;
 
   async function handleSubmit() {
-    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-      showSkeleton: true,
-      scrollTo: true,
-      title: 'Finding Suggestions...',
-      description: 'Asking the robot for movies based on your search request...'
-    }}));
-    const form = document.forms.namedItem("movie-search-details") as HTMLFormElement | null;
+    document.dispatchEvent(
+      new CustomEvent("movie-card--update", {
+        detail: {
+          showSkeleton: true,
+          scrollTo: true,
+          title: "Finding Suggestions...",
+          description:
+            "Asking the robot for movies based on your search request...",
+        },
+      }),
+    );
+    const form = document.forms.namedItem(
+      "movie-search-details",
+    ) as HTMLFormElement | null;
     const formData = new FormData(form!);
     let formValues: MovieFormData = {
       genres: [],
       good: true,
       prompt: "",
+      seenMovies: [],
+      decade: 0,
+      providers: [],
     };
     for (const key of formData.keys()) {
       const value = formData.getAll(key);
-      switch(key) {
+      switch (key) {
         case "genres":
         case "providers":
           formValues = { ...formValues, [key]: value.map(Number) };
@@ -124,66 +139,71 @@ const share = getSharingDetails(movie);
       if (error) throw error;
 
       if (data.error?.status === 429) {
-        navigate('/ai-cost/');
-        return
+        navigate("/ai-cost/");
+        return;
       }
 
       if (!data?.hasResults) {
         throw new Error("No results found");
       }
 
-
-
-
-      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-        showSkeleton: true,
-        title: 'Verifying Suggestions...',
-        description: 'Determining which robot suggestions are real and not hallucinations...'
-      }}));
-      const { data: movies, error: err } = await actions.movie.find(data.movies);
+      document.dispatchEvent(
+        new CustomEvent("movie-card--update", {
+          detail: {
+            showSkeleton: true,
+            title: "Verifying Suggestions...",
+            description:
+              "Determining which robot suggestions are real and not hallucinations...",
+          },
+        }),
+      );
+      const { data: movies, error: err } = await actions.movie.find(
+        data.movies,
+      );
 
       if (err) throw err;
 
       if (!movies || movies?.length === 0) {
-        return
+        return;
       }
 
-
-
-
-      document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-        showSkeleton: true,
-        title: 'Making Suggestion...',
-        description: 'Plucking the best movie from the options...'
-      }}));
-      const {data: result, error: er } = await actions.movie.select(movies);
+      document.dispatchEvent(
+        new CustomEvent("movie-card--update", {
+          detail: {
+            showSkeleton: true,
+            title: "Making Suggestion...",
+            description: "Plucking the best movie from the options...",
+          },
+        }),
+      );
+      const { data: result, error: er } = await actions.movie.select(movies);
 
       if (er) throw er;
 
       if (!result) {
-        return
+        return;
       }
 
-      navigate('/movie/' + result.id);
-
+      navigate("/movie/" + result.id);
     } catch (error) {
-      navigate('/500', {
+      navigate("/500", {
         state: {
           error,
         },
       });
-    }
-    finally {
+    } finally {
       promise = null;
     }
   }
 
-  const submitButtons = document.querySelectorAll("[name='new-movie-button']") as NodeListOf<HTMLButtonElement>;
+  const submitButtons = document.querySelectorAll(
+    "[name='new-movie-button']",
+  ) as NodeListOf<HTMLButtonElement>;
   for (const button of submitButtons) {
     button.addEventListener("click", async (event) => {
       event.preventDefault();
       submitButtons.forEach((btn) => {
-        btn.textContent = "Searching..."
+        btn.textContent = "Searching...";
       });
       const dialogs = document.querySelectorAll("dialog");
       dialogs.forEach((dialog) => {
@@ -197,30 +217,36 @@ const share = getSharingDetails(movie);
         await promise;
       } finally {
         submitButtons.forEach((btn) => {
-          btn.textContent = "Search"
+          btn.textContent = "Search";
         });
       }
     });
   }
 
-  const textarea = document.querySelector('textarea[name="prompt"]') as HTMLTextAreaElement;
-  textarea.addEventListener('keydown', (event: KeyboardEvent) => {
-    if (event.key === 'Enter' && (event.metaKey || event.ctrlKey)) {
+  const textarea = document.querySelector(
+    'textarea[name="prompt"]',
+  ) as HTMLTextAreaElement;
+  textarea.addEventListener("keydown", (event: KeyboardEvent) => {
+    if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
       submitButtons[0]?.click();
     }
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       textarea.blur();
     }
   });
-  textarea.addEventListener('focus', () => {
+  textarea.addEventListener("focus", () => {
     setTimeout(() => {
       textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
     }, 0);
   });
 
   document.addEventListener("astro:after-swap", () => {
-    document.dispatchEvent(new CustomEvent("movie-card--update", { detail: {
-      scrollTo: true,
-    }}));
+    document.dispatchEvent(
+      new CustomEvent("movie-card--update", {
+        detail: {
+          scrollTo: true,
+        },
+      }),
+    );
   });
 </script>

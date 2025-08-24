@@ -59,8 +59,8 @@ export async function getAiMovieSuggestions(
 	try {
 		completion = await openai.chat.completions.create({
 			model: aiModel,
-			temperature: 1.5,
-			// top_p: 1,
+			// temperature: 1.5,
+			top_p: 1,
 			messages: [
 				{
 					role: "system",
@@ -100,6 +100,8 @@ export async function getAiMovieSuggestions(
 			hasResults: false,
 			error: {
 				message: `Failed to find movies from prompt. [${error}]`,
+				status: 500,
+				name: "Prompt Issue",
 			},
 		};
 	}
@@ -116,7 +118,9 @@ export async function getAiMovieSuggestions(
 			movies: [],
 			hasResults: false,
 			error: {
-				message: "Failed to find movies from prompt.",
+				message: `Failed to find movies from prompt. [${error}]`,
+				status: 500,
+				name: "Prompt Issue",
 			},
 		};
 	}

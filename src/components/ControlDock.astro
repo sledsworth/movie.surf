@@ -47,7 +47,7 @@ const providers = await getAllMovieProviders();
             (provider: Provider) => (
             <li><label>
               <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
-              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              <img width="24" height="24" loading="lazy" decoding="async" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
               {provider.provider_name}
             </label></li>
           ))}
@@ -60,7 +60,7 @@ const providers = await getAllMovieProviders();
             (provider: Provider) => (
             <li><label>
               <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
-              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              <img width="24" height="24" loading="lazy" decoding="async" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
               {provider.provider_name}
             </label></li>
           ))}

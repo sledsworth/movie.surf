@@ -27,7 +27,7 @@ const providers = [
 {movie && (
 <article class="movie-card show">
   <div class="movie-card-image-container">
-    <img class="movie-card-image" width="300" src={share.imageUrl} alt={movie.title} />
+    <img class="movie-card-image" width="300" height="450" fetchpriority="high" src={share.imageUrl} alt={movie.title} />
   </div>
   <section class="movie-card-details">
     <section class="movie-card-details-meta">
@@ -46,13 +46,15 @@ const providers = [
           <a href={provider.url} class:list={{ filtered: !formData?.providers?.includes(provider.provider_id) }}><img
             width="36"
             height="36"
+            loading="lazy"
+            decoding="async"
             src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`}
             alt={provider.provider_name} title={provider.provider_name} />
           </a>
         ))}
         {movie.imdb_id && (
           <a href={`https://imdb.com/title/${movie.imdb_id}`} style="justify-self: flex-end;">
-            <img height="36px" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
+            <img height="36" width="73" loading="lazy" decoding="async" src="/imdb.svg" alt={`IMDB link to ${movie.title}`} />
           </a>
         )}
       </div>

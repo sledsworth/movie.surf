@@ -1,6 +1,6 @@
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,4 +16,11 @@ export default defineConfig({
 	experimental: {
 		contentIntellisense: true,
 	},
+ env: {
+    schema: {
+      TMDB_API_KEY: envField.string({ context: "server", access: "secret"}),
+      OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+      OPENAI_MODEL: envField.string({ context: "server", access: "public", default: 'gpt-4.1-nano' }),
+    }
+  }
 });

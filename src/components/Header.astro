@@ -216,9 +216,19 @@ const isHomePage = Astro.url.pathname === "/";
     opacity: .4;
     box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
     animation: 2s cubic-bezier(0.42, 0, 0.58, 1) infinite  lightOn;
+    will-change: box-shadow, opacity;
+    contain: layout style paint;
   }
 
   .light.alternate::before {
     animation: 2s cubic-bezier(0.42, 0, 0.58, 1) 1s infinite lightOn;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .light::before {
+      animation: none;
+      opacity: .7;
+      box-shadow: inset 0 0 4px 4px gold, 0 0 10px 10px gold;
+    }
   }
 </style>

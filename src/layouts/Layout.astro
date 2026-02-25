@@ -22,7 +22,11 @@ const { title, upsell } = Astro.props;
     <link rel='me' href='https://mastodon.social/@sel' />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
-    <link rel="stylesheet" href="https://use.typekit.net/hqt4aps.css">
+    <link rel="preconnect" href="https://use.typekit.net" crossorigin />
+    <link rel="preconnect" href="https://p.typekit.net" crossorigin />
+    <link rel="preconnect" href="https://image.tmdb.org" crossorigin />
+    <link rel="preload" href="https://use.typekit.net/hqt4aps.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://use.typekit.net/hqt4aps.css" /></noscript>
     <slot name="head" />
     <ClientRouter />
 	</head>
@@ -75,7 +79,14 @@ const { title, upsell } = Astro.props;
       background-size: 150% 150%;
       background-repeat: no-repeat;
       animation: gradient-move 5s infinite alternate ease-in-out;
+      will-change: background-position;
       margin: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body {
+        animation: none;
+      }
     }
 
     body:has(dialog[open]) {
@@ -110,9 +121,10 @@ const { title, upsell } = Astro.props;
     }
 
     h1, h2, h3 {
-      font-family: "ltc-broadway-engraved", sans-serif;
+      font-family: "ltc-broadway-engraved", serif;
       font-weight: 400;
       font-style: normal;
+      font-display: swap;
     }
 
     h2 {
@@ -213,6 +225,16 @@ const { title, upsell } = Astro.props;
 
     li {
       margin-bottom: .5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .glow {
+        animation: none;
+      }
+      .glow:hover,
+      .glow:focus {
+        animation: none;
+      }
     }
   </style>
 </html>

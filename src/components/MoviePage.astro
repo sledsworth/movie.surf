@@ -5,7 +5,6 @@ import { getSharingDetails } from "src/utlils/shareDetails";
 import ControlDock from "./ControlDock.astro";
 import MovieCard from "./MovieCard.astro";
 import PreviousSuggestions from "./PreviousSuggestions.astro";
-import ScrollPositionRestore from "./ScrollPositionRestore.astro";
 
 interface Props {
 	movie: Movie | null;
@@ -79,7 +78,6 @@ const share = getSharingDetails(movie);
   />
   <MovieCard movie={movie} formData={formData} />
   {showPreviousSuggestions && <PreviousSuggestions movieId={movie?.id} />}
-  <!-- <ScrollPositionRestore /> -->
 </Layout>
 <script>
   import { actions } from "astro:actions";
@@ -103,7 +101,7 @@ const share = getSharingDetails(movie);
     const form = document.forms.namedItem(
       "movie-search-details",
     ) as HTMLFormElement | null;
-    const formData = new FormData(form!);
+    const formData = new FormData(form ?? undefined);
     let formValues: MovieFormData = {
       genres: [],
       good: true,
@@ -184,7 +182,7 @@ const share = getSharingDetails(movie);
         return;
       }
 
-      navigate("/movie/" + result.id);
+      navigate(`/movie/${result.id}`);
     } catch (error) {
       navigate("/500", {
         state: {

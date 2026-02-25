@@ -16,11 +16,15 @@ export default defineConfig({
 	experimental: {
 		contentIntellisense: true,
 	},
- env: {
-    schema: {
-      TMDB_API_KEY: envField.string({ context: "server", access: "secret"}),
-      OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
-      OPENAI_MODEL: envField.string({ context: "server", access: "public", default: 'gpt-4.1-nano' }),
-    }
-  }
+	env: {
+		schema: {
+			TMDB_API_KEY: envField.string({ context: "server", access: "secret" }),
+			OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+			OPENAI_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "gpt-4.1-nano",
+			}),
+		},
+	},
 });

@@ -1,7 +1,8 @@
-import { TMDB_API_KEY } from 'astro:env/server'
+import { TMDB_API_KEY } from "astro:env/server";
 import type { Genre, Movie, Provider } from "src/actions/movie";
 
-const ENV_TMDB_API_KEY = TMDB_API_KEY ?? process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
+const ENV_TMDB_API_KEY =
+	TMDB_API_KEY ?? process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
 	2: "https://www.apple.com/apple-tv-plus/",

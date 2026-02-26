@@ -1,7 +1,6 @@
-import { defineConfig } from "astro/config";
-
+import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
-import netlify from "@astrojs/netlify";
+import { defineConfig, envField } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,17 +10,21 @@ export default defineConfig({
 		port: 3002,
 	},
 	prefetch: true,
-	adapter: netlify(),
-	session: {
-		// The name of the unstorage driver is camelCase
-		driver: "netlify-blobs",
-		options: {
-			name: "movie-surf-sessions",
-			// Sessions need strong consistency
-			consistency: "strong",
-		},
-	},
+	adapter: cloudflare({
+		platformProxy: { enabled: true },
+	}),
 	experimental: {
 		contentIntellisense: true,
+	},
+	env: {
+		schema: {
+			TMDB_API_KEY: envField.string({ context: "server", access: "secret" }),
+			OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+			OPENAI_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "gpt-4.1-nano",
+			}),
+		},
 	},
 });

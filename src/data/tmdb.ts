@@ -1,6 +1,8 @@
+import { TMDB_API_KEY } from "astro:env/server";
 import type { Genre, Movie, Provider } from "src/actions/movie";
 
-const TMDB_API_KEY = process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
+const ENV_TMDB_API_KEY =
+	TMDB_API_KEY ?? process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
 	2: "https://www.apple.com/apple-tv-plus/",
@@ -46,7 +48,7 @@ const genreCache: { [key: number]: Genre } = {};
 export async function getAllGenres({ type }: { type: "movie" | "tv" }) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/genre/${type}/list?language=en&api_key=${TMDB_API_KEY}`,
+			`https://api.themoviedb.org/3/genre/${type}/list?language=en&api_key=${ENV_TMDB_API_KEY}`,
 		);
 		const data = await response.json();
 		for (const genre of data.genres) {
@@ -72,7 +74,7 @@ export async function getMovieDetails(
 ): Promise<Movie | null> {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${TMDB_API_KEY}`,
+			`https://api.themoviedb.org/3/movie/${movieId}?api_key=${ENV_TMDB_API_KEY}`,
 		);
 		const data = await response.json();
 		const providers = await getMainMovieStreamProviders({
@@ -96,7 +98,7 @@ export async function searchForMovie({
 }): Promise<Movie | null> {
 	try {
 		const url = new URL("https://api.themoviedb.org/3/search/movie");
-		url.searchParams.append("api_key", TMDB_API_KEY ?? "");
+		url.searchParams.append("api_key", ENV_TMDB_API_KEY ?? "");
 		url.searchParams.append("query", title);
 		url.searchParams.append("primary_release_year", year.toString());
 		const response = await fetch(url.toString());
@@ -113,7 +115,7 @@ export async function searchForMovie({
 export async function getAllMovieProviders() {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/watch/providers/movie?api_key=${TMDB_API_KEY}`,
+			`https://api.themoviedb.org/3/watch/providers/movie?api_key=${ENV_TMDB_API_KEY}`,
 		);
 
 		if (!response.ok) {
@@ -176,7 +178,7 @@ export async function getMovieWatchProviders({
 }) {
 	try {
 		const response = await fetch(
-			`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${TMDB_API_KEY}`,
+			`https://api.themoviedb.org/3/movie/${movieId}/watch/providers?api_key=${ENV_TMDB_API_KEY}`,
 		);
 		const data = await response.json();
 		const providers = data.results.US;

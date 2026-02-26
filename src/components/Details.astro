@@ -24,7 +24,7 @@ const { id, open } = Astro.props;
       console.log(detail.id, openState)
       detail.open = openState !== 'false';
 
-      detail.addEventListener('toggle', (event) => {
+      detail.addEventListener('toggle', () => {
         localStorage.setItem(detail.id, detail.open ? 'true' : 'false')
       }, { signal: abortController.signal })
     }

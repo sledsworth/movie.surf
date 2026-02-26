@@ -11,6 +11,7 @@ const { removeElementWithId, id } = Astro.props;
 <Button id={id} className="reset-suggestions-button" data-remove={removeElementWithId}>Clear Movies</Button>
 <script>
 import { actions } from "astro:actions";
+
 let abortController: AbortController | null = null;
 
 document.addEventListener("astro:page-load", () => {

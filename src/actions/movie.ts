@@ -13,11 +13,11 @@ export const MovieSuggestionResultsSchema = z.object({
 	hasResults: z.boolean(),
 	error: z
 		.object({
-			message: z.string().optional(),
-			status: z.number().optional(),
-			name: z.string().optional(),
+			message: z.string().default(""),
+			status: z.number().default(0),
+			name: z.string().default(""),
 		})
-		.optional(),
+		.default({ message: "", status: 0, name: "" }),
 });
 
 export const GenreSchema = z.object({
@@ -30,22 +30,22 @@ export const ProviderSchema = z.object({
 	provider_name: z.string(),
 	logo_path: z.string(),
 	display_priority: z.number(),
-	url: z.string().optional(),
+	url: z.string().default(""),
 });
 
 export const AllProvidersSchema = z.object({
-	buy: z.array(ProviderSchema).optional(),
-	stream: z.array(ProviderSchema).optional(),
+	buy: z.array(ProviderSchema).default([]),
+	stream: z.array(ProviderSchema).default([]),
 });
 
 export const MovieSchema = z.object({
 	id: z.number(),
-	imdb_id: z.union([z.string().optional(), z.null()]),
+	imdb_id: z.string().default(""),
 	title: z.string(),
 	tagline: z.string(),
 	overview: z.string(),
-	poster_path: z.union([z.string().optional(), z.null()]),
-	backdrop_path: z.union([z.string().optional(), z.null()]),
+	poster_path: z.string().default(""),
+	backdrop_path: z.string().default(""),
 	release_date: z.string(),
 	vote_average: z.number(),
 	vote_count: z.number(),
@@ -58,16 +58,16 @@ export const LimitedMovieSchema = z.object({
 	id: z.number(),
 	title: z.string(),
 	release_date: z.string(),
-	poster_path: z.union([z.string().optional(), z.null()]),
+	poster_path: z.string().default(""),
 });
 
 export const MovieFormDataSchema = z.object({
 	prompt: z.string().default("One of the best movies ever made."),
 	genres: z.array(z.coerce.number()),
 	good: z.boolean().default(true),
-	decade: z.number().optional(),
-	providers: z.array(z.coerce.number()).optional(),
-	seenMovies: z.array(z.string()).optional(),
+	decade: z.number().default(0),
+	providers: z.array(z.coerce.number()).default([]),
+	seenMovies: z.array(z.string()).default([]),
 });
 
 export type Movie = z.infer<typeof MovieSchema>;

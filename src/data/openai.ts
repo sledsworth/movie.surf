@@ -1,3 +1,4 @@
+import { OPENAI_API_KEY, OPENAI_MODEL } from "astro:env/server";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import {
@@ -7,9 +8,15 @@ import {
 } from "src/actions/movie";
 import { getGenreNameFromId } from "./tmdb";
 
-const apiKey = process.env.OPENAI_API_KEY ?? import.meta.env.OPENAI_API_KEY;
+const apiKey =
+	OPENAI_API_KEY ??
+	process.env.OPENAI_API_KEY ??
+	import.meta.env.OPENAI_API_KEY;
 const aiModel: OpenAI.Chat.ChatModel =
-	process.env.OPENAI_MODEL ?? import.meta.env.OPENAI_MODEL ?? "gpt-4.1";
+	(OPENAI_MODEL as OpenAI.Chat.ChatModel) ??
+	process.env.OPENAI_MODEL ??
+	import.meta.env.OPENAI_MODEL ??
+	"gpt-4.1";
 
 const openai = new OpenAI({
 	apiKey,
@@ -59,8 +66,8 @@ export async function getAiMovieSuggestions(
 	try {
 		completion = await openai.chat.completions.create({
 			model: aiModel,
-			temperature: 1.5,
-			// top_p: 1,
+			// temperature: 1.5,
+			top_p: 1,
 			messages: [
 				{
 					role: "system",
@@ -100,6 +107,8 @@ export async function getAiMovieSuggestions(
 			hasResults: false,
 			error: {
 				message: `Failed to find movies from prompt. [${error}]`,
+				status: 500,
+				name: "Prompt Issue",
 			},
 		};
 	}
@@ -116,7 +125,9 @@ export async function getAiMovieSuggestions(
 			movies: [],
 			hasResults: false,
 			error: {
-				message: "Failed to find movies from prompt.",
+				message: `Failed to find movies from prompt. [${error}]`,
+				status: 500,
+				name: "Prompt Issue",
 			},
 		};
 	}

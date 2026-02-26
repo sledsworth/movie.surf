@@ -9,12 +9,20 @@
 		"type": "git",
 		"url": "https://github.com/sledsworth/movie.surf.git"
 	},
-	"keywords": ["astro", "movie", "recommendation", "ai", "tmdb"],
+	"keywords": [
+		"astro",
+		"movie",
+		"recommendation",
+		"ai",
+		"tmdb"
+	],
 	"type": "module",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"scripts": {
-		"start": "netlify dev",
+		"start": "astro dev",
 		"build": "astro check && astro build",
+		"preview": "astro build && wrangler pages dev dist",
+		"deploy": "wrangler pages deploy dist",
 		"astro": "astro",
 		"check": "astro check && biome check --write",
 		"update": "npx npm-check -u",
@@ -22,16 +30,15 @@
 	},
 	"dependencies": {
 		"@astrojs/check": "0.9.4",
-		"@astrojs/mdx": "^4.2.6",
-		"@astrojs/netlify": "^6.3.2",
-		"@netlify/blobs": "^9.0.0",
-		"astro": "^5.7.10",
-		"openai": "^4.96.2",
-		"typescript": "^5.8.3",
-		"zod": "^3.24.3"
+		"@astrojs/cloudflare": "^12.4.0",
+		"@astrojs/mdx": "4.3.4",
+		"astro": "5.13.2",
+		"openai": "5.13.1",
+		"typescript": "5.9.2",
+		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"netlify-cli": "^20.1.1"
+		"@biomejs/biome": "^2.4.4",
+		"wrangler": "^4.0.0"
 	}
 }

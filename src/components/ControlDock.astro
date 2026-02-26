@@ -47,7 +47,7 @@ const providers = await getAllMovieProviders();
             (provider: Provider) => (
             <li><label>
               <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
-              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              <img width="24" loading="lazy" decoding="async" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
               {provider.provider_name}
             </label></li>
           ))}
@@ -60,7 +60,7 @@ const providers = await getAllMovieProviders();
             (provider: Provider) => (
             <li><label>
               <input name="providers" type="checkbox" value={provider.provider_id} checked={formData.providers?.includes(provider.provider_id)} />
-              <img width="24" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
+              <img width="24" loading="lazy" decoding="async" src={`https://image.tmdb.org/t/p/w500${provider.logo_path}`} alt={provider.provider_name} title={provider.provider_name} />
               {provider.provider_name}
             </label></li>
           ))}
@@ -70,6 +70,7 @@ const providers = await getAllMovieProviders();
   <div class:list={{ 'control-dock-container': !inlineDock, 'control-dock-inline': inlineDock }}>
     <div class="control-dock">
       <textarea aria-label="Movie search prompt" transition:persist="prompt-input" name="prompt">{formData.prompt}</textarea>
+      <!-- biome-ignore lint/a11y/noAutofocus: intentional autofocus for primary search action -->
       <Button id="new-movie-submit" style={{ flex: '2 1 200px'}} type="submit" variant="primary" name="new-movie-button" glow autofocus={!inlineDock}>Search</Button>
       <Button id="filter-movie-button" style={{ flex: '1 2 100px'}} dialogtarget="prompt-popover">Filter</Button>
     </div>
@@ -92,7 +93,6 @@ const providers = await getAllMovieProviders();
 
     label {
       cursor: pointer;
-      display: inline-block;
       padding: .25rem 1rem .25rem .25rem;
       color: white;
       display: flex;

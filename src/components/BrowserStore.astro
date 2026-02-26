@@ -42,7 +42,7 @@ class BrowserStoreElement extends HTMLElement {
 			this.form.addEventListener("change", () => {
         const formData = new FormData(this.form as HTMLFormElement);
 				let formValues = {};
-        
+
 				for (const key of formData.keys()) {
 					const value = formData.getAll(key);
 					if (value.length === 1) {
@@ -108,6 +108,7 @@ class BrowserStoreElement extends HTMLElement {
 					break;
         case "select-one":
           this.handleSelect(key, value);
+          break;
 				default:
 					this.form
 						?.querySelector(`[name="${key}"]`)

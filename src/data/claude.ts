@@ -81,19 +81,29 @@ export async function getAiMovieSuggestions(
 			return {
 				movies: [],
 				hasResults: false,
-				error: { message: "Claude returned no tool use.", status: 500, name: "EmptyResponse" },
+				error: {
+					message: "Claude returned no tool use.",
+					status: 500,
+					name: "EmptyResponse",
+				},
 			};
 		}
 
 		const parsed = MovieSuggestionResultsSchema.safeParse(toolUse.input);
 		if (!parsed.success) {
-			console.error("Failed to validate:", JSON.stringify(parsed.error.issues, null, 2));
+			console.error(
+				"Failed to validate:",
+				JSON.stringify(parsed.error.issues, null, 2),
+			);
 			// Attempt a lenient parse: pick only title/year from each movie
 			const raw = toolUse.input as { movies?: unknown[]; hasResults?: boolean };
 			const movies = (raw.movies ?? [])
 				.map((m) => {
 					const movie = m as Record<string, unknown>;
-					return { title: String(movie.title ?? ""), year: Number(movie.year ?? 0) };
+					return {
+						title: String(movie.title ?? ""),
+						year: Number(movie.year ?? 0),
+					};
 				})
 				.filter((m) => m.title);
 			return {

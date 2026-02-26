@@ -1,9 +1,6 @@
 import { GEMINI_API_KEY, GEMINI_MODEL } from "astro:env/server";
 import { GoogleGenAI, Type } from "@google/genai";
-import {
-	type MovieFormData,
-	type MovieSuggestionResults,
-} from "src/actions/movie";
+import type { MovieFormData, MovieSuggestionResults } from "src/actions/movie";
 import { getGenreNameFromId } from "./tmdb";
 
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
@@ -73,7 +70,11 @@ export async function getAiMovieSuggestions(
 			return {
 				movies: [],
 				hasResults: false,
-				error: { message: "Gemini returned no content.", status: 500, name: "EmptyResponse" },
+				error: {
+					message: "Gemini returned no content.",
+					status: 500,
+					name: "EmptyResponse",
+				},
 			};
 		}
 

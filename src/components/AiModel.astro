@@ -1,12 +1,28 @@
 ---
-import { OPENAI_MODEL } from "astro:env/server";
-import type OpenAI from "openai";
+import { AI_PROVIDER, CLAUDE_MODEL, GEMINI_MODEL, OPENAI_MODEL } from "astro:env/server";
 
-const aiModel: OpenAI.Chat.ChatModel =
-	OPENAI_MODEL as OpenAI.Chat.ChatModel ?? process.env.OPENAI_MODEL ?? import.meta.env.OPENAI_MODEL;
+const providers = {
+	openai: {
+		name: "OpenAI",
+		url: "https://openai.com/",
+		model: OPENAI_MODEL,
+	},
+	gemini: {
+		name: "Google Gemini",
+		url: "https://deepmind.google/technologies/gemini/",
+		model: GEMINI_MODEL,
+	},
+	claude: {
+		name: "Anthropic Claude",
+		url: "https://anthropic.com/",
+		model: CLAUDE_MODEL,
+	},
+};
+
+const { name, url, model } = providers[AI_PROVIDER] ?? providers.openai;
 ---
 
-Terrible movie recommendations by <a href="https://openai.com/">OpenAI</a>. <span>({aiModel})</span>
+Terrible movie recommendations by <a href={url}>{name}</a>. <span>({model})</span>
 <style>
   span {
     font-size: .85rem;

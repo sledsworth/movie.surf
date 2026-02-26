@@ -24,8 +24,8 @@ export default defineConfig({
 				values: ["openai", "gemini", "claude"],
 				default: "openai",
 			}),
-			TMDB_API_KEY: envField.string({ context: "server", access: "secret" }),
-			OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+			TMDB_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+			OPENAI_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
 			OPENAI_MODEL: envField.string({
 				context: "server",
 				access: "public",

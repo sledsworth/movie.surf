@@ -1,0 +1,15 @@
+---
+import { OPENAI_MODEL } from "astro:env/server";
+import type OpenAI from "openai";
+
+const aiModel: OpenAI.Chat.ChatModel =
+	OPENAI_MODEL as OpenAI.Chat.ChatModel ?? process.env.OPENAI_MODEL ?? import.meta.env.OPENAI_MODEL;
+---
+
+Terrible movie recommendations by <a href="https://openai.com/">OpenAI</a>. <span>({aiModel})</span>
+<style>
+  span {
+    font-size: .85rem;
+    color: grey;
+  }
+</style>

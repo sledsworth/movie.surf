@@ -25,6 +25,20 @@ export default defineConfig({
 				access: "public",
 				default: "gpt-4.1-nano",
 			}),
+			GEMINI_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+			GEMINI_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "gemini-2.0-flash",
+				optional: true,
+			}),
+			CLAUDE_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
+			CLAUDE_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "claude-sonnet-4-6",
+				optional: true,
+			}),
 		},
 	},
 });

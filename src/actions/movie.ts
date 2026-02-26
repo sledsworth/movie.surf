@@ -1,6 +1,6 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { getAiMovieSuggestions } from "@data/openai";
+import { getAiMovieSuggestions } from "@data/claude";
 import { searchForMovie } from "@data/tmdb";
 
 export const MovieSuggestionSchema = z.object({

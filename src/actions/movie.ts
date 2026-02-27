@@ -40,12 +40,12 @@ export const AllProvidersSchema = z.object({
 
 export const MovieSchema = z.object({
 	id: z.number(),
-	imdb_id: z.string().default(""),
+	imdb_id: z.string().nullable().default(""),
 	title: z.string(),
 	tagline: z.string(),
 	overview: z.string(),
-	poster_path: z.string().default(""),
-	backdrop_path: z.string().default(""),
+	poster_path: z.string().nullable().default(""),
+	backdrop_path: z.string().nullable().default(""),
 	release_date: z.string(),
 	vote_average: z.number(),
 	vote_count: z.number(),
@@ -58,7 +58,7 @@ export const LimitedMovieSchema = z.object({
 	id: z.number(),
 	title: z.string(),
 	release_date: z.string(),
-	poster_path: z.string().default(""),
+	poster_path: z.string().nullable().default(""),
 });
 
 export const MovieFormDataSchema = z.object({

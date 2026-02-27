@@ -229,7 +229,7 @@ export function filterProviders(
 		providers
 			.filter((provider) => !ignoredProviderIds.includes(provider.provider_id))
 			.map(async (provider: Provider) => {
-				let url = PROVIDER_URLS[provider.provider_id]?.replace(
+				const url = PROVIDER_URLS[provider.provider_id]?.replace(
 					"{search}",
 					encodedSearch,
 				);

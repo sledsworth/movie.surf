@@ -18,12 +18,48 @@ export default defineConfig({
 	},
 	env: {
 		schema: {
-			TMDB_API_KEY: envField.string({ context: "server", access: "secret" }),
-			OPENAI_API_KEY: envField.string({ context: "server", access: "secret" }),
+			AI_PROVIDER: envField.enum({
+				context: "server",
+				access: "public",
+				values: ["openai", "gemini", "claude"],
+				default: "openai",
+			}),
+			TMDB_API_KEY: envField.string({
+				context: "server",
+				access: "secret",
+				optional: true,
+			}),
+			OPENAI_API_KEY: envField.string({
+				context: "server",
+				access: "secret",
+				optional: true,
+			}),
 			OPENAI_MODEL: envField.string({
 				context: "server",
 				access: "public",
 				default: "gpt-4.1-nano",
+			}),
+			GEMINI_API_KEY: envField.string({
+				context: "server",
+				access: "secret",
+				optional: true,
+			}),
+			GEMINI_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "gemini-2.0-flash",
+				optional: true,
+			}),
+			CLAUDE_API_KEY: envField.string({
+				context: "server",
+				access: "secret",
+				optional: true,
+			}),
+			CLAUDE_MODEL: envField.string({
+				context: "server",
+				access: "public",
+				default: "claude-sonnet-4-6",
+				optional: true,
 			}),
 		},
 	},

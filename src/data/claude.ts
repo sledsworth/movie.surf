@@ -5,7 +5,7 @@ import {
 	type MovieSuggestionResults,
 	MovieSuggestionResultsSchema,
 } from "src/actions/movie";
-import { getGenreNameFromId } from "./tmdb";
+import { getAllGenres } from "./tmdb";
 
 const client = new Anthropic({ apiKey: CLAUDE_API_KEY });
 
@@ -21,9 +21,10 @@ export async function getAiMovieSuggestions(
 		parts.push(`Should be from the decade: ${movieFormData.decade}s.`);
 	}
 	if (movieFormData.genres.length > 0) {
-		const genres = await Promise.all(
-			movieFormData.genres.map((genreId) => getGenreNameFromId(genreId)),
-		);
+		const allGenres = await getAllGenres({ type: "movie" });
+		const genres = movieFormData.genres
+			.map((genreId) => allGenres.find((g) => g.id === genreId)?.name)
+			.filter(Boolean);
 		parts.push(`Should be in the genres: ${genres.join(", ")}.`);
 	}
 	if (movieFormData.seenMovies && movieFormData.seenMovies.length > 0) {

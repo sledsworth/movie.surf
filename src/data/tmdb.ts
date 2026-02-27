@@ -5,7 +5,7 @@ const ENV_TMDB_API_KEY =
 	TMDB_API_KEY ?? process.env.TMDB_API_KEY ?? import.meta.env.TMDB_API_KEY;
 
 const PROVIDER_URLS: { [key: number]: string } = {
-	2: "https://www.apple.com/apple-tv-plus/",
+	2: "https://tv.apple.com/us/search?term={search}",
 	3: "https://play.google.com/store/search?q={search}&c=movies",
 	8: "https://www.netflix.com/",
 	9: "https://www.amazon.com/gp/video/",
@@ -14,7 +14,7 @@ const PROVIDER_URLS: { [key: number]: string } = {
 	43: "https://www.starz.com/",
 	283: "https://www.crunchyroll.com/",
 	337: "https://www.disneyplus.com/",
-	350: "https://www.apple.com/apple-tv-plus/",
+	350: "https://tv.apple.com/us/search?term={search}",
 	386: "https://www.peacocktv.com/",
 	526: "https://www.amc.com/",
 	531: "https://www.paramountplus.com/",
@@ -233,38 +233,10 @@ export function filterProviders(
 					"{search}",
 					encodedSearch,
 				);
-				if (provider.provider_id === 2) {
-					url = (await getAppleTVStoreLink(search, year)) ?? "";
-				}
 				return {
 					...provider,
 					url,
 				};
 			}),
 	);
-}
-
-export async function getAppleTVStoreLink(search: string, year?: number) {
-	const searchURL = new URL("https://itunes.apple.com/search");
-
-	searchURL.searchParams.set("media", "movie");
-	searchURL.searchParams.set("entity", "movie");
-	searchURL.searchParams.set("lang", "en_us");
-	searchURL.searchParams.set("country", "US");
-	searchURL.searchParams.set("term", search);
-
-	try {
-		const response = await fetch(searchURL);
-		const data = await response.json();
-		const filteredResults = data.results.filter(
-			(movie: { releaseDate: string }) => {
-				const releaseYear = new Date(movie.releaseDate).getFullYear();
-				return releaseYear === year;
-			},
-		);
-		return filteredResults.length > 0 ? filteredResults[0].trackViewUrl : null;
-	} catch (error) {
-		console.error("Error fetching Apple TV store link:", error);
-		return null;
-	}
 }

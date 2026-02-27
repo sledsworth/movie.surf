@@ -6,7 +6,7 @@ import {
 	type MovieSuggestionResults,
 	MovieSuggestionResultsSchema,
 } from "src/actions/movie";
-import { getGenreNameFromId } from "./tmdb";
+import { getAllGenres } from "./tmdb";
 
 const apiKey =
 	OPENAI_API_KEY ??
@@ -42,9 +42,10 @@ export async function getAiMovieSuggestions(
 		});
 	}
 	if (movieFormData.genres.length > 0) {
-		const genres = await Promise.all(
-			movieFormData.genres.map((genreId) => getGenreNameFromId(genreId)),
-		);
+		const allGenres = await getAllGenres({ type: "movie" });
+		const genres = movieFormData.genres
+			.map((genreId) => allGenres.find((g) => g.id === genreId)?.name)
+			.filter(Boolean);
 		prompts.push({
 			content: `Should be in the genres: ${genres.join(", ")}.`,
 			role: "user",

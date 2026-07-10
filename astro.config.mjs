@@ -37,7 +37,7 @@ export default defineConfig({
 			OPENAI_MODEL: envField.string({
 				context: "server",
 				access: "public",
-				default: "gpt-4.1-nano",
+				default: "gpt-5.4-mini",
 			}),
 			GEMINI_API_KEY: envField.string({
 				context: "server",
@@ -47,7 +47,7 @@ export default defineConfig({
 			GEMINI_MODEL: envField.string({
 				context: "server",
 				access: "public",
-				default: "gemini-2.0-flash",
+				default: "gemini-3.5-flash",
 				optional: true,
 			}),
 			CLAUDE_API_KEY: envField.string({
@@ -58,7 +58,7 @@ export default defineConfig({
 			CLAUDE_MODEL: envField.string({
 				context: "server",
 				access: "public",
-				default: "claude-sonnet-4-6",
+				default: "claude-sonnet-5",
 				optional: true,
 			}),
 		},

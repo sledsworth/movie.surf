@@ -16,7 +16,7 @@ const aiModel: OpenAI.Chat.ChatModel =
 	(OPENAI_MODEL as OpenAI.Chat.ChatModel) ??
 	process.env.OPENAI_MODEL ??
 	import.meta.env.OPENAI_MODEL ??
-	"gpt-4.1";
+	"gpt-5.4-mini";
 
 const openai = new OpenAI({
 	apiKey,

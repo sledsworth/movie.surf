@@ -1,5 +1,5 @@
 import { ActionError, defineAction } from "astro:actions";
-import { z } from "astro:schema";
+import { z } from "zod";
 import { getAiMovieSuggestions } from "@data/ai";
 import { searchForMovie } from "@data/tmdb";
 

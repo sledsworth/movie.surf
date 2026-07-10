@@ -29,18 +29,18 @@
 		"update:astro": "npx @astrojs/upgrade"
 	},
 	"dependencies": {
-		"@anthropic-ai/sdk": "^0.78.0",
-		"@astrojs/check": "0.9.4",
-		"@astrojs/cloudflare": "^12.4.0",
-		"@astrojs/mdx": "4.3.4",
-		"@google/genai": "^1.43.0",
-		"astro": "5.13.2",
-		"openai": "5.13.1",
-		"typescript": "5.9.2",
+		"@anthropic-ai/sdk": "^0.110.0",
+		"@astrojs/check": "0.9.9",
+		"@astrojs/cloudflare": "^12.6.13",
+		"@astrojs/mdx": "4.3.14",
+		"@google/genai": "^2.11.0",
+		"astro": "5.18.2",
+		"openai": "6.46.0",
+		"typescript": "6.0.3",
 		"zod": "3.25.76"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
-		"wrangler": "^4.0.0"
+		"@biomejs/biome": "^2.5.3",
+		"wrangler": "^4.110.0"
 	}
 }
